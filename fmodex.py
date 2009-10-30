@@ -1,75 +1,30 @@
-import constants
 from ctypes import *
+from constants import *
 _dll = windll.fmodex
-class cpuUsageInfo(object):
-    def __init__(self, dsp, stream, update, total):
-        self._dsp = dsp
-        self._stream = stream
-        self._update = update
-        self._total = total
+import globalvars
+globalvars.dll = _dll
+from system import System
+from utils import ckresult
 
-    @property
-    def dsp(self):
-        return self._dsp
+def get_debug_level():
+    level = c_int()
+    ckresult(_dll.FMOD_Debug_GetLevel(byref(level)))
+    return level.value
 
-    @property
-    def stream(self):
-        return self._stream
+def set_debug_level(level):
+    ckresult(_dll.FMOD_Debug_SetLevel(level))
 
-    @property
-    def update(self):
-        return self._update
+def get_disk_busy():
+    busy = c_int()
+    ckresult(_dll.FMOD_File_GetDiskBusy(byref(busy)))
+    return busy.value
 
-    @property
-    def total(self):
-        return self._total
-class CDROMDriveName(object):
-    def __init__(self, drivename, scsiname, devicename):
-        self._drivename = drivename
-        self._scsiname = scsiname
-        self._devicename = devicename
+def set_disk_busy(busy):
+    ckresult(_dll.FMOD_File_SetDiskBusy(busy))
 
-    @property
-    def driveName(self):
-        return self._drivename
+def get_memory_stats(blocking):
+    current = c_int()
+    max = c_int()
+    ckresult(_dll.FMOD_Memory_GetStats(byref(current), byref(max), blocking))
+    return (current, max)
 
-    @property
-    def scsiName(self):
-        return self._scsiname
-
-    @property
-    def deviceName(self):
-        return self._devicename
-class system(object):
-    def __init__(self, numchannels=32):
-        self._ptr = c_int(0)
-        res = _dll.FMOD_System_Create(byref(self._ptr))
-        res2 = _dll.FMOD_System_Init(self._ptr, numchannels, constants.FMOD_INIT_NORMAL, 0)
-
-    @property
-    def num3DListeners(self):
-        num = c_int()
-        _dll.FMOD_System_Get3DNumListeners(self._ptr, byref(num))
-        return num.value
-
-    def getCDROMDriveName(self, index):
-        n1 = c_char_p()
-        n2 = c_char_p()
-        n3 = c_char_p()
-        _dll.FMOD_System_GetCDROMDriveName(self._ptr, byref(n1), sizeof(n1), byref(n2), sizeof(n2), byref(n3), sizeof(n3))
-        return CDROMDriveName(n1.value, n2.value, n3.value)
-
-    @property
-    def cpuUsage(self):
-        dsp = c_float()
-        stream = c_float()
-        update = c_float()
-        total = c_float()
-        _dll.FMOD_System_GetCPUUsage(self._ptr, byref(dsp), byref(stream), byref(update), byref(total))
-        return cpuUsageInfo(dsp.value, stream.value, update.value, total.value)
-
-    @property
-    def channelsPlaying(self):
-        channels = c_int()
-        _dll.FMOD_System_GetChannelsPlaying(self._ptr, byref(channels))
-        return channels.value
