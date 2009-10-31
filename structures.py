@@ -21,16 +21,27 @@ class DSP_PARAMETERDESC(Structure):
     _fields_ = [("min", c_float), ("max", c_float), ("defaultval", c_float), ("name", c_char * 16), ("label", c_char * 16), ("description", c_char_p)]
 
 class GUID(Structure):
-    _fields_ = [("data1", c_uint), ("data2", c_ushort), ("data3", c_ushort), ("data4", char * 8)]
+    _fields_ = [("data1", c_uint), ("data2", c_ushort), ("data3", c_ushort), ("data4", c_char * 8)]
 
 class REVERB_CHANNELPROPERTIES(Structure):
-    _fields_ = [("Direct", c_int), ("DirectHF", c_int), ("Room", c_int), ("RoomHF", c_int), ("Obstruction", c_int), ("ObstructionLFRatio", c_float), ("Occlusion", c_int), ("OcclusionLFRatio", c_float), ("OcclusionRoomRatio", c_float), ("OcclusionDirectRatio", c_float), ("Exclusion", c_int), ("ExclusionLFRatio", c_float), ("OutsidevolumeHF", c_int), ("DopplerFactor", c_float), ("RolloffFactor", c_float), ("RoomRolloffFactor", c_float), ("AirAbsorptionFactor", c_float), ("Flags", c_uint), ("ConnectionPoint", c_int)[
+    _fields_ = [("Direct", c_int), ("DirectHF", c_int), ("Room", c_int), ("RoomHF", c_int), ("Obstruction", c_int), ("ObstructionLFRatio", c_float), ("Occlusion", c_int), ("OcclusionLFRatio", c_float), ("OcclusionRoomRatio", c_float), ("OcclusionDirectRatio", c_float), ("Exclusion", c_int), ("ExclusionLFRatio", c_float), ("OutsidevolumeHF", c_int), ("DopplerFactor", c_float), ("RolloffFactor", c_float), ("RoomRolloffFactor", c_float), ("AirAbsorptionFactor", c_float), ("Flags", c_uint), ("ConnectionPoint", c_int)]
 
 class REVERBPROPERTIES(Structure):
-    _fields_ = [("Instance", c_int), ("Environment", c_int), ("EnvSize", c_float), ("EnvDiffusion", c_float), ("Room", c_int), ("RoomHF", c_int), ("RoomLF", c_int), ("DecayTime", c_float), ("DecayHFRatio", c_float), ("DecayLFRatio", c_float), ("Reflections", c_int), ("ReflectionsDelay", c_float), ("ReflectionsPan", c_float * 3), ("Reverb", c_int), ("ReverbDelay", c_float), ("ReverbPan", c_float * 3), ("EchoTime", c_float), ("EchoDepth", c_float), ("ModulationTime", c_float), ("ModulationDepth", c_float), ("AirAbsorptionHF", c_float), ("HFReference", c_float), ("LFreference", c_float), ("RoomRolloffFactor", Cc_float), ("Diffusion", c_float), ("Density", c_float), ("Flags", c_uint)]
+    _fields_ = [("Instance", c_int), ("Environment", c_int), ("EnvSize", c_float), ("EnvDiffusion", c_float), ("Room", c_int), ("RoomHF", c_int), ("RoomLF", c_int), ("DecayTime", c_float), ("DecayHFRatio", c_float), ("DecayLFRatio", c_float), ("Reflections", c_int), ("ReflectionsDelay", c_float), ("ReflectionsPan", c_float * 3), ("Reverb", c_int), ("ReverbDelay", c_float), ("ReverbPan", c_float * 3), ("EchoTime", c_float), ("EchoDepth", c_float), ("ModulationTime", c_float), ("ModulationDepth", c_float), ("AirAbsorptionHF", c_float), ("HFReference", c_float), ("LFreference", c_float), ("RoomRolloffFactor", c_float), ("Diffusion", c_float), ("Density", c_float), ("Flags", c_uint)]
 
 class TAG(Structure):
     _fields_ = [("type", c_int), ("datatype", c_int), ("name", c_char_p), ("data", c_void_p), ("datalen", c_uint), ("updated", c_int)]
 
 class VECTOR(Structure):
     _fields_ = [("x", c_float), ("y", c_float), ("z", c_float)]
+
+    @staticmethod
+    def from_list(lst):
+        vec = VECTOR()
+        vec.x = lst[0]
+        vec.y = lst[1]
+        vec.z = lst[2]
+        return vec
+
+    def to_list(self):
+        return [self.x, self.y, self.z]
