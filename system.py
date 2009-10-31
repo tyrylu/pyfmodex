@@ -263,3 +263,62 @@ class System(object):
         total = c_int()
         ckresult(_dll.FMOD_System_GetHardwareChannels(self._ptr, byref(num2d), byref(num3d), byref(total)))
         return HardwareChannelsInfo(num2d.value, num3d.value, total.value)
+
+    def get_memory_info(membits, event_membits):
+        # Which can be done with fourth argument...?
+        usage = c_uint()
+        ckresult(_dll.FMOD_System_GetMemoryInfo(self._ptr, membits, event_membits, byref(usage), None))
+        return usage.value
+
+    @property
+    def network_proxy(self):
+        server = c_char_p()
+        ckresult(_dll.FMOD_System_GetNetworkProxy(self._ptr, byref(server), sizeof(server)))
+    @network_proxy.setter
+    def network_proxy(self, proxy):
+        ckresult(_dll.FMOD_System_SetNetworkProxy(self._ptr, proxy))
+
+    @property
+    def network_timeout(self):
+        timeout = c_int()
+        ckresult(_dll.FMOD_System_GetNetworkTimeout(self._ptr, byref(timeout)))
+        return timeout.value
+    @network_timeout.setter
+    def network_timeout(self, timeout):
+        ckresult(_dll.FMOD_System_SetNetworkTimeout(self_ptr, timeout))
+
+    @property
+    def num_cdrom_drives(self):
+        num = c_int()
+        ckresult(_dll.FMOD_System_GetNumCDROMDrives(self._ptr, byref(num)))
+        return num.value
+
+    @property
+    def num_drivers(self):
+        num = c_int()
+        ckresult(_dll.FMOD_System_GetNumDrivers(self._ptr, byref(num)))
+        return num.value
+
+    def get_num_plugins(self, plugintype):
+        num = c_int()
+        ckresult(_dll.FMOD_System_GetNumPlugins(self._ptr, plugintype, byref(num)))
+        return num.value
+
+    @property
+    def output(self):
+        output = c_int()
+        ckresult(_dll.FMOD_System_GetOutput(self._ptr, byref(output)))
+        return output.value
+    @output.setter
+    def output(self, out):
+        ckresult(_dll.FMOD_System_SetOutput(self._ptr, out))
+
+    @property
+    def output_by_plugin(self):
+        handle = c_uint()
+        ckresult(_dll.FMOD_System_GetOutputByPlugin(self._ptr, byref(handle)))
+        return handle.value
+    @output_by_plugin.setter
+    def output_by_plugin(self, handle):
+        ckresult(_dll.FMOD_System_SetOutputByPlugin(self._ptr, handle))
+
