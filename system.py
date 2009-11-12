@@ -2,6 +2,23 @@ from ctypes import *
 from utils import ckresult
 from structures import *
 from globalvars import dll as _dll
+class PluginInfo(object):
+    def __init__(self, type, name, ver):
+        self._type = type
+        self._name = name
+        self._ver = ver
+
+    @property
+    def type(self):
+        return self._type
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def version(self):
+        return self._ver
 class HardwareChannelsInfo(object):
     def __init__(self, num2d, num3d, total):
         self._num2d = num2d
@@ -321,4 +338,29 @@ class System(object):
     @output_by_plugin.setter
     def output_by_plugin(self, handle):
         ckresult(_dll.FMOD_System_SetOutputByPlugin(self._ptr, handle))
+
+    @property
+    def output_handle(self):
+        handle = c_void_p()
+        ckresult(_dll.FMOD_System_GetOutputHandle(self._ptr, byref(handle)))
+        return handle.value
+
+    def get_plugin_handle(type, index):
+        handle = c_uint()
+        ckresult(_dll.FMOD_System_GetPluginHandle(self._ptr, type, index, byref(handle)))
+        return handle.value
+
+    def get_plugin_info(self, handle):
+        type = c_int()
+        name = c_char_p()
+        ver = c_uint()
+        ckresult(_dll.FMOD_System_GetPluginInfo(self._ptr, handle, byref(type), byref(name), sizeof(name), byref(ver)))
+        return PluginInfo(type.value, name.value, ver.value)
+
+    def get_record_driver_caps(self, id):
+        caps = c_uint()
+        minfreq = c_int()
+        maxfreq = c_int()
+        ckresult(_dll.FMOD_System_GetRecordDriverCaps(self._ptr, id, byref(caps), byref(minfreq), byref(maxfreq)))
+        return DriverCapsInfo(caps.value, minfreq.value, maxfreq.value, None)
 
