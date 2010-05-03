@@ -364,3 +364,48 @@ class System(object):
         ckresult(_dll.FMOD_System_GetRecordDriverCaps(self._ptr, id, byref(caps), byref(minfreq), byref(maxfreq)))
         return DriverCapsInfo(caps.value, minfreq.value, maxfreq.value, None)
 
+    def get_record_driver_info(self, index):
+        name = c_char_p()
+        guid = GUID()
+        ckresult(_dll.FMOD_System_GetRecordDriverInfo(self._ptr, index, byref(name), sizeof(name), byref(guid)))
+        return (name.value, guid)
+
+    @property
+    def record_num_drivers(self):
+        num = c_int()
+        ckresult(_dll.FMOD_System_GetRecordNumDrivers(self._ptr, byref(num)))
+        return num.value
+
+    def get_record_position(self, index):
+        pos = c_uint()
+        ckresult(_dll.FMOD_System_GetRecordPosition(self._ptr, index, byref(ppos)))
+        return pos.value
+
+
+    @property
+    def reverb_ambient_properties(self):
+        props = REVERBPROPERTIES()
+        ckresult(_dll.FMOD_System_GetReverbAmbientProperties(self._ptr, byref(props)))
+    @reverb_ambient_properties.setter
+    def reverb_ambient_properties(self, props):
+        ckresult(_dll.FMOD_System_SetReverbAmbientProperties(self._ptr, byref(props)))
+
+    def get_reverb_properties(self, instance = 0):
+        props = REVERBPROPERTIES()
+        props.Instance = instance
+        ckresult(_dll.FMOD_System_GetReverbProperties(self._ptr, byref(props)))
+        return props
+
+    def set_reverb_properties(self, instance, props):
+        props.Instance = instance
+        ckresult(_dll.FMOD_System_SetReverbProperties(self._ptr, byref(props)))
+
+    @property
+    def software_channels(self):
+        channels = c_int()
+        ckresult(_dll.FMOD_System_GetSoftwareChannels(self._ptr, byref(channels)))
+        return channels.value
+    @software_channels.setter
+    def software_channels(self, num):
+        ckresult(_dll.FMOD_System_SetSoftwareChannels(self._ptr, num))
+
