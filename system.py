@@ -2,64 +2,7 @@ from ctypes import *
 from utils import ckresult
 from structures import *
 from globalvars import dll as _dll
-class PluginInfo(object):
-    def __init__(self, type, name, ver):
-        self._type = type
-        self._name = name
-        self._ver = ver
-
-    @property
-    def type(self):
-        return self._type
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def version(self):
-        return self._ver
-class HardwareChannelsInfo(object):
-    def __init__(self, num2d, num3d, total):
-        self._num2d = num2d
-        self._num3d = num3d
-        self._total = total
-
-    @property
-    def num2d(self):
-        return self._num2d
-
-    @property
-    def num3d(self):
-        return self._num3d
-
-    @property
-    def total(self):
-        return self._total
-
-
-class DriverCapsInfo(object):
-    def __init__(self, caps, minfreq, maxfreq, speakermode):
-        self._caps = caps
-        self._minfreq = minfreq
-        self._maxfreq = maxfreq
-        self._speakermode = speakermode
-
-    @property
-    def caps(self):
-        return self._caps
-
-    @property
-    def minfrequency(self):
-        return self._minfreq
-
-    @property
-    def maxfrequency(self):
-        return self._maxfreq
-
-    @property
-    def control_panel_speaker_mode(self):
-        return self._speakermode
+from structobject import Structobject as so
 
 class DSPBufferSizeInfo(object):
     def __init__(self, sptr, size, count):
@@ -70,15 +13,20 @@ class DSPBufferSizeInfo(object):
     @property
     def size(self):
         return self._size
+
     @size.setter
     def size(self, size):
         ckresult(_dll.FMOD_System_SetDSPBufferSize(self._sysptr, size, self._count))
+        self._size = size
+
     @property
     def count(self):
         return self._count
+
     @count.setter
     def count(self, count):
         ckresult(_dll.FMOD_System_SetDSPBufferSize(self._sysptr, self._size, count))
+        self._count = count
 
 class ThreedSettings(object):
     def __init__(self, sptr, dopplerscale, distancefactor, rolloffscale):
@@ -88,103 +36,65 @@ class ThreedSettings(object):
         self._rolloffscale = rolloffscale
 
     @property
-    def distancefactor(self):
+    def distance_factor(self):
         return self._distancefactor
 
-    @distancefactor.setter
-    def distancefactor(self, factor):
+    @distance_factor.setter
+    def distance_factor(self, factor):
         ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, self._dopplerscale, factor, self._rolloffscale))
+        self._distancefactor = factor
 
     @property
-    def dopplerscale(self):
+    def doppler_scale(self):
         return self._dopplerscale
 
-    @dopplerscale.setter
-    def dopplerscale(self, scale):
+    @doppler_scale.setter
+    def doppler_scale(self, scale):
         ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, scale, self._distancefactor, self._rolloffscale))
+        self._dopplerscale = scale
+
     @property
-    def rolloffscale(self):
+    def rolloff_scale(self):
         return self._rolloffscale
 
-    @rolloffscale.setter
-    def rolloffscale(self, rscale):
+    @rolloff_scale.setter
+    def rolloff_scale(self, rscale):
         ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, self._distancefactor, self._dopplerscale, rscale))
-class CPUUsageInfo(object):
-    def __init__(self, dsp, stream, geometry, update, total):
-        self._dsp = dsp
-        self._stream = stream
-        self._geometry = geometry
-        self._update = update
-        self._total = total
+        self._rolloffscale = rscale
 
-    @property
-    def dsp(self):
-        return self._dsp
-
-    @property
-    def stream(self):
-        return self._stream
-
-    @property
-    def geometry(self):
-        return self._geometry
-
-    @property
-    def update(self):
-        return self._update
-
-    @property
-    def total(self):
-        return self._total
-class CDROMDriveName(object):
-    def __init__(self, drivename, scsiname, devicename):
-        self._drivename = drivename
-        self._scsiname = scsiname
-        self._devicename = devicename
-
-    @property
-    def driveName(self):
-        return self._drivename
-
-    @property
-    def scsiName(self):
-        return self._scsiname
-
-    @property
-    def deviceName(self):
-        return self._devicename
 class System(object):
     def __init__(self):
         self._ptr = c_int()
         ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
+
     def close(self):
         ckresult(_dll.FMOD_System_Close(self._ptr))
 
     @property
-    def num3DListeners(self):
+    def num_3d_listeners(self):
         num = c_int()
         ckresult(_dll.FMOD_System_Get3DNumListeners(self._ptr, byref(num)))
         return num.value
 
-    def getCDROMDriveName(self, index):
+    def get_cdrom_drive_name(self, index):
         n1 = c_char_p()
         n2 = c_char_p()
         n3 = c_char_p()
         ckresult(_dll.FMOD_System_GetCDROMDriveName(self._ptr, byref(n1), sizeof(n1), byref(n2), sizeof(n2), byref(n3), sizeof(n3)))
-        return CDROMDriveName(n1.value, n2.value, n3.value)
+        return so(drive_name=n1.value, scsi_name=n2.value, device_name=n3.value)
 
     @property
-    def cpuUsage(self):
+    def cpu_usage(self):
         dsp = c_float()
         stream = c_float()
         geometry = c_float()
         update = c_float()
         total = c_float()
         ckresult(_dll.FMOD_System_GetCPUUsage(self._ptr, byref(dsp), byref(stream), byref(geometry), byref(update), byref(total)))
-        return CPUUsageInfo(dsp.value, stream.value, geometry.value, update.value, total.value)
+        return so(dsp=dsp.value, stream=stream.value, geometry=geometry.value, update=update.value, total=total.value)
 
     @property
-    def channelsPlaying(self):
+    def channels_playing(self):
         channels = c_int()
         ckresult(_dll.FMOD_System_GetChannelsPlaying(self._ptr, byref(channels)))
         return channels.value
@@ -192,7 +102,6 @@ class System(object):
     @property
     def threed_settings(self):
         dscale = c_float()
-
         distancefactor = c_float()
         rscale = c_float()
         ckresult(_dll.FMOD_System_Get3DSettings(self._ptr, byref(dscale), byref(distancefactor), byref(rscale)))
@@ -203,7 +112,7 @@ class System(object):
         y = c_float()
         active = c_int()
         ckresult(_dll.FMOD_System_Get3DSpeakerPosition(self._ptr, speaker, byref(x), byref(y), byref(active)))
-        return (x.value, y.value, active.value)
+        return so(x=x.value, y=y.value, active=active.value)
 
     def set_3d_speaker_position(self, speaker, x, y, active):
         ckresult(_dll.FMOD_System_Set3DSpeakerPosition(self._ptr, speaker, x, y, active))
@@ -230,7 +139,7 @@ class System(object):
         hi = c_uint()
         lo = c_uint()
         ckresult(_dll.FMOD_System_GetDSPClock(self._ptr, byref(hi), byref(lo)))
-        return (hi.value, lo.value)
+        return so(hi=hi.value, lo=lo.value)
 
     @property
     def driver(self):
@@ -248,13 +157,13 @@ class System(object):
         maxfreq = c_int()
         mode = c_uint()
         ckresult(_dll.FMOD_System_GetDriverCaps(self._ptr, id, byref(caps), byref(minfreq), byref(maxfreq), byref(mode)))
-        return DriverCapsInfo(caps.value, minfreq.value, maxfreq.value, mode.value)
+        return so(caps=caps.value, minfreq=minfreq.value, maxfreq=maxfreq.value, mode=mode.value)
 
     def get_driver_info(self, id):
         name = c_char_p()
         guid = GUID()
         ckresult(_dll.FMOD_System_GetDriverInfo(self._ptr, id, byref(name), sizeof(name), byref(guid)))
-        return (name, guid)
+        return so(name=nae, guid=guid)
 
     def get_geometry_occlusion(self, listener, source):
         listener = VECTOR.from_list(listener)
@@ -262,27 +171,28 @@ class System(object):
         direct = c_float()
         reverb = c_float()
         ckresult(_dll.FMOD_System_GetGeometryOcclusion(self._ptr, byref(listener), byref(source), byref(direct), byref(reverb)))
-        return (direct.value, reverb.value)
+        return so(direct=direct.value, reverb=reverb.value)
 
     @property
     def geometry_max_world_size(self):
         wsize = c_float()
         ckresult(_dll.FMOD_System_GetGeometrySettings(self._ptr, byref(wsize)))
         return wsize.value
+
     @geometry_max_world_size.setter
     def geometry_max_world_size(self, size):
         ckresult(_dll.FMOD_System_SetGeometrySettings(self._ptr, size))
 
     @property
-    def hardware_chanels(self):
+    def hardware_channels(self):
         num2d = c_int()
         num3d = c_int()
         total = c_int()
         ckresult(_dll.FMOD_System_GetHardwareChannels(self._ptr, byref(num2d), byref(num3d), byref(total)))
-        return HardwareChannelsInfo(num2d.value, num3d.value, total.value)
+        return so(num_2d=num2d.value, num_3d=num3d.value, total=total.value)
 
     def get_memory_info(membits, event_membits):
-        # Which can be done with fourth argument...?
+        #What can be done with fourth argument...?
         usage = c_uint()
         ckresult(_dll.FMOD_System_GetMemoryInfo(self._ptr, membits, event_membits, byref(usage), None))
         return usage.value
@@ -291,6 +201,7 @@ class System(object):
     def network_proxy(self):
         server = c_char_p()
         ckresult(_dll.FMOD_System_GetNetworkProxy(self._ptr, byref(server), sizeof(server)))
+
     @network_proxy.setter
     def network_proxy(self, proxy):
         ckresult(_dll.FMOD_System_SetNetworkProxy(self._ptr, proxy))
@@ -300,6 +211,7 @@ class System(object):
         timeout = c_int()
         ckresult(_dll.FMOD_System_GetNetworkTimeout(self._ptr, byref(timeout)))
         return timeout.value
+
     @network_timeout.setter
     def network_timeout(self, timeout):
         ckresult(_dll.FMOD_System_SetNetworkTimeout(self_ptr, timeout))
@@ -326,6 +238,7 @@ class System(object):
         output = c_int()
         ckresult(_dll.FMOD_System_GetOutput(self._ptr, byref(output)))
         return output.value
+
     @output.setter
     def output(self, out):
         ckresult(_dll.FMOD_System_SetOutput(self._ptr, out))
@@ -335,6 +248,7 @@ class System(object):
         handle = c_uint()
         ckresult(_dll.FMOD_System_GetOutputByPlugin(self._ptr, byref(handle)))
         return handle.value
+
     @output_by_plugin.setter
     def output_by_plugin(self, handle):
         ckresult(_dll.FMOD_System_SetOutputByPlugin(self._ptr, handle))
@@ -355,20 +269,20 @@ class System(object):
         name = c_char_p()
         ver = c_uint()
         ckresult(_dll.FMOD_System_GetPluginInfo(self._ptr, handle, byref(type), byref(name), sizeof(name), byref(ver)))
-        return PluginInfo(type.value, name.value, ver.value)
+        return so(type=type.value, name=name.value, version=ver.value)
 
     def get_record_driver_caps(self, id):
         caps = c_uint()
         minfreq = c_int()
         maxfreq = c_int()
         ckresult(_dll.FMOD_System_GetRecordDriverCaps(self._ptr, id, byref(caps), byref(minfreq), byref(maxfreq)))
-        return DriverCapsInfo(caps.value, minfreq.value, maxfreq.value, None)
+        return so(caps=caps.value, minfreq=minfreq.value, maxfreq=maxfreq.value)
 
     def get_record_driver_info(self, index):
         name = c_char_p()
         guid = GUID()
         ckresult(_dll.FMOD_System_GetRecordDriverInfo(self._ptr, index, byref(name), sizeof(name), byref(guid)))
-        return (name.value, guid)
+        return so(name=name.value, guid=guid)
 
     @property
     def record_num_drivers(self):
@@ -381,11 +295,11 @@ class System(object):
         ckresult(_dll.FMOD_System_GetRecordPosition(self._ptr, index, byref(ppos)))
         return pos.value
 
-
     @property
     def reverb_ambient_properties(self):
         props = REVERBPROPERTIES()
         ckresult(_dll.FMOD_System_GetReverbAmbientProperties(self._ptr, byref(props)))
+
     @reverb_ambient_properties.setter
     def reverb_ambient_properties(self, props):
         ckresult(_dll.FMOD_System_SetReverbAmbientProperties(self._ptr, byref(props)))
@@ -396,7 +310,7 @@ class System(object):
         ckresult(_dll.FMOD_System_GetReverbProperties(self._ptr, byref(props)))
         return props
 
-    def set_reverb_properties(self, instance, props):
+    def set_reverb_properties(self, props, instance=0):
         props.Instance = instance
         ckresult(_dll.FMOD_System_SetReverbProperties(self._ptr, byref(props)))
 
@@ -405,6 +319,7 @@ class System(object):
         channels = c_int()
         ckresult(_dll.FMOD_System_GetSoftwareChannels(self._ptr, byref(channels)))
         return channels.value
+
     @software_channels.setter
     def software_channels(self, num):
         ckresult(_dll.FMOD_System_SetSoftwareChannels(self._ptr, num))
