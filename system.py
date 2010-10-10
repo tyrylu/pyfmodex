@@ -279,7 +279,7 @@ class System(object):
         name = c_char_p()
         guid = GUID()
         ckresult(_dll.FMOD_System_GetDriverInfo(self._ptr, id, byref(name), sizeof(name), byref(guid)))
-        return so(name=nae, guid=guid)
+        return so(name=name, guid=guid)
 
     def get_geometry_occlusion(self, listener, source):
         listener = VECTOR.from_list(listener)
@@ -540,3 +540,9 @@ class System(object):
 
     def listener(self, id=0):
         return Listener(self._ptr, id)
+
+    @property
+    def num_record_drivers(self):
+        num = c_int()
+        ckresult(_dll.FMOD_System_GetRecordNumDrivers(self._ptr, byref(num)))
+        return num.value
