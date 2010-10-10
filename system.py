@@ -1,8 +1,59 @@
 from ctypes import *
-from utils import ckresult
+from utils import *
 from structures import *
 from globalvars import dll as _dll
 from structobject import Structobject as so
+import channel, channel_group, dsp, dsp_connection, sound, sound_group, geometry, reverb
+from constants import FMOD_3D, FMOD_SOFTWARE, FMOD_INIT_NORMAL, FMOD_CHANNEL_FREE
+
+class Listener(object):
+    def __init__(self, sptr, id):
+        pos = Vector()
+        vel = Vector()
+        fw = Vector()
+        up = Vector()
+        self._sysptr = sptr
+        self._id = id
+        ckresult(_dll.FMOD_System_Get3DListenerAttributes(self._sysptr, id, byref(pos), byref(vel), byref(fwd), byref(up)))
+        self._pos = pos
+        self._vel = vel
+        self._fwd = fwd
+        self._up = up
+
+    @property
+    def position(self):
+        return self._pos.to_list()
+    @position.setter
+    def position(self, poslist):
+        self._pos = Vector.from_list(poslist)
+        self._commit()
+
+    @property
+    def velocity(self):
+        return self._vel.to_list()
+    @velocity.setter
+    def velocity(self, vellist):
+        self._vel = Vector.from_list(vellist)
+        self._commit()
+
+    @property
+    def forward(self):
+        return self._fwd.to_list()
+    @forward.setter
+    def position(self, fwdlist):
+        self._fwd = Vector.from_list(fwdlist)
+        self._commit()
+
+    @property
+    def up(self):
+        return self._up.to_list()
+    @up.setter
+    def up(self, uplist):
+        self._up = Vector.from_list(uplist)
+        self._commit()
+
+    def _commit(self):
+        ckresult(_dll.FMOD_System_Set3DListenerAttributes(self._sysptr, id, pos, vel, fwd, up))
 
 class DSPBufferSizeInfo(object):
     def __init__(self, sptr, size, count):
@@ -67,6 +118,59 @@ class System(object):
         self._ptr = c_int()
         ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
 
+    def add_dsp(self, dsp):
+        if not isinstance(dsp, dsp.DSP): raise FmodError("This method requires an instance of DSP")
+        dsp_ptr = c_int()
+        ckresult(_dll.FMOD_System_AddDSP(self._ptr, dsp._ptr, byref(dsp_ptr)))
+        return dsp_connection.DSPConnection(dsp_ptr)
+
+    def create_channel_group(self, name):
+        cp = c_int()
+        ckresult(_dll.FMOD_System_CreateChannelGroup(self._ptr, name, byref(cp)))
+        return channel_group.ChannelGroup(cp)
+
+    def create_codec(self, desc, priority):
+        ckresult(_dll.FMOD_System_CreateCodec(self._ptr, desc, priority))
+
+    def create_dsp(self, dspdesc):
+        dsp_ptr = c_int()
+        ckresult(_dll.FMOD_System_CreateDSP(self._ptr, dspdesc, byref(dsp_ptr)))
+        return dsp.DSP(dsp_ptr)
+
+    def create_dsp_by_plugin(self, plugin_handle):
+        dsp_ptr = c_int()
+        ckresult(_dll.FMOD_System_CreateDSPByPlugin(self._ptr, plugin_handle, byref(dsp_ptr)))
+        return dsp.DSP(dsp_ptr)
+
+    def create_dsp_by_type(self, type):
+        dsp_ptr = c_int()
+        ckresult(_dll.FMOD_System_CreateDSPByType(self._ptr, type, byref(dsp_ptr)))
+        return dsp.DSP(dsp_ptr)
+
+    def create_geometry(self, maxpoligons, maxvertices):
+        geo_ptr = c_int()
+        ckresult(_dll.FMOD_System_CreateGeometry(self._ptr, maxpoligons, maxvertices, byref(geo_ptr)))
+        return geometry.Geometry(geo_ptr)
+
+    def create_reverb(self):
+        r_ptr = c_int()
+        ckresult(_dll.FMOD_System_CreateReverb(self._ptr, byref(r_ptr)))
+        return reverb.Reverb(r_ptr)
+
+    def create_sound(self, name_or_addr, mode=FMOD_3D|FMOD_SOFTWARE, exinfo=None):
+        snd_ptr = c_int()
+        ckresult(_dll.FMOD_System_CreateSound(self._ptr, name_or_addr, mode, exinfo, byref(snd_ptr)))
+        return sound.Sound(snd_ptr)
+
+    def create_sound_group(self, name):
+        sg_ptr = c_int()
+        ckresult(_dll.FMOD_System_CreateSoundGroup(self._ptr, name, byref(sg_ptr)))
+        return sound_group.SoundGroup(sg_ptr)
+
+    def create_stream(self, name_or_addr, mode=FMOD_3D|FMOD_SOFTWARE, exinfo=None):
+        mode = mode|FMOD_CREATESTREAM
+        return self.create_sound(name_or_addr, mode, exinfo)
+    
     def close(self):
         ckresult(_dll.FMOD_System_Close(self._ptr))
 
@@ -92,6 +196,11 @@ class System(object):
         total = c_float()
         ckresult(_dll.FMOD_System_GetCPUUsage(self._ptr, byref(dsp), byref(stream), byref(geometry), byref(update), byref(total)))
         return so(dsp=dsp.value, stream=stream.value, geometry=geometry.value, update=update.value, total=total.value)
+
+    def get_channel(self, id):
+        c_ptr = c_int()
+        ckresult(_dll.FMOD_System_GetChannel(self._ptr, id, byref(c_ptr)))
+        return channel.Channel(c_ptr)
 
     @property
     def channels_playing(self):
@@ -140,6 +249,13 @@ class System(object):
         lo = c_uint()
         ckresult(_dll.FMOD_System_GetDSPClock(self._ptr, byref(hi), byref(lo)))
         return so(hi=hi.value, lo=lo.value)
+
+
+    @property
+    def dsp_head(self):
+        dsp_ptr = c_int()
+        ckresult(_dll.FMOD_System_GetDSPHead(self._ptr, byref(dsp_ptr)))
+        return dsp.DSP(dsp_ptr)
 
     @property
     def driver(self):
@@ -191,8 +307,21 @@ class System(object):
         ckresult(_dll.FMOD_System_GetHardwareChannels(self._ptr, byref(num2d), byref(num3d), byref(total)))
         return so(num_2d=num2d.value, num_3d=num3d.value, total=total.value)
 
+
+    @property
+    def master_channel_group(self):
+        grp_ptr = c_int()
+        ckresult(_dll.FMOD_System_GetMasterChannelGroup(self._ptr, byref(grp_ptr)))
+        return channel_group.ChannelGroup(grp_ptr)
+
+    @property
+    def master_sound_group(self):
+        grp_ptr = c_int()
+        ckresult(_dll.FMOD_System_GetMasterSoundGroup(self._ptr, byref(grp_ptr)))
+        return sound_group.SoundGroup(grp_ptr)
+    
     def get_memory_info(membits, event_membits):
-        #What can be done with fourth argument...?
+        #Detailed memory info support will be there, but currently this is not the most important thing.
         usage = c_uint()
         ckresult(_dll.FMOD_System_GetMemoryInfo(self._ptr, membits, event_membits, byref(usage), None))
         return usage.value
@@ -324,3 +453,90 @@ class System(object):
     def software_channels(self, num):
         ckresult(_dll.FMOD_System_SetSoftwareChannels(self._ptr, num))
 
+    @property
+    def speaker_mode(self):
+        mode = c_int()
+        ckresult(_dll.FMOD_System_GetSpeakerMode(self._ptr, byref(mode)))
+        return mode
+    @speaker_mode.setter
+    def speaker_mode(self, mode):
+        ckresult(_dll.FMOD_System_SetSpeakerMode(self._ptr, mode))
+
+    def get_spectrum(self, numvalues, channeloffset, window):
+        arr = c_float * numvalues
+        ckresult(_dll.FMOD_System_GetSpectrum(self._ptr, byref(arr), numvalues, channeloffset, window))
+        return list(arr)
+    def get_wave_data(self, numvalues, channeloffset):
+        arr = c_float * numvalues
+        ckresult(_dll.FMOD_System_GetWaveData(self._ptr, byref(arr), numvalues, channeloffset))
+        return list(arr)
+    def init(self, maxchannels=1000, flags=FMOD_INIT_NORMAL, extra=None):
+        ckresult(_dll.FMOD_System_Init(self._ptr, maxchannels, flags, extra))
+
+    def is_recording(self, id):
+        rec = c_int()
+        ckresult(_dll.FMOD_System_IsRecording(self._ptr, id, byref(rec)))
+        return rec
+
+    def load_geometry(self, data):
+        d = c_void_p(data)
+        geo_ptr = c_int()
+        ckresult(_dll.FMOD_System_LoadGeometry(self._ptr, d, len(data), byref(geo_ptr)))
+        return geometry.Geometry(geo_ptr)
+
+    def load_plugin(self, file, priority):
+        handle = c_uint()
+        ckresult(_dll.FMOD_System_LoadPlugin(self._ptr, filename, byref(handle), priority))
+
+    def lock_dsp(self):
+        ckresult(_dll.FMOD_System_LockDSP(self._ptr))
+
+    def play_dsp(self, dsp, paused=False, channelid=FMOD_CHANNEL_FREE):
+        if not isinstance(dsp, dsp.DSP): raise FmodError("DSP instance is required.")
+        c_ptr = c_int()
+        ckresult(_dll.FMOD_System_PlayDSP(self._ptr, channelid, dsp._ptr, paused, byref(c_ptr)))
+        return channel.Channel(c_ptr)
+
+    def play_sound(self, snd, paused=False, channelid=FMOD_CHANNEL_FREE):
+        if not isinstance(snd, sound.Sound): raise FmodError("Sound instance is required.")
+        c_ptr = c_int()
+        ckresult(_dll.FMOD_System_PlaySound(self._ptr, channelid, snd._ptr, paused, byref(c_ptr)))
+        return channel.Channel(c_ptr)
+
+    def record_start(self, id, snd, loop=False):
+        if not isinstance(snd, sound.Sound): raise FmodError("Sound instance required.")
+        ckresult(_dll.FMOD_System_RecordStart(self._ptr, id, snd._ptr, loop))
+
+    def record_stop(self, id):
+        ckresult(_dll.FMOD_System_RecordStop(self._ptr, id))
+
+    def release(self):
+        ckresult(_dll.FMOD_System_Release(self._ptr))
+
+    def set_3d_rolloff_callback(self, callback):
+        cb = FMOD_ROLLOFF_CALLBACK(callback)
+        ckresult(_dll.FMOD_System_Set3DRolloffCallback(self._ptr, cb))
+    def set_callback(self, callback):
+        cb = FMOD_SYSTEM_CALLBACK(callback)
+        ckresult(_dll.FMOD_System_SetCallback(self._ptr, cb))
+
+    def set_plugin_path(self, path):
+        ckresult(_dll.FMOD_System_SetPluginPath(self._ptr, path))
+
+    def unload_plugin(self, handle):
+        ckresult(_dll.FMOD_System_UnloadPlugin(self._ptr, handle))
+
+    def unlock_dsp(self):
+        ckresult(_dll.FMOD_System_UnlockDSP(self._ptr))
+
+    def update(self):
+        ckresult(_dll.FMOD_System_Update(self._ptr))
+
+    @property
+    def version(self):
+        ver = c_uint()
+        ckresult(_dll.FMOD_System_GetVersion(self._ptr, byref(ver)))
+        return ver
+
+    def listener(self, id=0):
+        return Listener(self._ptr, id)
