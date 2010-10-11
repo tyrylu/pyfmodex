@@ -114,9 +114,13 @@ class ThreedSettings(object):
         self._rolloffscale = rscale
 
 class System(object):
-    def __init__(self):
-        self._ptr = c_int()
-        ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
+    def __init__(self, ptr=None, create=True):
+        """If create is True, new instance is created. Otherwise ptr must be a valid pointer."""
+        if create:
+            self._ptr = c_int()
+            ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
+        else:
+            self._ptr = ptr
 
     def add_dsp(self, dsp):
         if not isinstance(dsp, dsp.DSP): raise FmodError("This method requires an instance of DSP")
@@ -276,10 +280,10 @@ class System(object):
         return so(caps=caps.value, minfreq=minfreq.value, maxfreq=maxfreq.value, mode=mode.value)
 
     def get_driver_info(self, id):
-        name = c_char_p()
+        name = c_char * 256
         guid = GUID()
-        ckresult(_dll.FMOD_System_GetDriverInfo(self._ptr, id, byref(name), sizeof(name), byref(guid)))
-        return so(name=name, guid=guid)
+        ckresult(_dll.FMOD_System_GetDriverInfo(self._ptr, id, name, 256, byref(guid)))
+        return so(name=name.value, guid=guid)
 
     def get_geometry_occlusion(self, listener, source):
         listener = VECTOR.from_list(listener)
@@ -395,9 +399,9 @@ class System(object):
 
     def get_plugin_info(self, handle):
         type = c_int()
-        name = c_char_p()
+        name = c_char_ * 256
         ver = c_uint()
-        ckresult(_dll.FMOD_System_GetPluginInfo(self._ptr, handle, byref(type), byref(name), sizeof(name), byref(ver)))
+        ckresult(_dll.FMOD_System_GetPluginInfo(self._ptr, handle, byref(type), byref(name), 256, byref(ver)))
         return so(type=type.value, name=name.value, version=ver.value)
 
     def get_record_driver_caps(self, id):
@@ -457,7 +461,7 @@ class System(object):
     def speaker_mode(self):
         mode = c_int()
         ckresult(_dll.FMOD_System_GetSpeakerMode(self._ptr, byref(mode)))
-        return mode
+        return mode.value
     @speaker_mode.setter
     def speaker_mode(self, mode):
         ckresult(_dll.FMOD_System_SetSpeakerMode(self._ptr, mode))
@@ -476,7 +480,7 @@ class System(object):
     def is_recording(self, id):
         rec = c_int()
         ckresult(_dll.FMOD_System_IsRecording(self._ptr, id, byref(rec)))
-        return rec
+        return rec.value
 
     def load_geometry(self, data):
         d = c_void_p(data)
@@ -536,7 +540,7 @@ class System(object):
     def version(self):
         ver = c_uint()
         ckresult(_dll.FMOD_System_GetVersion(self._ptr, byref(ver)))
-        return ver
+        return ver.value
 
     def listener(self, id=0):
         return Listener(self._ptr, id)
