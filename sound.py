@@ -288,3 +288,28 @@ class Sound(FmodObject):
         v = self._variations
         v[2] = var
         self._variations = var
+
+    def lock(self, offset, length):
+        ptr1 = c_void_p()
+        len1 = c_uint()
+    ptr2 = c_void_p()
+        len2 = c_uint()
+        ckresult(_dll.FMOD_Sound_Lock(self._ptr, offset, length, byref(ptr1), byref(ptr2), byref(len1), byref(len2)))
+        return ((ptr1, len1), (ptr2, len2))
+
+    def release(self):
+        ckresult(_dll.FMOD_Sound_Release(self._ptr))
+
+    def set_subsound(self, index, snd):
+        if not isinstance(snd, sound.Sound): raise FmodError("Fmod sound instance required.")
+        ckresult(_dll.FMOD_Sound_SetSubSound(self._ptr, index, snd._ptr))
+
+    def set_subsound_sentence(self, sounds):
+        a = c_int * len(sounds)
+        ptrs = [o._ptr for o in snds]
+        ai = a(*ptrs)
+        ckresult(_dll.FMOD_Sound_SetSubSoundSentence(self._ptr, ai, len(ai))
+
+    def unlock(self, i1, i2):
+        """I1 and I2 are tuples of form (ptr, len)."""
+        ckresult(_dll.FMOD_Sound_Unlock(self._ptr, i1[0], i2[0], i1[1], i2[1]))
