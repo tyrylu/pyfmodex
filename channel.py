@@ -1,7 +1,8 @@
 from fmodobject import *
 from fmodobject import _dll
 from structures import VECTOR
-import dsp, dsp_connection, channel_group
+from constants import FMOD_DELAYTYPE_END_MS
+import dsp, dsp_connection, channel_group, sound
 
 class ConeSettings(object):
     def __init__(self, sptr):
@@ -150,3 +151,68 @@ class Channel(FmodObject):
     def pan_level(self, l):
     ckresult(_dll.FMOD_Channel_Set3DPanLevel(self._ptr, l))
     
+    @property
+    def threed_spread(self):
+        a = c_float()
+        ckresult(_dll.FMOD_Channel_Get3DSpread(self._ptr, byref(a)))
+        return a.value
+    @threed_spread.setter
+    def threed_spread(self, a):
+        ckresult(_dll.FMOD_Channel_Set3DSpread(self._ptr, a))
+
+    @property
+    def audibility(self):
+        aud = c_float()
+        ckresult(_dll.FMOD_Channel_GetAudibility(self._ptr, byref(aud)))
+        return aud.value
+
+    @property
+    def channel_group(self):
+        grp_ptr = c_int()
+        ckresult(_dll.FMOD_Channel_GetChannelGroup(self._ptr, byref(grp_ptr)))
+        return channel_group.ChannelGroup(grp_ptr)
+    @channel_group.setter
+    def channel_group(self, group):
+        if not isinstance(group, channel_group.ChannelGroup): raise FmodError("Channel group object is required.")
+        ckresult(_dll.FMOD_Channel_SetChannelGroup(self._ptr, group._ptr))
+
+    @property
+    def current_sound(self):
+        snd_ptr = c_int()
+        ckresult(_dll.FMOD_Channel_GetCurrentSound(self._ptr, byref(snd_ptr)))
+        return sound.Sound(snd_ptr)
+
+    @property
+    def dsp_head(self):
+        dsp_ptr = c_int()
+        ckresult(_dll.FMOD_Channel_GetDSPHead(self._ptr, byref(dsp_ptr)))
+        return dsp.DSP(dsp_ptr)
+    def get_delay(self, type):
+        lo = c_uint()
+        hi = c_uint()
+        ckresult(_dll.FMOD_ChannelGetDelay(self._ptr, type, byref(hi), byref(lo)))
+        return MAKELONG(lo.value, hi.value)
+
+    def set_delay(self, type, val):
+        if type == FMOD_DELAYTYPE_END_MS:
+            hi = val
+            lo = None
+        else:
+            hi = HIWORD(val)
+            lo = LOWORD(val)
+        ckresult(_dll.FMOD_Channel_SetDelay(self._ptr, type, hi, lo))
+
+    @property
+    def frequency(self):
+        freq = c_float()
+        ckresult(_dll.FMOD_Channel_GetFrequency(self._ptr, byref(freq)))
+        return freq.value
+    @frequency.setter
+    def frequency(self, freq):
+        ckresult(_dll.FMOD_Channel_SetFrequency(self._ptr, freq))
+
+    @property
+def index(self):
+        idx = c_int()
+    ckresult(_dll.FMOD_Channel_GetIndex(self._ptr, byref(idx)))
+        return idx.value

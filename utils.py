@@ -9,3 +9,13 @@ class FmodError(Exception):
 def ckresult(result):
     if result != 0:
         raise FmodError(result)
+
+def LOWORD(long):
+    return long&0xFFFF
+ 
+def HIWORD(long):
+    return long>>16
+
+def MAKELONG(lo,hi):
+    return (hi<<16)+lo
+

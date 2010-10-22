@@ -252,7 +252,7 @@ class System(object):
         hi = c_uint()
         lo = c_uint()
         ckresult(_dll.FMOD_System_GetDSPClock(self._ptr, byref(hi), byref(lo)))
-        return so(hi=hi.value, lo=lo.value)
+        return MAKELONG(hi.value, lo.value)
 
 
     @property
