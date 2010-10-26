@@ -59,7 +59,7 @@ class Sound(FmodObject):
         return (min.value, max.value)
     @_min_max_distance.setter
     def _min_max_distance(self, dists):
-        ckresult(_dll.FMOD_Sound_Set3DMinMaxDistance(self._ptr, dists[0], dists[1]))
+        ckresult(_dll.FMOD_Sound_Set3DMinMaxDistance(self._ptr, c_float(dists[0]), c_float(dists[1])))
 
     @property
     def min_distance(self):
@@ -85,7 +85,7 @@ class Sound(FmodObject):
         return [freq.value, vol.value, pan.value, pri.value]
     @_defaults.setter
     def _defaults(self, vals):
-        ckresult(_dll.FMOD_Sound_SetDefaults(self._ptr, vals[0], vals[1], vals[2], vals[3]))
+        ckresult(_dll.FMOD_Sound_SetDefaults(self._ptr, c_float(vals[0]), c_float(vals[1]), c_float(vals[2]), vals[3]))
 
     @property
     def default_frequency(self):
@@ -147,7 +147,7 @@ class Sound(FmodObject):
 
     @property
     def loop_points(self):
-        "Returns tuple of two tuples ((start, startunit),(end, endunit))"""
+        """Returns tuple of two tuples ((start, startunit),(end, endunit))"""
         start = c_uint()
         startunit = c_int()    
         end = c_uint()
@@ -173,7 +173,7 @@ class Sound(FmodObject):
         ckresult(_dll.FMOD_Sound_GetMusiChannelVolume(self._ptr, channel, byref(v)))
         return v.value
     def set_music_channel_volume(self, id, vol):
-        ckresult(_dll.FMOD_Sound_SetMusiChannelVolume(self._ptr, id, vol))
+        ckresult(_dll.FMOD_Sound_SetMusiChannelVolume(self._ptr, id, c_float(vol)))
 
     @property
     def num_music_channels(self):
@@ -260,7 +260,7 @@ class Sound(FmodObject):
         return [freq.value, vol.value, pan.value]
     @_variations.setter
     def _variations(self, vars):
-        ckresult(_dll.FMOD_Sound_SetVariations(self._ptr, vars[0], vars[1], vars[2]))
+        ckresult(_dll.FMOD_Sound_SetVariations(self._ptr, c_float(vars[0]), c_float(vars[1]), c_float(vars[2])))
 
     @property
     def frequency_variation(self):
@@ -292,7 +292,7 @@ class Sound(FmodObject):
     def lock(self, offset, length):
         ptr1 = c_void_p()
         len1 = c_uint()
-    ptr2 = c_void_p()
+        ptr2 = c_void_p()
         len2 = c_uint()
         ckresult(_dll.FMOD_Sound_Lock(self._ptr, offset, length, byref(ptr1), byref(ptr2), byref(len1), byref(len2)))
         return ((ptr1, len1), (ptr2, len2))
@@ -306,9 +306,9 @@ class Sound(FmodObject):
 
     def set_subsound_sentence(self, sounds):
         a = c_int * len(sounds)
-        ptrs = [o._ptr for o in snds]
+        ptrs = [o._ptr for o in sounds]
         ai = a(*ptrs)
-        ckresult(_dll.FMOD_Sound_SetSubSoundSentence(self._ptr, ai, len(ai))
+        ckresult(_dll.FMOD_Sound_SetSubSoundSentence(self._ptr, ai, len(ai)))
 
     def unlock(self, i1, i2):
         """I1 and I2 are tuples of form (ptr, len)."""

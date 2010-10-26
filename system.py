@@ -228,7 +228,7 @@ class System(object):
         return so(x=x.value, y=y.value, active=active.value)
 
     def set_3d_speaker_position(self, speaker, x, y, active):
-        ckresult(_dll.FMOD_System_Set3DSpeakerPosition(self._ptr, speaker, x, y, active))
+        ckresult(_dll.FMOD_System_Set3DSpeakerPosition(self._ptr, speaker, c_float(x), c_float(y), active))
 
     @property
     def advanced_settings(self):
@@ -301,7 +301,7 @@ class System(object):
 
     @geometry_max_world_size.setter
     def geometry_max_world_size(self, size):
-        ckresult(_dll.FMOD_System_SetGeometrySettings(self._ptr, size))
+        ckresult(_dll.FMOD_System_SetGeometrySettings(self._ptr, c_float(size)))
 
     @property
     def hardware_channels(self):

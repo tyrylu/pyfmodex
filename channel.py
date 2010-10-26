@@ -2,7 +2,7 @@ from fmodobject import *
 from fmodobject import _dll
 from structures import VECTOR
 from constants import FMOD_DELAYTYPE_END_MS
-import dsp, dsp_connection, channel_group, sound
+import dsp, dsp_connection, channel_group
 
 class ConeSettings(object):
     def __init__(self, sptr):
@@ -42,7 +42,7 @@ class ConeSettings(object):
 class Channel(FmodObject):
     def add_dsp(self, dsp):
         if not isinstance(dsp, dsp.DSP): raise FmodError("DSP instance is required.")
-        c_ptr = c_int()
+        c_ptr = c_float()
         ckresult(_dll.FMOD_Channel_AddDSP(self._ptr, dsp._ptr, byref(c_ptr)))
         return dsp_connection.DSPConnection(c_ptr)
     @property
@@ -59,14 +59,14 @@ class Channel(FmodObject):
 
     @property
     def position(self):
-        return self._threed_attrs0]
-    @velocity.setter
-    def velocity(self, pos):
+        return self._threed_attrs[0]
+    @position.setter
+    def position(self, pos):
         self._threed_attrs = (pos, self._threed_attrs[1])
 
     @property
     def velocity(self):
-        return self._threed_attrs1]
+        return self._threed_attrs[1]
     @velocity.setter
     def velocity(self, vel):
         self._threed_attrs = (self._threed_attrs[0], vel)
@@ -75,11 +75,11 @@ class Channel(FmodObject):
     def cone_orientation(self):
         ori = VECTOR()
         ckresult(_dll.FMOD_Channel_Get3DConeOrientation(self._ptr, byref(ori)))
-    return ori.to_list()
+        return ori.to_list()
     @cone_orientation.setter
     def cone_orientation(self, ori):
         vec = VECTOR.from_list(ori)
-    ckresult(_dll.FMOD_Channel_Set3DConeOrientation(self._ptr, vec))
+        ckresult(_dll.FMOD_Channel_Set3DConeOrientation(self._ptr, vec))
 
     @property
     def cone_settings(self):
@@ -92,7 +92,7 @@ class Channel(FmodObject):
         return level.value
     @doppler_level.setter
     def doppler_level(self, l):
-    ckresult(_dll.FMOD_Channel_Set3DDopplerLevel(self._ptr, l))
+        ckresult(_dll.FMOD_Channel_Set3DDopplerLevel(self._ptr, c_float(l)))
 
     @property
     def _min_max_distance(self):
@@ -102,7 +102,7 @@ class Channel(FmodObject):
         return (min.value, max.value)
     @_min_max_distance.setter
     def _min_max_distance(self, dists):
-        ckresult(_dll.FMOD_Channel_Set3DMinMaxDistance(self._ptr, dists[0], dists[1]))
+        ckresult(_dll.FMOD_Channel_Set3DMinMaxDistance(self._ptr, c_float(dists[0]), c_float(dists[1])))
 
     @property
     def min_distance(self):
@@ -118,7 +118,7 @@ class Channel(FmodObject):
     def max_distance(self, dist):
         self._min_max_distance = (self._min_max_distance[0], dist)
 
-        @property
+    @property
     def _occlusion(self):
         direct = c_float()
         reverb = c_float()
@@ -126,7 +126,7 @@ class Channel(FmodObject):
         return (direct.value, reverb.value)
     @_occlusion.setter
     def _occlusion(self, occs):
-        ckresult(_dll.FMOD_Channel_Set3DOcclusion(self._ptr, occs[0], occs[1]))
+        ckresult(_dll.FMOD_Channel_Set3DOcclusion(self._ptr, c_float(occs[0]), c_float(occs[1])))
 
     @property
     def direct_occlusion(self):
@@ -144,12 +144,12 @@ class Channel(FmodObject):
 
     @property
     def pan_level(self):
-        l = c_int()
+        l = c_float()
         ckresult(_dll.FMOD_Channel_Get3DanLevel(self._ptr, byref(l)))
         return l.value
     @pan_level.setter
     def pan_level(self, l):
-    ckresult(_dll.FMOD_Channel_Set3DPanLevel(self._ptr, l))
+        ckresult(_dll.FMOD_Channel_Set3DPanLevel(self._ptr, c_float(l)))
     
     @property
     def threed_spread(self):
@@ -158,7 +158,7 @@ class Channel(FmodObject):
         return a.value
     @threed_spread.setter
     def threed_spread(self, a):
-        ckresult(_dll.FMOD_Channel_Set3DSpread(self._ptr, a))
+        ckresult(_dll.FMOD_Channel_Set3DSpread(self._ptr, c_float(a)))
 
     @property
     def audibility(self):
@@ -168,7 +168,7 @@ class Channel(FmodObject):
 
     @property
     def channel_group(self):
-        grp_ptr = c_int()
+        grp_ptr = c_float()
         ckresult(_dll.FMOD_Channel_GetChannelGroup(self._ptr, byref(grp_ptr)))
         return channel_group.ChannelGroup(grp_ptr)
     @channel_group.setter
@@ -177,14 +177,14 @@ class Channel(FmodObject):
         ckresult(_dll.FMOD_Channel_SetChannelGroup(self._ptr, group._ptr))
 
     @property
-    def current_sound(self):
-        snd_ptr = c_int()
-        ckresult(_dll.FMOD_Channel_GetCurrentSound(self._ptr, byref(snd_ptr)))
-        return sound.Sound(snd_ptr)
+    def current_Channel(self):
+        snd_ptr = c_float()
+        ckresult(_dll.FMOD_Channel_GetCurrentChannel(self._ptr, byref(snd_ptr)))
+        return Channel.Channel(snd_ptr)
 
     @property
     def dsp_head(self):
-        dsp_ptr = c_int()
+        dsp_ptr = c_float()
         ckresult(_dll.FMOD_Channel_GetDSPHead(self._ptr, byref(dsp_ptr)))
         return dsp.DSP(dsp_ptr)
     def get_delay(self, type):
@@ -209,10 +209,95 @@ class Channel(FmodObject):
         return freq.value
     @frequency.setter
     def frequency(self, freq):
-        ckresult(_dll.FMOD_Channel_SetFrequency(self._ptr, freq))
+        ckresult(_dll.FMOD_Channel_SetFrequency(self._ptr, c_float(freq)))
 
     @property
-def index(self):
-        idx = c_int()
-    ckresult(_dll.FMOD_Channel_GetIndex(self._ptr, byref(idx)))
+    def index(self):
+        idx = c_float()
+        ckresult(_dll.FMOD_Channel_GetIndex(self._ptr, byref(idx)))
         return idx.value
+
+    @property
+    def loop_count(self):
+        c = c_float()
+        ckresult(_dll.FMOD_Channel_GetLoopCount(self._ptr, byref(c)))
+        return c.value
+    @loop_count.setter
+    def loop_count(self, count):
+        ckresult(_dll.FMOD_Channel_SetLoopCount(self._ptr, c_int(count)))
+
+    @property
+    def loop_points(self):
+        "Returns tuple of two tuples ((start, startunit),(end, endunit))"""
+        start = c_uint()
+        startunit = c_int()    
+        end = c_uint()
+        endunit = c_int()
+        ckresult(_dll.FMOD_Channel_GetLoopPoints(self._ptr, byref(start), byref(startunit), byref(end), byref(endunit)))
+        return ((start.value, startunit.value), (end.value, endunit.value))
+    @loop_points.setter
+    def loop_points(self, p):
+        """Same format as returned from this property is required to successfully call this setter."""
+        ckresult(_dll.FMOD_Channel_SetLoopPoints(self._ptr, c_uint(p[0][0]), p[0][1], c_uint(p[1][0]), p[1][1]))
+
+    @property
+    def low_pass_gain(self):
+        gain = c_float()
+        ckresult(_dll.FMOD_Channel_GetLowPassGain(self._ptr, byref(gain)))
+        return gain.value
+    @low_pass_gain.setter
+    def low_pass_gain(self, gain):
+        ckresult(_dll.FFMOD_Channel_SetLowPassGain(self._ptr, c_float(gain)))
+
+    @property
+    def mode(self):
+        mode = c_int()
+        ckresult(_dll.FMOD_Channel_GetMode(self._ptr, byref(mode)))
+        return mode.value
+    @mode.setter
+    def mode(self, m):
+        ckresult(_dll.FMOD_Channel_SetMode(self._ptr, m))
+
+    @property
+    def mute(self):
+        mute = c_bool()
+        ckresult(_dll.FMOD_Channel_GetMute(self._ptr, byref(mute)))
+        return mute.value
+    @mute.setter
+    def mute(self, m):
+        ckresult(_dll.FMOD_Channel_SetMute(self._ptr, m))
+
+    @property
+    def pan(self):
+        pan = c_float()
+        ckresult(_dll.FMOD_Channel_GetPan(self._ptr, byref(Pan)))
+        return pan.value
+    @pan.setter
+    def pan(self, pan):
+        ckresult(_dll.FMOD_Channel_SetPan(self._ptr, c_float(pan)))
+
+    @property
+    def paused(self):
+        paused = c_bool()
+        ckresult(_dll.FMOD_Channel_GetPaused(self._ptr, byref(paused)))
+        return paused.value
+    @paused.setter
+    def paused(self, p):
+        ckresult(_dll.FMOD_Channel_SetPaused(self._ptr, p))
+
+    def get_position(self, unit):
+        pos = c_uint()
+        ckresult(_dll.FMOD_Channel_GetPosition(self._ptr, byref(pos), unit))
+        return pos.value
+
+    def set_position(self, pos, unit):
+        ckresult(_dll.FMOD_Channel_SetPosition(self._ptr, pos, unit))
+
+    @property
+    def priority(self):
+        pri = c_int()
+        ckresult(_dll.FMOD_Channel_GetPriority(self._ptr, byref(pri)))
+        return pri.value
+    @priority.setter
+    def priority(self, pri):
+        ckresult(_dll.FMOD_Channel_SetPriority(self._ptr, pri))    
