@@ -468,12 +468,14 @@ class System(object):
 
     def get_spectrum(self, numvalues, channeloffset, window):
         arr = c_float * numvalues
-        ckresult(_dll.FMOD_System_GetSpectrum(self._ptr, byref(arr), numvalues, channeloffset, window))
-        return list(arr)
+        arri = arr()
+        ckresult(_dll.FMOD_System_GetSpectrum(self._ptr, byref(arri), numvalues, channeloffset, window))
+        return list(arri)
     def get_wave_data(self, numvalues, channeloffset):
         arr = c_float * numvalues
-        ckresult(_dll.FMOD_System_GetWaveData(self._ptr, byref(arr), numvalues, channeloffset))
-        return list(arr)
+        arri = arr()
+        ckresult(_dll.FMOD_System_GetWaveData(self._ptr, byref(arri), numvalues, channeloffset))
+        return list(arri)
     def init(self, maxchannels=1000, flags=FMOD_INIT_NORMAL, extra=None):
         ckresult(_dll.FMOD_System_Init(self._ptr, maxchannels, flags, extra))
 

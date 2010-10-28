@@ -1,10 +1,9 @@
 from ctypes import *
-from constants import *
 _dll = windll.fmodex
 import globalvars
 globalvars.dll = _dll
-from system import System
 from utils import ckresult
+from structobject import Structobject as so
 
 def get_debug_level():
     level = c_int()
@@ -26,5 +25,5 @@ def get_memory_stats(blocking):
     current = c_int()
     max = c_int()
     ckresult(_dll.FMOD_Memory_GetStats(byref(current), byref(max), blocking))
-    return (current, max)
+    return so(current=current.value, maximum=max.value)
 

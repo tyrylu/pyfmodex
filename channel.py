@@ -1,8 +1,8 @@
 from fmodobject import *
 from fmodobject import _dll
-from structures import VECTOR
+from structures import VECTOR, FMOD_REVERB_CHANNELPROPERTIES
 from constants import FMOD_DELAYTYPE_END_MS
-import dsp, dsp_connection, channel_group
+import dsp, dsp_connection, channel_group, system
 
 class ConeSettings(object):
     def __init__(self, sptr):
@@ -301,3 +301,59 @@ class Channel(FmodObject):
     @priority.setter
     def priority(self, pri):
         ckresult(_dll.FMOD_Channel_SetPriority(self._ptr, pri))    
+
+    @property
+    def reverb_properties(self):
+        props = FMOD_REVERBP_CHANNELROPERTIES()
+        ckresult(_dll.FMOD_Channel_GetReverbProperties(self._ptr, byref(props)))
+        return props
+    @reverb_properties.setter
+    def reverb_properties(self, props):
+        if not isinstance(props, FMOD_REVERB_CHANNELPROPERTIES): raise FmodError("Wrong object passed in.")
+        ckresult(_dll.FMOD_Channel_SetReverbProperties(self._ptr, props))
+
+    def get_spectrum(self, numvalues, channeloffset, window):
+        arr = c_float * numvalues
+        arri = arr()
+        ckresult(_dll.FMOD_Channel_GetSpectrum(self._ptr, byref(arri), numvalues, channeloffset, window))
+        return list(arri)
+
+    @property
+    def system_object(self):
+        sptr = c_int()
+        ckresult(_dll.FMOD_Channel_GetSystemObject(self._ptr, byref(sptr)))
+        return system.System(sptr, False)
+
+    @property
+    def volume(self):
+        vol = c_float()
+        ckresult(_dll.FMOD_Channel_GetVolume(self._ptr, byref(vol)))
+        return vol.value
+    @volume.setter
+    def volume(self, vol):
+        ckresult(_dll.FMOD_Channel_SetVolume(self._ptr, c_float(vol)))
+
+    def get_wave_data(self, numvalues, channeloffset):
+        arr = c_float * numvalues
+        arri = arr()
+        ckresult(_dll.FMOD_Channel_GetWaveData(self._ptr, byref(arri), numvalues, channeloffset))
+        return list(arri)
+
+    @property
+    def is_playing(self):
+        pl = c_bool()
+        ckresult(_dll.FMOD_Channel_IsPlaying(self._ptr, byref(pl)))
+        return pl.value
+
+    @property
+    def is_virtual(self):
+        vi = c_bool()
+        ckresult(_dll.FMOD_Channel_IsVirtual(self._ptr, byref(vi)))
+        return vi.value
+
+    def set_callback(self, cb):
+        cbi = FMOD_CHANNEL_CALLBACK(cb)
+        ckresult(_dll.FMOD_Channel_SetCallback(self._ptr, cbi))
+
+    def stop(self):
+        ckresult(_dll.FMOD_Channel_Stop())
