@@ -201,6 +201,7 @@ class Sound(FmodObject):
 
     @property
     def num_tags(self):
+        num = c_int()
         ckresult(_dll.FMOD_Sound_GetNumTags(self._ptr, byref(num)))
         return num.value
 
@@ -217,7 +218,7 @@ class Sound(FmodObject):
         return sound_group.SoundGroup(grp_ptr)
     @sound_group.setter
     def sound_group(self, group):
-        if not isinstance(group, sound_group.Group): raise FmodError("Sound group object is required.")
+        check_type(group, sound_group.SoundGroup)
         ckresult(_dll.FMOD_Sound_SetSoundGroup(self._ptr, group._ptr))
 
     def get_subsound(self, index):
@@ -246,7 +247,7 @@ class Sound(FmodObject):
     def play(self, paused=False):
         return self.system_object.play_sound(self, paused)
 
-    def get_tag(index, name=None):
+    def get_tag(self, index, name=None):
         tag = TAG()
         ckresult(_dll.FMOD_Sound_GetTag(self._ptr, name, index, byref(tag)))
         return tag
@@ -301,7 +302,7 @@ class Sound(FmodObject):
         ckresult(_dll.FMOD_Sound_Release(self._ptr))
 
     def set_subsound(self, index, snd):
-        if not isinstance(snd, sound.Sound): raise FmodError("Fmod sound instance required.")
+        check_type(snd, Sound)
         ckresult(_dll.FMOD_Sound_SetSubSound(self._ptr, index, snd._ptr))
 
     def set_subsound_sentence(self, sounds):

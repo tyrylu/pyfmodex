@@ -1,8 +1,9 @@
 from fmodobject import *
 from fmodobject import _dll
-from structures import VECTOR, FMOD_REVERB_CHANNELPROPERTIES
+from structures import VECTOR, REVERB_CHANNELPROPERTIES
 from constants import FMOD_DELAYTYPE_END_MS
 import dsp, dsp_connection, channel_group, system
+from callbackprototypes import CHANNEL_CALLBACK
 
 class ConeSettings(object):
     def __init__(self, sptr):
@@ -40,15 +41,15 @@ class ConeSettings(object):
         ckresult(_dll.FMOD_Channel_Set3DConeSettings(self._sptr, self._in, self._out, self._outvol))
 
 class Channel(FmodObject):
-    def add_dsp(self, dsp):
-        if not isinstance(dsp, dsp.DSP): raise FmodError("DSP instance is required.")
+    def add_dsp(self, d):
+        check_type(d, dsp.DSP): raise FmodError("DSP instance is required.")
         c_ptr = c_float()
-        ckresult(_dll.FMOD_Channel_AddDSP(self._ptr, dsp._ptr, byref(c_ptr)))
+        ckresult(_dll.FMOD_Channel_AddDSP(self._ptr, d._ptr, byref(c_ptr)))
         return dsp_connection.DSPConnection(c_ptr)
     @property
     def _threed_attrs(self):
-        pos = Vector()
-        vel = Vector()
+        pos = VECTOR()
+        vel = VECTOR()
         ckresult(_dll.FMOD_Channel_Get3DAttributes(self._ptr, byref(pos), byref(vel)))
         return [pos.to_list(), vel.to_list()]
     @_threed_attrs.setter
@@ -173,14 +174,14 @@ class Channel(FmodObject):
         return channel_group.ChannelGroup(grp_ptr)
     @channel_group.setter
     def channel_group(self, group):
-        if not isinstance(group, channel_group.ChannelGroup): raise FmodError("Channel group object is required.")
+        check_type(group, channel_group.ChannelGroup)
         ckresult(_dll.FMOD_Channel_SetChannelGroup(self._ptr, group._ptr))
 
     @property
-    def current_Channel(self):
+    def current_sound(self):
         snd_ptr = c_float()
-        ckresult(_dll.FMOD_Channel_GetCurrentChannel(self._ptr, byref(snd_ptr)))
-        return Channel.Channel(snd_ptr)
+        ckresult(_dll.FMOD_Channel_GetCurrentSound(self._ptr, byref(snd_ptr)))
+        return sound.Sound(snd_ptr)
 
     @property
     def dsp_head(self):
@@ -270,7 +271,7 @@ class Channel(FmodObject):
     @property
     def pan(self):
         pan = c_float()
-        ckresult(_dll.FMOD_Channel_GetPan(self._ptr, byref(Pan)))
+        ckresult(_dll.FMOD_Channel_GetPan(self._ptr, byref(pan)))
         return pan.value
     @pan.setter
     def pan(self, pan):
@@ -304,12 +305,12 @@ class Channel(FmodObject):
 
     @property
     def reverb_properties(self):
-        props = FMOD_REVERBP_CHANNELROPERTIES()
+        props = REVERB_CHANNELPROPERTIES()
         ckresult(_dll.FMOD_Channel_GetReverbProperties(self._ptr, byref(props)))
         return props
     @reverb_properties.setter
     def reverb_properties(self, props):
-        if not isinstance(props, FMOD_REVERB_CHANNELPROPERTIES): raise FmodError("Wrong object passed in.")
+        check_type(props, REVERB_CHANNELPROPERTIES)
         ckresult(_dll.FMOD_Channel_SetReverbProperties(self._ptr, props))
 
     def get_spectrum(self, numvalues, channeloffset, window):
@@ -352,8 +353,8 @@ class Channel(FmodObject):
         return vi.value
 
     def set_callback(self, cb):
-        cbi = FMOD_CHANNEL_CALLBACK(cb)
+        cbi = CHANNEL_CALLBACK(cb)
         ckresult(_dll.FMOD_Channel_SetCallback(self._ptr, cbi))
 
     def stop(self):
-        ckresult(_dll.FMOD_Channel_Stop())
+        ckresult(_dll.FMOD_Channel_Stop(self._ptr))
