@@ -1,6 +1,6 @@
 from fmodobject import *
 from fmodobject import _dll
-import dsp, dsp_connection
+import dsp, dsp_connection, system
 
 class DSP(FmodObject):
 
@@ -133,3 +133,36 @@ class DSP(FmodObject):
 
     def set_param(self, index, val):
         ckresult(_dll.FMOD_DSP_SetParameter(self._ptr, index, val))
+
+    def get_speaker_active(self, speaker):
+        active = c_bool()
+        ckresult(_dll.FMOD_DSP_GetSpeakerActive(self._ptr, speaker, byref(active)))
+        return active.value
+
+    def set_speaker_active(self, speaker, active):
+        ckresult(_dll.FMOD_DSP_SetSpeakerActive(self._ptr, speaker, active))
+
+    @property
+    def system_object(self):
+        sptr = c_int()
+        ckresult(_dll.FMOD_DSP_GetSystemObject(self._ptr, byref(sptr)))
+        return system.System(sptr, False)
+
+    @property
+    def type(self):
+        t = c_int()
+        ckresult(_dll.FMOD_DSP_GetType(self._ptr, byref(t)))
+        return t.value
+
+    def release(self):
+        ckresult(_dll.FMOD_DSP_Release(self._ptr))
+
+    def remove(self):
+    ckresult(_dll.FMOD_DSP_Remove(self._ptr))    
+
+    def reset(self):
+        ckresult(_dll.FMOD_DSP_Reset(self._ptr))
+
+    def show_config_dialog(self, hwnd, show=True):
+        ckresult(_dll.FMOD_DSP_ShowConfigDialog(self._ptr, hwnd, show))
+
