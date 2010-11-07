@@ -14,7 +14,7 @@ class DSPConnection(FmodObject):
         m_val = c_float()
         ckresult(_dll.FMOD_DSPConnection_GetMix(self._ptr, byref(m_val)))
         return m_val.value
-    @mix.property
+    @mix.setter
     def mix(self, m):
         ckresult(_dll.FMOD_DSPConnection_SetMix(self._ptr, m))
 

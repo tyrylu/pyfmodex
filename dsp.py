@@ -132,7 +132,7 @@ class DSP(FmodObject):
         return so(name=name.value, label=label.value, description=desc.value, min=min.value, max=max.value)
 
     def set_param(self, index, val):
-        ckresult(_dll.FMOD_DSP_SetParameter(self._ptr, index, val))
+        ckresult(_dll.FMOD_DSP_SetParameter(self._ptr, index, c_float(val)))
 
     def get_speaker_active(self, speaker):
         active = c_bool()
@@ -158,7 +158,7 @@ class DSP(FmodObject):
         ckresult(_dll.FMOD_DSP_Release(self._ptr))
 
     def remove(self):
-    ckresult(_dll.FMOD_DSP_Remove(self._ptr))    
+        ckresult(_dll.FMOD_DSP_Remove(self._ptr))    
 
     def reset(self):
         ckresult(_dll.FMOD_DSP_Reset(self._ptr))

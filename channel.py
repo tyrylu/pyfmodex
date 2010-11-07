@@ -42,7 +42,7 @@ class ConeSettings(object):
 
 class Channel(FmodObject):
     def add_dsp(self, d):
-        check_type(d, dsp.DSP): raise FmodError("DSP instance is required.")
+        check_type(d, dsp.DSP)
         c_ptr = c_float()
         ckresult(_dll.FMOD_Channel_AddDSP(self._ptr, d._ptr, byref(c_ptr)))
         return dsp_connection.DSPConnection(c_ptr)

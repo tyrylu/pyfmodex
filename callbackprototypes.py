@@ -5,7 +5,7 @@ if os.name == "nt":
 else:
     func = WINFUNCTYPE
 
-ROLLOFCALLBACK = func(c_float, c_int, c_float)
+ROLLOFF_CALLBACK = func(c_float, c_int, c_float)
 CHANNEL_CALLBACK = func(c_int, c_int, c_int, c_void_p, c_void_p)
 FILE_CLOSECALLBACK = func(c_int, c_void_p, c_void_p)
 FILE_OPENCALLBACK = func(c_int, c_char_p, c_int, c_uint, c_void_p, c_void_p)
