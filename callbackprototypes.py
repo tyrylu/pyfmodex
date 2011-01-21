@@ -3,7 +3,7 @@ from ctypes import *
 if os.name == "nt":
     func = WINFUNCTYPE
 else:
-    func = WINFUNCTYPE
+    func = CFUNCTYPE
 
 ROLLOFF_CALLBACK = func(c_float, c_int, c_float)
 CHANNEL_CALLBACK = func(c_int, c_int, c_int, c_void_p, c_void_p)

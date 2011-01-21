@@ -1,5 +1,9 @@
 from ctypes import *
-_dll = windll.fmodex
+import os
+if os.name == 'nt':
+    _dll = windll.fmodex
+else:
+    _dll = CDLL('libfmodex.so')
 import globalvars
 globalvars.dll = _dll
 from utils import ckresult
