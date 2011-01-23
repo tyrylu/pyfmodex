@@ -1,9 +1,19 @@
+import constants
+#Generate mapping from fmod ex error codes to their enum names which are enough for somethink like basic meaning.
+errmembers = [str(m) for m in dir(constants) if str(m).startswith("FMOD_ERR")]
+#Use dict, so we arn't dependent on the order in which we'll found them.
+errors_mapping = {}
+for member in errmembers:
+    val = getattr(constants, member)
+    errors_mapping[val] = member.replace("_", " ")
+
 class FmodError(Exception):
     def __init__(self, errcode):
         self.errcode = errcode
+        self.msg = errors_mapping[errcode]
 
     def __str__(self):
-        return "Fmod error, code %i"%self.errcode
+        return self.msg
 
 def ckresult(result):
     if result != 0:
