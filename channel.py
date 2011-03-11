@@ -56,7 +56,7 @@ class Channel(FmodObject):
     def _threed_attrs(self, attrs):
         pos = VECTOR.from_list(attrs[0])
         vel = VECTOR.from_list(attrs[1])
-        ckresult(_dll.FMOD_Channel_Set3DAttributes(self._ptr, pos, vel))
+        ckresult(_dll.FMOD_Channel_Set3DAttributes(self._ptr, byref(pos), byref(vel)))
 
     @property
     def position(self):
@@ -311,7 +311,7 @@ class Channel(FmodObject):
     @reverb_properties.setter
     def reverb_properties(self, props):
         check_type(props, REVERB_CHANNELPROPERTIES)
-        ckresult(_dll.FMOD_Channel_SetReverbProperties(self._ptr, props))
+        ckresult(_dll.FMOD_Channel_SetReverbProperties(self._ptr, byref(props)))
 
     def get_spectrum(self, numvalues, channeloffset, window):
         arr = c_float * numvalues
