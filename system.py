@@ -54,7 +54,7 @@ class Listener(object):
         self._commit()
 
     def _commit(self):
-        ckresult(_dll.FMOD_System_Set3DListenerAttributes(self._sysptr, self._id, self._pos, self._vel, self._fwd, self._up))
+        ckresult(_dll.FMOD_System_Set3DListenerAttributes(self._sysptr, self._id, byref(self._pos), byref(self._vel), byref(self._fwd), byref(self._up)))
 
 class DSPBufferSizeInfo(object):
     def __init__(self, sptr, size, count):
@@ -93,7 +93,7 @@ class ThreedSettings(object):
 
     @distance_factor.setter
     def distance_factor(self, factor):
-        ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, self._dopplerscale, factor, self._rolloffscale))
+        ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, c_float(self._dopplerscale), c_float(factor), c_float(self._rolloffscale)))
         self._distancefactor = factor
 
     @property
@@ -102,7 +102,7 @@ class ThreedSettings(object):
 
     @doppler_scale.setter
     def doppler_scale(self, scale):
-        ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, scale, self._distancefactor, self._rolloffscale))
+        ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, c_float(scale), c_float(self._distancefactor), c_float(self._rolloffscale)))
         self._dopplerscale = scale
 
     @property
@@ -111,7 +111,7 @@ class ThreedSettings(object):
 
     @rolloff_scale.setter
     def rolloff_scale(self, rscale):
-        ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, self._distancefactor, self._dopplerscale, rscale))
+        ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, c_float(self._distancefactor), c_float(self._dopplerscale), c_float(rscale)))
         self._rolloffscale = rscale
 
 class System(object):
