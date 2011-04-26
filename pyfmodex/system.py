@@ -164,6 +164,7 @@ class System(object):
 
     def create_sound(self, name_or_addr, mode=FMOD_3D|FMOD_SOFTWARE, exinfo=None):
         snd_ptr = c_int()
+        if exinfo is not None: exinfo = byref(exinfo)
         ckresult(_dll.FMOD_System_CreateSound(self._ptr, name_or_addr, mode, exinfo, byref(snd_ptr)))
         return sound.Sound(snd_ptr)
 

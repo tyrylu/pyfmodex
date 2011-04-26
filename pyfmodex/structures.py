@@ -1,17 +1,23 @@
-from callbackprototypes import *
 from ctypes import *
+
 class ADVANCEDSETTINGS(Structure):
-    _fields_ = [("cbsize", c_int), ("maxMPEGcodecs", c_int), ("maxADPCMcodecs", c_int), ("maxXMAcodecs", c_int), ("maxPCMcodecs", c_int), ("ASIONumChannels", c_int), ("ASIOChannelList", c_char_p * 20), ("ASIOSpeakerList", c_int * 20), ("max3DReverbDSPs", c_int), ("HRTFMinAngle", c_float), ("HRTFMaxAngle", c_float), ("HRTFFreq", c_float), ("vol0virtualvol", c_float), ("eventqueuesize", c_int), ("defaultDecodeBufferSize", c_uint), ("debugLogFilename", c_char_p), ("profileport", c_ushort), ("geometryThreadPeriot", c_uint)]
+    _fields_ = [("cbsize", c_int), ("maxMPEGcodecs", c_int), ("maxADPCMcodecs", c_int), ("maxXMAcodecs", c_int), ("maxCELDcodecs", c_int), ("maxPCMcodecs", c_int), ("ASIONumChannels", c_int), ("ASIOChannelList", POINTER(c_char_p)), ("ASIOSpeakerList", POINTER(c_int)), ("max3DReverbDSPs", c_int), ("HRTFMinAngle", c_float), ("HRTFMaxAngle", c_float), ("HRTFFreq", c_float), ("vol0virtualvol", c_float), ("eventqueuesize", c_int), ("defaultDecodeBufferSize", c_uint), ("debugLogFilename", c_char_p), ("profileport", c_ushort), ("geometryThreadPeriot", c_uint), ("maxSpectrumWaveDataBufers", c_uint)]
 
     def __init__(self, *args, **kwargs):
         Structure.__init__(self, *args, **kwargs)
         self.cbsize = sizeof(self)
 
+class ASYNCREADINFO(Structure):
+    _fields_ = [("handle", c_void_p), ("offset", c_uint), ("sizebytes", c_uint), ("priority", c_int), ("buffer", c_void_p), ("bytesread", c_uint), ("result", c_int), ("userdata", c_void_p)]
+
+# This tricky import here avoids circular import issues with importing ASYNCREADINFO in callbackprototypes.
+from callbackprototypes import *
+
 class CDTOC(Structure):
     _fields_ = [("numtracks", c_int), ("min", c_int * 100), ("sec", c_int * 100), ("frame", c_int * 100)]
 
 class CREATESOUNDEXINFO(Structure):
-    _fields_ = [("cbsize", c_int), ("length", c_uint), ("fileoffset", c_uint), ("numchannels", c_int), ("defaultfrequency", c_int), ("format", c_int), ("decodebuffersize", c_uint), ("initialsubsound", c_int), ("numsubsounds", c_int), ("inclusionlist", c_int * 20), ("inclusionlistnum", c_int), ("pcmreadcallback", SOUND_PCMREADCALLBACK), ("pcmsetposcallback", SOUND_PCMSETPOSCALLBACK), ("nonblockcallback", SOUND_NONBLOCKCALLBACK), ("dlsname", c_char_p), ("encryptionkey", c_char_p), ("maxpolyphony", c_int), ("userdata", c_void_p), ("suggestedsoundtype", c_int), ("useropen", FILE_OPENCALLBACK), ("userclose", FILE_CLOSECALLBACK), ("userread", FILE_READCALLBACK), ("userseek", FILE_SEEKCALLBACK), ("speakermap", c_int), ("initialsoundgroup", c_int), ("initialseekposition", c_uint), ("initialseekpostype", c_int), ("ignoresetfilesystem", c_int)]
+    _fields_ = [("cbsize", c_int), ("length", c_uint), ("fileoffset", c_uint), ("numchannels", c_int), ("defaultfrequency", c_int), ("format", c_int), ("decodebuffersize", c_uint), ("initialsubsound", c_int), ("numsubsounds", c_int), ("inclusionlist", POINTER(c_int)), ("inclusionlistnum", c_int), ("pcmreadcallback", SOUND_PCMREADCALLBACK), ("pcmsetposcallback", SOUND_PCMSETPOSCALLBACK), ("nonblockcallback", SOUND_NONBLOCKCALLBACK), ("dlsname", c_char_p), ("encryptionkey", c_char_p), ("maxpolyphony", c_int), ("userdata", c_void_p), ("suggestedsoundtype", c_int), ("useropen", FILE_OPENCALLBACK), ("userclose", FILE_CLOSECALLBACK), ("userread", FILE_READCALLBACK), ("userseek", FILE_SEEKCALLBACK), ("userasyncread", FILE_ASYNCREADCALLBACK), ("userasynccancel", FILE_ASYNCCANCELCALLBACK), ("speakermap", c_int), ("initialsoundgroup", POINTER(c_int)), ("initialseekposition", c_uint), ("initialseekpostype", c_int), ("ignoresetfilesystem", c_int), ("extracodecdata", c_void_p)]
 
     def __init__(self, *args, **kwargs):
         Structure.__init__(self, *args, **kwargs)
