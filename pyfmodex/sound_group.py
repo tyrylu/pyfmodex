@@ -3,8 +3,8 @@ from fmodobject import *
 
 class SoundGroup(FmodObject):
 
-@property    
-def max_audible(self):
+    @property    
+    def max_audible(self):
         val = c_int()
     ckresult(_dll.FMOD_SoundGroup_GetMaxAudible(self._ptr, byref(val)))
     return val.value
