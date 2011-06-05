@@ -43,7 +43,7 @@ class ConeSettings(object):
 class Channel(FmodObject):
     def add_dsp(self, d):
         check_type(d, dsp.DSP)
-        c_ptr = c_float()
+        c_ptr = c_int()
         ckresult(_dll.FMOD_Channel_AddDSP(self._ptr, d._ptr, byref(c_ptr)))
         return dsp_connection.DSPConnection(c_ptr)
     @property
@@ -185,7 +185,7 @@ class Channel(FmodObject):
 
     @property
     def dsp_head(self):
-        dsp_ptr = c_float()
+        dsp_ptr = c_int()
         ckresult(_dll.FMOD_Channel_GetDSPHead(self._ptr, byref(dsp_ptr)))
         return dsp.DSP(dsp_ptr)
     def get_delay(self, type):
@@ -220,7 +220,7 @@ class Channel(FmodObject):
 
     @property
     def loop_count(self):
-        c = c_float()
+        c = c_int()
         ckresult(_dll.FMOD_Channel_GetLoopCount(self._ptr, byref(c)))
         return c.value
     @loop_count.setter

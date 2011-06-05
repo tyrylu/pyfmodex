@@ -15,9 +15,12 @@ class FmodError(Exception):
     def __str__(self):
         return self.msg
 
+
+
 def ckresult(result):
     if result != 0:
         raise FmodError(result)
+
 
 def LOWORD(long):
     return long&0xFFFF
