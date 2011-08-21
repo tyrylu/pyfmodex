@@ -275,11 +275,10 @@ class System(object):
 
     def get_driver_caps(self, id):
         caps = c_uint()
-        minfreq = c_int()
-        maxfreq = c_int()
+        outputfreq = c_int()
         mode = c_uint()
-        ckresult(_dll.FMOD_System_GetDriverCaps(self._ptr, id, byref(caps), byref(minfreq), byref(maxfreq), byref(mode)))
-        return so(caps=caps.value, minfreq=minfreq.value, maxfreq=maxfreq.value, mode=mode.value)
+        ckresult(_dll.FMOD_System_GetDriverCaps(self._ptr, id, byref(caps), byref(outputfreq), byref(mode)))
+        return so(caps=caps.value, moutput_frequency=outputfreq.value, mode=mode.value)
 
     def get_driver_info(self, id):
         name = c_char * 256

@@ -208,8 +208,11 @@ class Sound(FmodObject):
     @property
     def open_state(self):
         state = c_int()
-        ckresult(_dll.FMOD_Sound_GetOpenState(self._ptr, byref(state)))
-        return state.value
+        percentbuffered = c_uint()
+        starving = c_bool()
+        diskbusy = c_bool()
+        ckresult(_dll.FMOD_Sound_GetOpenState(self._ptr, byref(state), byref(percentbuffered), byref(starving), byref(diskbusy)))
+        return so(state=state.value, percent_buffered=percentbuffered.value, starving=starving.value, disk_busy=diskbusy.value)
 
     @property
     def sound_group(self):
@@ -314,3 +317,12 @@ class Sound(FmodObject):
     def unlock(self, i1, i2):
         """I1 and I2 are tuples of form (ptr, len)."""
         ckresult(_dll.FMOD_Sound_Unlock(self._ptr, i1[0], i2[0], i1[1], i2[1]))
+
+    @property
+    def music_speed(self):
+        speed = c_float()
+        self._call_fmod("FMOD_Sound_GetMusicSpeed", byref(speed))
+        return speed.value
+    @music_speed.setter
+    def music_speed(self, speed):
+        self._call_fmod("FMOD_Sound_SetMusicSpeed", c_float(speed))

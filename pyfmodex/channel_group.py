@@ -155,3 +155,13 @@ class ChannelGroup(FmodObject):
         self._call_fmod("FMOD_ChannelGroup_Release")
     def stop(self):
         self._call_fmod("FMOD_ChannelGroup_Stop")
+
+    @property
+    def reverb_properties(self):
+        props = REVERB_CHANNELPROPERTIES()
+        ckresult(_dll.FMOD_ChannelGroup_GetReverbProperties(self._ptr, byref(props)))
+        return props
+    @reverb_properties.setter
+    def reverb_properties(self, props):
+        check_type(props, REVERB_CHANNELPROPERTIES)
+        ckresult(_dll.FMOD_ChannelGroup_SetReverbProperties(self._ptr, byref(props)))

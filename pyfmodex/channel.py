@@ -358,3 +358,15 @@ class Channel(FmodObject):
 
     def stop(self):
         ckresult(_dll.FMOD_Channel_Stop(self._ptr))
+
+    @property
+    def threed_distance_filter(self):
+        cu = c_bool()
+        cl = c_float()
+        ce = c_float()
+        self._call_fmod("FMOD_CHANNEL_Get3DDistanceFilter", byref(cu), byref(cl), byref(cu))
+        return so(custom=cu.value, custom_level=cl.value, center_frequency=ce.value)	
+    @threed_distance_filter.setter
+    def threed_distance_filter(self, cfg):
+        "Sets the distance filter. Cfg must be an structobject, or anythink with attributes custom, custom_level and center_frequency."""
+        self._call_fmod("FMOD_CHANNEL_Set3DDistanceFilter", cfg.custom, cfg.custom_level, cfg.center_frequency)
