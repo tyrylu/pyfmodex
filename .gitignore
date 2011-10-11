@@ -1,0 +1,4 @@
+*.pyc
+scripts/enums.py
+scripts/structures.py
+scripts/callbackprototypes.py
