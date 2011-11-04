@@ -183,7 +183,7 @@ class Sound(FmodObject):
 
     @property
     def name(self):
-        name = c_char_p()
+        name = create_string_buffer(256)
         ckresult(_dll.FMOD_Sound_GetName(self._ptr, byref(name), 256))
         return name.value
 

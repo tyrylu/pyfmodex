@@ -118,17 +118,17 @@ class DSP(FmodObject):
 
     def get_param(self, index):
         val = c_float()
-        arr = (c_char * 16)()
-        ckresult(_dll.FMOD_DSP_GetParameter(self._ptr, index, byref(val), byref(arr), 16))
-        return (val.value, str(arr))
+        name = create_string_buffer(16)
+        ckresult(_dll.FMOD_DSP_GetParameter(self._ptr, index, byref(val), byref(name), 16))
+        return (val.value, name.value)
 
     def get_param_info(self, index):
-        name = c_char_p()
-        label = c_char_p()
-        desc = c_char_p()
+        name = create_string_buffer(17)
+        label = create_string_buffer(16)
+        desc = create_string_buffer(512)
         min = c_float()
         max = c_float()
-        ckresult(_dll.FMOD_DSP_GetParameterInfo(self._ptr, index, byref(name), byref(label), byref(desc), 16, byref(min), byref(max)))
+        ckresult(_dll.FMOD_DSP_GetParameterInfo(self._ptr, index, byref(name), byref(label), byref(desc), 512, byref(min), byref(max)))
         return so(name=name.value, label=label.value, description=desc.value, min=min.value, max=max.value)
 
     def set_param(self, index, val):

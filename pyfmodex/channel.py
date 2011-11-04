@@ -2,7 +2,7 @@ from fmodobject import *
 from fmodobject import _dll
 from structures import VECTOR, REVERB_CHANNELPROPERTIES
 from constants import FMOD_DELAYTYPE_END_MS
-import dsp, dsp_connection, channel_group, system
+import dsp, dsp_connection, channel_group, system, sound
 from callbackprototypes import CHANNEL_CALLBACK
 
 class ConeSettings(object):

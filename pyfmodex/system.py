@@ -187,9 +187,9 @@ class System(object):
         return num.value
 
     def get_cdrom_drive_name(self, index):
-        n1 = c_char_p()
-        n2 = c_char_p()
-        n3 = c_char_p()
+        n1 = create_string_buffer(256)
+        n2 = create_string_buffer(256)
+        n3 = create_string_buffer(256)
         ckresult(_dll.FMOD_System_GetCDROMDriveName(self._ptr, index, byref(n1), sizeof(n1), byref(n2), sizeof(n2), byref(n3), sizeof(n3)))
         return so(drive_name=n1.value, scsi_name=n2.value, device_name=n3.value)
 
@@ -281,7 +281,7 @@ class System(object):
         return so(caps=caps.value, moutput_frequency=outputfreq.value, mode=mode.value)
 
     def get_driver_info(self, id):
-        name = c_char * 256
+        name = create_string_buffer(256)
         guid = GUID()
         ckresult(_dll.FMOD_System_GetDriverInfo(self._ptr, id, name, 256, byref(guid)))
         return so(name=name.value, guid=guid)
@@ -333,7 +333,7 @@ class System(object):
 
     @property
     def network_proxy(self):
-        server = c_char_p()
+        server = create_string_buffer(256)
         ckresult(_dll.FMOD_System_GetNetworkProxy(self._ptr, byref(server), sizeof(server)))
 
     @network_proxy.setter
@@ -400,7 +400,7 @@ class System(object):
 
     def get_plugin_info(self, handle):
         type = c_int()
-        name = (c_char * 256)()
+        name = create_string_buffer(256)
         ver = c_uint()
         ckresult(_dll.FMOD_System_GetPluginInfo(self._ptr, handle, byref(type), byref(name), 256, byref(ver)))
         return so(type=type.value, name=name.value, version=ver.value)
@@ -413,7 +413,7 @@ class System(object):
         return so(caps=caps.value, minfreq=minfreq.value, maxfreq=maxfreq.value)
 
     def get_record_driver_info(self, index):
-        name = c_char_p()
+        name = create_string_buffer(256)
         guid = GUID()
         ckresult(_dll.FMOD_System_GetRecordDriverInfo(self._ptr, index, byref(name), sizeof(name), byref(guid)))
         return so(name=name.value, guid=guid)
