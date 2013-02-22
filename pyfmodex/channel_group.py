@@ -1,6 +1,6 @@
-from fmodobject import *
-from globalvars import dll as _dll
-import dsp, dsp_connection, channel, system
+from .fmodobject import *
+from .globalvars import dll as _dll
+from . import dsp, dsp_connection, channel, system
 
 class ChannelGroup(FmodObject):
 

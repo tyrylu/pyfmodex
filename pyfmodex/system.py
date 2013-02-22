@@ -1,11 +1,11 @@
 from ctypes import *
-from utils import *
-from structures import *
-from globalvars import dll as _dll
-from structobject import Structobject as so
-import channel, channel_group, dsp, dsp_connection, sound, sound_group, geometry, reverb
-from constants import FMOD_3D, FMOD_SOFTWARE, FMOD_INIT_NORMAL, FMOD_CHANNEL_FREE, FMOD_CREATESTREAM
-from callbackprototypes import SYSTEM_CALLBACK, ROLLOFF_CALLBACK
+from .utils import *
+from .structures import *
+from .globalvars import dll as _dll
+from .structobject import Structobject as so
+from . import channel, channel_group, dsp, dsp_connection, sound, sound_group, geometry, reverb
+from .constants import FMOD_3D, FMOD_SOFTWARE, FMOD_INIT_NORMAL, FMOD_CHANNEL_FREE, FMOD_CREATESTREAM
+from .callbackprototypes import SYSTEM_CALLBACK, ROLLOFF_CALLBACK
 
 class Listener(object):
     def __init__(self, sptr, id):
