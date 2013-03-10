@@ -1,9 +1,9 @@
-from .fmodobject import *
-from .fmodobject import _dll
-from .structures import VECTOR, REVERB_CHANNELPROPERTIES
-from .constants import FMOD_DELAYTYPE_END_MS
-from . import dsp, dsp_connection, channel_group, system, sound
-from .callbackprototypes import CHANNEL_CALLBACK
+from fmodobject import *
+from fmodobject import _dll
+from structures import VECTOR, REVERB_CHANNELPROPERTIES
+from constants import FMOD_DELAYTYPE_END_MS
+import dsp, dsp_connection, channel_group, system, sound
+from callbackprototypes import CHANNEL_CALLBACK
 
 class ConeSettings(object):
     def __init__(self, sptr):

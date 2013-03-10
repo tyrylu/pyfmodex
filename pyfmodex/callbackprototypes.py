@@ -1,7 +1,7 @@
 import os
 from ctypes import *
 
-from .structures import ASYNCREADINFO
+from structures import ASYNCREADINFO
 
 if os.name == "nt":
     func = WINFUNCTYPE

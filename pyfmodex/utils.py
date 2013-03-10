@@ -1,4 +1,4 @@
-from . import constants
+import constants
 #Generate mapping from fmod ex error codes to their enum names which are enough for somethink like basic meaning.
 errmembers = [str(m) for m in dir(constants) if str(m).startswith("FMOD_ERR")]
 #Use dict, so we arn't dependent on the order in which we'll found them.

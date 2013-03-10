@@ -1,6 +1,6 @@
-from . import system, sound
-from .fmodobject import *
-from .globalvars import dll as _dll
+import system, sound
+from fmodobject import *
+from globalvars import dll as _dll
 from ctypes import create_string_buffer
 
 class SoundGroup(FmodObject):

@@ -1,5 +1,5 @@
-from .fmodobject import *
-from .fmodobject import _dll
+from fmodobject import *
+from fmodobject import _dll
 
 class DSPConnection(FmodObject):
 

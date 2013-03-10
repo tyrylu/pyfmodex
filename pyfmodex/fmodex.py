@@ -4,10 +4,10 @@ if os.name == 'nt':
     _dll = windll.fmodex
 else:
     _dll = CDLL('libfmodex.so')
-from . import globalvars
+import globalvars
 globalvars.dll = _dll
-from .utils import ckresult
-from .structobject import Structobject as so
+from utils import ckresult
+from structobject import Structobject as so
 
 def get_debug_level():
     level = c_int()

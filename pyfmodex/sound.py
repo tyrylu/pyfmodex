@@ -1,7 +1,7 @@
-from .fmodobject import *
-from .fmodobject import _dll
-from .structures import TAG
-from . import sound_group, system
+from fmodobject import *
+from fmodobject import _dll
+from structures import TAG
+import sound_group, system
 
 class ConeSettings(object):
     def __init__(self, sptr):

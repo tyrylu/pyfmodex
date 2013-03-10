@@ -1,6 +1,6 @@
-from .fmodobject import *
-from .fmodobject import _dll
-from . import dsp, dsp_connection, system
+from fmodobject import *
+from fmodobject import _dll
+import dsp, dsp_connection, system
 
 class DSP(FmodObject):
 
