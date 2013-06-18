@@ -1,6 +1,6 @@
-import system, sound
-from fmodobject import *
-from globalvars import dll as _dll
+from .globalvars import get_class
+from .fmodobject import *
+from .globalvars import dll as _dll
 from ctypes import create_string_buffer
 
 class SoundGroup(FmodObject):
@@ -53,13 +53,13 @@ class SoundGroup(FmodObject):
     def get_sound(self, idx):
         sndptr = c_int()
         ckresult(_dll.FMOD_SoundGroup_GetSound(self._ptr, idx, byref(sndptr)))
-        return sound.Sound(sndptr)
+        return get_class("Sound")(sndptr)
 
     @property
     def system_object(self):
         sysptr = c_int()
         ckresult(_dll.FMOD_SoundGroup_GetSystemObject(self._ptr, byref(sysptr)))
-        return system.System(sysptr, False)
+        return get_class("System")(sysptr, False)
 
     @property
     def volume(self):

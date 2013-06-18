@@ -1,14 +1,14 @@
-from fmodobject import *
-from globalvars import dll as _dll
-import dsp, dsp_connection, channel, system
+from .fmodobject import *
+from .globalvars import dll as _dll
+from .globalvars import get_class
 
 class ChannelGroup(FmodObject):
 
     def add_dsp(self, dsp):
-        check_type(dsp, dsp.DSP)
+        check_type(dsp, get_class("DSP"))
         c_ptr = c_int()
         self._call_fmod("FMOD_ChannelGroup_AddDSP", d._ptr, byref(c_ptr))
-        return dsp_connection.DSPConnection(c_ptr)
+        return get_class("DSPConnection")(c_ptr)
 
     def add_group(self, group):
         check_type(group, ChannelGroup)
@@ -47,7 +47,7 @@ class ChannelGroup(FmodObject):
     def dsp_head(self):
         dsp_ptr = c_int()
         self._call_fmod("FMOD_ChannelGroup_GetDSPHead", byref(dsp_ptr))
-        return dsp.DSP(dsp_ptr)
+        return get_class("DSP")(dsp_ptr)
 
     def get_group(self, idx):
         grp_ptr = c_int()
@@ -115,7 +115,7 @@ class ChannelGroup(FmodObject):
     def system_object(self):
         sptr = c_int()
         self._call_fmod("FMOD_channelGroup_GetSystemObject", byref(sptr))
-        return system.System(sptr, False)
+        return get_class("System")(sptr, False)
 
     @property
     def volume(self):

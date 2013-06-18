@@ -11,7 +11,7 @@ class ASYNCREADINFO(Structure):
     _fields_ = [("handle", c_void_p), ("offset", c_uint), ("sizebytes", c_uint), ("priority", c_int), ("buffer", c_void_p), ("bytesread", c_uint), ("result", c_int), ("userdata", c_void_p)]
 
 # This tricky import here avoids circular import issues with importing ASYNCREADINFO in callbackprototypes.
-from callbackprototypes import *
+from .callbackprototypes import *
 
 class CDTOC(Structure):
     _fields_ = [("numtracks", c_int), ("min", c_int * 100), ("sec", c_int * 100), ("frame", c_int * 100)]

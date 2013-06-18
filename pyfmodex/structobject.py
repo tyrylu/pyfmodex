@@ -3,7 +3,7 @@ class Structobject(object):
     def __init__(self, **kw):
         """Initialize, and set attributes from all keyword arguments."""
         self.__members=[]
-        for k in kw.keys():
+        for k in list(kw.keys()):
             setattr(self,k,kw[k])
             self.__remember(k)
 
@@ -19,7 +19,7 @@ class Structobject(object):
         try:
             return getattr(self, key)
         except AttributeError:
-            raise KeyError, key
+            raise KeyError(key)
 
 
     def __setitem__(self, key, value):
@@ -49,5 +49,5 @@ class Structobject(object):
         for x in self.__members:
             v = getattr(self, x)
             if s: s+=", "
-            s += "%s: %s" % (x, `v`)
+            s += "%s: %s" % (x, repr(v))
         return s

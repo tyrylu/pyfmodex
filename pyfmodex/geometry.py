@@ -1,5 +1,6 @@
-from fmodobject import *
-from globalvars import dll as _dll
+from .fmodobject import *
+from .globalvars import dll as _dll
+from .structures import VECTOR
 
 class PolygonAttributes(object):
     def __init__(self, gptr, index):

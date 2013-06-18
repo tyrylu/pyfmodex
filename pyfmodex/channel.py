@@ -1,9 +1,9 @@
-from fmodobject import *
-from fmodobject import _dll
-from structures import VECTOR, REVERB_CHANNELPROPERTIES
-from constants import FMOD_DELAYTYPE_END_MS
-import dsp, dsp_connection, channel_group, system, sound
-from callbackprototypes import CHANNEL_CALLBACK
+from .fmodobject import *
+from .fmodobject import _dll
+from .structures import VECTOR, REVERB_CHANNELPROPERTIES
+from .constants import FMOD_DELAYTYPE_END_MS
+from .globalvars import get_class
+from .callbackprototypes import CHANNEL_CALLBACK
 
 class ConeSettings(object):
     def __init__(self, sptr):
@@ -42,10 +42,10 @@ class ConeSettings(object):
 
 class Channel(FmodObject):
     def add_dsp(self, d):
-        check_type(d, dsp.DSP)
+        check_type(d, get_class("DSP"))
         c_ptr = c_int()
         ckresult(_dll.FMOD_Channel_AddDSP(self._ptr, d._ptr, byref(c_ptr)))
-        return dsp_connection.DSPConnection(c_ptr)
+        return get_class("DSPConnection")(c_ptr)
     @property
     def _threed_attrs(self):
         pos = VECTOR()
@@ -171,23 +171,23 @@ class Channel(FmodObject):
     def channel_group(self):
         grp_ptr = c_float()
         ckresult(_dll.FMOD_Channel_GetChannelGroup(self._ptr, byref(grp_ptr)))
-        return channel_group.ChannelGroup(grp_ptr)
+        return get_class("ChannelGroup")(grp_ptr)
     @channel_group.setter
     def channel_group(self, group):
-        check_type(group, channel_group.ChannelGroup)
+        check_type(group, get_class("ChannelGroup"))
         ckresult(_dll.FMOD_Channel_SetChannelGroup(self._ptr, group._ptr))
 
     @property
     def current_sound(self):
         snd_ptr = c_float()
         ckresult(_dll.FMOD_Channel_GetCurrentSound(self._ptr, byref(snd_ptr)))
-        return sound.Sound(snd_ptr)
+        return get_class("Sound")(snd_ptr)
 
     @property
     def dsp_head(self):
         dsp_ptr = c_int()
         ckresult(_dll.FMOD_Channel_GetDSPHead(self._ptr, byref(dsp_ptr)))
-        return dsp.DSP(dsp_ptr)
+        return get_class("DSP")(dsp_ptr)
     def get_delay(self, type):
         lo = c_uint()
         hi = c_uint()
@@ -323,7 +323,7 @@ class Channel(FmodObject):
     def system_object(self):
         sptr = c_int()
         ckresult(_dll.FMOD_Channel_GetSystemObject(self._ptr, byref(sptr)))
-        return system.System(sptr, False)
+        return get_class("System")(sptr, False)
 
     @property
     def volume(self):

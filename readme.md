@@ -22,3 +22,7 @@ sound = system.create_sound("somefile.mp3")
 sound.play()
 ```
 Of course, somefile.mp3 must be replaced with somethink that actually exists. Here, i used the default parameters and not used features like 3d positioning. For more info, you can using dir function and of course the source.
+Python 3 compatibility
+----------------------
+Pyfmodex works with python 3 (tested in version 3.3, older may work).
+Note that because of some changes in the ctypes library in python 3, you must pass string sto pyfmodex as byte strings for now.

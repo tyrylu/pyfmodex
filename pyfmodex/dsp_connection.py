@@ -1,5 +1,6 @@
-from fmodobject import *
-from fmodobject import _dll
+from .fmodobject import *
+from .fmodobject import _dll
+from .globalvars import get_class
 
 class DSPConnection(FmodObject):
 
@@ -7,7 +8,7 @@ class DSPConnection(FmodObject):
     def input(self):
         dsp_ptr = c_int()
         ckresult(_dll.FMOD_DSPConnection(self._ptr, byref(dsp_ptr)))
-        return dsp.DSP(dsp_ptr)
+        return get_class("DSP")(dsp_ptr)
 
     @property
     def mix(self):
@@ -22,4 +23,4 @@ class DSPConnection(FmodObject):
     def output(self):
         o_ptr = c_int()
         ckresult(_dll.FMOD_DSPConnection_GetOutput(self._ptr, byref(o_ptr)))
-        return dsp.DSP(o_ptr)
+        return get_class("DSP")(o_ptr)

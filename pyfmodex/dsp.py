@@ -1,11 +1,11 @@
-from fmodobject import *
-from fmodobject import _dll
-import dsp, dsp_connection, system
+from .fmodobject import *
+from .fmodobject import _dll
+from .globalvars import get_class
 
 class DSP(FmodObject):
 
     def add_input(self, input):
-        check_type(input, dsp.DSP)
+        check_type(input, DSP)
         connptr = c_int()
         ckresult(_dll.FMOD_DSP_AddInput(self._ptr, input._ptr, byref(connptr)))
         return dsp_connection.DSPConnection(connptr)
@@ -14,7 +14,7 @@ class DSP(FmodObject):
         ckresult(_dll.FMOD_DSP_DisconnectAll(self._ptr, inputs, outputs))
 
     def disconnect_from(self, d):
-        check_type(d, dsp.DSP)
+        check_type(d, DSP)
         ckresult(_dll.FMOD_DSP_DisconnectFrom(self._ptr, d._ptr))
 
     @property
@@ -96,7 +96,7 @@ class DSP(FmodObject):
         i_ptr = c_int()
         ic_ptr = c_int()
         ckresult(_dll.FMOD_DSP_GetInput(self._ptr, byref(i_ptr), byref(ic_ptr)))
-        return (dsp.DSP(i_ptr), dsp_connection.DSPConnection(ic_ptr))
+        return (DSP(i_ptr), get_class("DSPConnection")(ic_ptr))
 
     @property
     def num_inputs(self):
@@ -114,7 +114,7 @@ class DSP(FmodObject):
         o_ptr = c_int()
         oc_ptr = c_int()
         ckresult(_dll.FMOD_DSP_GetOutput(self._ptr, byref(o_ptr), byref(oc_ptr)))
-        return (dsp.DSP(o_ptr), dsp_connection.DSPConnection(oc_ptr))
+        return (DSP(o_ptr), get_class("DSPConnection")(oc_ptr))
 
     def get_param(self, index):
         val = c_float()
@@ -146,7 +146,7 @@ class DSP(FmodObject):
     def system_object(self):
         sptr = c_int()
         ckresult(_dll.FMOD_DSP_GetSystemObject(self._ptr, byref(sptr)))
-        return system.System(sptr, False)
+        return get_class("System")(sptr, False)
 
     @property
     def type(self):

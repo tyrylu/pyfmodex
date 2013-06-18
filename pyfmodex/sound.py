@@ -1,7 +1,7 @@
-from fmodobject import *
-from fmodobject import _dll
-from structures import TAG
-import sound_group, system
+from .fmodobject import *
+from .fmodobject import _dll
+from .structures import TAG
+from .globalvars import get_class
 
 class ConeSettings(object):
     def __init__(self, sptr):
@@ -218,10 +218,10 @@ class Sound(FmodObject):
     def sound_group(self):
         grp_ptr = c_int()
         ckresult(_dll.FMOD_Sound_GetSoundGroup(self._ptr, byref(grp_ptr)))
-        return sound_group.SoundGroup(grp_ptr)
+        return get_class("SoundGroup")(grp_ptr)
     @sound_group.setter
     def sound_group(self, group):
-        check_type(group, sound_group.SoundGroup)
+        check_type(group, get_class("SoundGroup"))
         ckresult(_dll.FMOD_Sound_SetSoundGroup(self._ptr, group._ptr))
 
     def get_subsound(self, index):
@@ -245,7 +245,7 @@ class Sound(FmodObject):
     def system_object(self):
         sptr = c_int()
         ckresult(_dll.FMOD_Sound_GetSystemObject(self._ptr, byref(sptr)))
-        return system.System(sptr, False)
+        return get_class("System")(sptr, False)
 
     def play(self, paused=False):
         return self.system_object.play_sound(self, paused)

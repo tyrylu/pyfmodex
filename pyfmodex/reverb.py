@@ -1,6 +1,6 @@
-from fmodobject import *
-from globalvars import dll as _dll
-from structures import VECTOR, REVERBPROPERTIES
+from .fmodobject import *
+from .globalvars import dll as _dll
+from .structures import VECTOR, REVERBPROPERTIES
 
 class Reverb(FmodObject):
 
