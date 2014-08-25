@@ -1,9 +1,16 @@
 from ctypes import *
-import os
+import os, platform
+arch = platform.architecture()[0]
 if os.name == 'nt':
-    _dll = windll.fmodex
-else:
-    _dll = CDLL('libfmodex.so')
+    if arch == "32bit":
+        _dll = windll.fmodex
+    else:
+        _dll = windll.fmodex64
+elif os.name == "posix":
+    if arch == "32bit":
+        _dll = CDLL('libfmodex.so')
+    else:
+        _dll = CDLL('libfmodex64.so')
 from . import globalvars
 globalvars.dll = _dll
 from .utils import ckresult
