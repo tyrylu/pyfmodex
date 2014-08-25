@@ -3,6 +3,8 @@ from .fmodex import get_debug_level, set_debug_level, get_disk_busy, set_disk_bu
 from . import globalvars
 # Avoid recursive import hell
 from . import dsp, dsp_connection, geometry, channel, channel_group, reverb, sound, sound_group, system 
+__version__ = "0.3.1"
+
 c = {}
 c["DSP"] = dsp.DSP
 c["DSP_Connection"] = dsp_connection.DSPConnection
