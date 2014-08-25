@@ -169,7 +169,7 @@ class Sound(FmodObject):
         ckresult(_dll.FMOD_Sound_SetMode(self._ptr, m))
 
     def get_music_channel_volume(self, channel):
-        v = c_int()
+        v = c_float()
         ckresult(_dll.FMOD_Sound_GetMusiChannelVolume(self._ptr, channel, byref(v)))
         return v.value
     def set_music_channel_volume(self, id, vol):
