@@ -1,6 +1,6 @@
 from .fmodobject import *
 from .fmodobject import _dll
-from .structures import TAG
+from .structures import TAG, VECTOR
 from .globalvars import get_class
 
 class ConeSettings(object):
@@ -50,6 +50,25 @@ class Sound(FmodObject):
     @property
     def threed_cone_settings(self):
         return ConeSettings(self._ptr)
+
+    @property
+    def custom_rolloff(self):
+        """Returns the custom rolloff curve.
+        :rtype: List of [x, y, z] lists.
+        """
+        num = c_int()
+        self._call_fmod("FMOD_Sound_Get3DCustomRolloff", None, byref(num))
+        curve = (VECTOR * num.value)()
+        self._call_fmod("FMOD_Sound_Get3DCustomRolloff", byref(curve), 0)
+        return [p.to_list() for p in curve]
+    @custom_rolloff.setter
+    def custom_rolloff(self, curve):
+        """Sets the custom rolloff curve.
+        :param curve: The curve to set.
+        :type curve: A list of something that can be treated as a list of [x, y, z] values e.g. implements indexing in some way.
+        """
+        native_curve = (VECTOR * len(curve))(*[VECTOR.from_list(lst) for lst in curve])
+        self._call_fmod("FMOD_Sound_Set3DCustomRolloff", native_curve, len(native_curve))
 
     @property
     def _min_max_distance(self):
@@ -326,3 +345,19 @@ class Sound(FmodObject):
     @music_speed.setter
     def music_speed(self, speed):
         self._call_fmod("FMOD_Sound_SetMusicSpeed", c_float(speed))
+
+    def read_data(self, length):
+        """Read a fragment of the sound's decoded data.
+        :param length: The requested length.
+        :returns: The data and the actual length.
+        :rtype: Tuple of the form (data, actual)."""
+        buf = create_string_buffer(length)
+        actual = c_uint()
+        self._call_fmod("FMOD_Sound_ReadData", buf, length, byref(actual))
+        return buf.value, actual.value
+
+    def seek_data(self, offset):
+        """Seeks for data reading purposes.
+        :param offset: The offset to seek to in PCM samples.
+        :type offset: Int or long, but must be in range of an unsigned long, not python's arbitrary long."""
+        self._call_fmod("FMOD_Sound_SeekData", offset)
