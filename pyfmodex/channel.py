@@ -45,7 +45,7 @@ class Channel(FmodObject):
         check_type(d, get_class("DSP"))
         c_ptr = c_int()
         ckresult(_dll.FMOD_Channel_AddDSP(self._ptr, d._ptr, byref(c_ptr)))
-        return get_class("DSPConnection")(c_ptr)
+        return get_class("DSP_Connection")(c_ptr)
     @property
     def _threed_attrs(self):
         pos = VECTOR()
