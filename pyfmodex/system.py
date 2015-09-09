@@ -156,7 +156,7 @@ class System(object):
         check_type(d, get_class("DSP"))
         dsp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_AddDSP(self._ptr, d._ptr, byref(dsp_ptr)))
-        return get_class("DSPConnection")(dsp_ptr)
+        return get_class("DSP_Connection")(dsp_ptr)
 
     def create_channel_group(self, name):
         cp = c_int()
