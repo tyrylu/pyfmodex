@@ -43,7 +43,7 @@ class ConeSettings(object):
 class Channel(FmodObject):
     def add_dsp(self, d):
         check_type(d, get_class("DSP"))
-        c_ptr = c_int()
+        c_ptr = c_void_p()
         ckresult(_dll.FMOD_Channel_AddDSP(self._ptr, d._ptr, byref(c_ptr)))
         return get_class("DSPConnection")(c_ptr)
     @property
@@ -169,7 +169,7 @@ class Channel(FmodObject):
 
     @property
     def channel_group(self):
-        grp_ptr = c_float()
+        grp_ptr = c_void_p()
         ckresult(_dll.FMOD_Channel_GetChannelGroup(self._ptr, byref(grp_ptr)))
         return get_class("ChannelGroup")(grp_ptr)
     @channel_group.setter
@@ -179,13 +179,13 @@ class Channel(FmodObject):
 
     @property
     def current_sound(self):
-        snd_ptr = c_float()
+        snd_ptr = c_void_p()
         ckresult(_dll.FMOD_Channel_GetCurrentSound(self._ptr, byref(snd_ptr)))
         return get_class("Sound")(snd_ptr)
 
     @property
     def dsp_head(self):
-        dsp_ptr = c_int()
+        dsp_ptr = c_void_p()
         ckresult(_dll.FMOD_Channel_GetDSPHead(self._ptr, byref(dsp_ptr)))
         return get_class("DSP")(dsp_ptr)
     def get_delay(self, type):
@@ -321,7 +321,7 @@ class Channel(FmodObject):
 
     @property
     def system_object(self):
-        sptr = c_int()
+        sptr = c_void_p()
         ckresult(_dll.FMOD_Channel_GetSystemObject(self._ptr, byref(sptr)))
         return get_class("System")(sptr, False)
 

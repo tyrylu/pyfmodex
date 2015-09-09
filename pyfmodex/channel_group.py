@@ -6,7 +6,7 @@ class ChannelGroup(FmodObject):
 
     def add_dsp(self, dsp):
         check_type(dsp, get_class("DSP"))
-        c_ptr = c_int()
+        c_ptr = c_void_p()
         self._call_fmod("FMOD_ChannelGroup_AddDSP", d._ptr, byref(c_ptr))
         return get_class("DSPConnection")(c_ptr)
 
@@ -39,18 +39,18 @@ class ChannelGroup(FmodObject):
         self._occlusion = (self._occlusion[0], occ)
 
     def get_channel(self, idx):
-        c_ptr = c_int()
+        c_ptr = c_void_p()
         self._call_fmod("FMOD_ChannelGroup_GetChannel", idx, byref(c_ptr))
         return channel.Channel(c_ptr)
 
     @property
     def dsp_head(self):
-        dsp_ptr = c_int()
+        dsp_ptr = c_void_p()
         self._call_fmod("FMOD_ChannelGroup_GetDSPHead", byref(dsp_ptr))
         return get_class("DSP")(dsp_ptr)
 
     def get_group(self, idx):
-        grp_ptr = c_int()
+        grp_ptr = c_void_p()
         self._call_fmod("FMOD_ChannelGroup_GetGroup", idx)
         return ChannelGroup(grp_ptr)
 
@@ -83,7 +83,7 @@ class ChannelGroup(FmodObject):
 
     @property
     def parent_group(self):
-        grp_ptr = c_int()
+        grp_ptr = c_void_p()
         self._call_fmod("FMOD_ChannelGroup_GetParentGroup", byref(grp_ptr))
         return ChannelGroup(grp_ptr)
 
@@ -113,7 +113,7 @@ class ChannelGroup(FmodObject):
 
     @property
     def system_object(self):
-        sptr = c_int()
+        sptr = c_void_p()
         self._call_fmod("FMOD_channelGroup_GetSystemObject", byref(sptr))
         return get_class("System")(sptr, False)
 

@@ -51,13 +51,13 @@ class SoundGroup(FmodObject):
         return num.value
 
     def get_sound(self, idx):
-        sndptr = c_int()
+        sndptr = c_void_p()
         ckresult(_dll.FMOD_SoundGroup_GetSound(self._ptr, idx, byref(sndptr)))
         return get_class("Sound")(sndptr)
 
     @property
     def system_object(self):
-        sysptr = c_int()
+        sysptr = c_void_p()
         ckresult(_dll.FMOD_SoundGroup_GetSystemObject(self._ptr, byref(sysptr)))
         return get_class("System")(sysptr, False)
 

@@ -6,7 +6,7 @@ class DSPConnection(FmodObject):
 
     @property
     def input(self):
-        dsp_ptr = c_int()
+        dsp_ptr = c_void_p()
         ckresult(_dll.FMOD_DSPConnection(self._ptr, byref(dsp_ptr)))
         return get_class("DSP")(dsp_ptr)
 
@@ -21,6 +21,6 @@ class DSPConnection(FmodObject):
 
     @property
     def output(self):
-        o_ptr = c_int()
+        o_ptr = c_void_p()
         ckresult(_dll.FMOD_DSPConnection_GetOutput(self._ptr, byref(o_ptr)))
         return get_class("DSP")(o_ptr)

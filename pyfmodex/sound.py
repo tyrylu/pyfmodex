@@ -40,7 +40,7 @@ class ConeSettings(object):
 
 class Sound(FmodObject):
     def add_sync_point(self, offset, offset_type, name):
-        s_ptr = c_int()
+        s_ptr = c_void_p()
         ckresult(_dll.FMOD_Sound_AddSyncPoint(self._ptr, offset, offset_type, name, byref(s_ptr)))
         return s_ptr
 
@@ -235,7 +235,7 @@ class Sound(FmodObject):
 
     @property
     def sound_group(self):
-        grp_ptr = c_int()
+        grp_ptr = c_void_p()
         ckresult(_dll.FMOD_Sound_GetSoundGroup(self._ptr, byref(grp_ptr)))
         return get_class("SoundGroup")(grp_ptr)
     @sound_group.setter
@@ -244,7 +244,7 @@ class Sound(FmodObject):
         ckresult(_dll.FMOD_Sound_SetSoundGroup(self._ptr, group._ptr))
 
     def get_subsound(self, index):
-        sh_ptr = c_int()
+        sh_ptr = c_void_p()
         ckresult(_dll.FMOD_Sound_GetSubSound(self._ptr, index, byref(sh_ptr)))
         return Sound(sh_ptr)
 
@@ -262,7 +262,7 @@ class Sound(FmodObject):
 
     @property
     def system_object(self):
-        sptr = c_int()
+        sptr = c_void_p()
         ckresult(_dll.FMOD_Sound_GetSystemObject(self._ptr, byref(sptr)))
         return get_class("System")(sptr, False)
 

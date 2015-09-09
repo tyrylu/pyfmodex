@@ -6,7 +6,7 @@ class DSP(FmodObject):
 
     def add_input(self, input):
         check_type(input, DSP)
-        connptr = c_int()
+        connptr = c_void_p()
         ckresult(_dll.FMOD_DSP_AddInput(self._ptr, input._ptr, byref(connptr)))
         return dsp_connection.DSPConnection(connptr)
 
@@ -93,8 +93,8 @@ class DSP(FmodObject):
         return so(name=name.value, version=ver.value, channels=chans.value, config_width=cfgw.value, config_height=cfgh.value)
 
     def get_input(self, index):
-        i_ptr = c_int()
-        ic_ptr = c_int()
+        i_ptr = c_void_p()
+        ic_ptr = c_void_p()
         ckresult(_dll.FMOD_DSP_GetInput(self._ptr, byref(i_ptr), byref(ic_ptr)))
         return (DSP(i_ptr), get_class("DSPConnection")(ic_ptr))
 
@@ -111,8 +111,8 @@ class DSP(FmodObject):
         return num.value
 
     def get_output(self, index):
-        o_ptr = c_int()
-        oc_ptr = c_int()
+        o_ptr = c_void_p()
+        oc_ptr = c_void_p()
         ckresult(_dll.FMOD_DSP_GetOutput(self._ptr, byref(o_ptr), byref(oc_ptr)))
         return (DSP(o_ptr), get_class("DSPConnection")(oc_ptr))
 
@@ -144,7 +144,7 @@ class DSP(FmodObject):
 
     @property
     def system_object(self):
-        sptr = c_int()
+        sptr = c_void_p()
         ckresult(_dll.FMOD_DSP_GetSystemObject(self._ptr, byref(sptr)))
         return get_class("System")(sptr, False)
 

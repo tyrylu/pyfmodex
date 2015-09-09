@@ -147,14 +147,14 @@ class System(object):
     def __init__(self, ptr=None, create=True):
         """If create is True, new instance is created. Otherwise ptr must be a valid pointer."""
         if create:
-            self._ptr = c_int()
+            self._ptr = c_void_p()
             ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
         else:
             self._ptr = ptr
 
     def add_dsp(self,d):
         check_type(d, get_class("DSP"))
-        dsp_ptr = c_int()
+        dsp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_AddDSP(self._ptr, d._ptr, byref(dsp_ptr)))
         return get_class("DSPConnection")(dsp_ptr)
 
@@ -167,38 +167,38 @@ class System(object):
         ckresult(_dll.FMOD_System_CreateCodec(self._ptr, desc, priority))
 
     def create_dsp(self, dspdesc):
-        dsp_ptr = c_int()
+        dsp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_CreateDSP(self._ptr, dspdesc, byref(dsp_ptr)))
         return get_class("DSP")(dsp_ptr)
 
     def create_dsp_by_plugin(self, plugin_handle):
-        dsp_ptr = c_int()
+        dsp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_CreateDSPByPlugin(self._ptr, plugin_handle, byref(dsp_ptr)))
         return get_class("DSP")(dsp_ptr)
 
     def create_dsp_by_type(self, type):
-        dsp_ptr = c_int()
+        dsp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_CreateDSPByType(self._ptr, type, byref(dsp_ptr)))
         return get_class("DSP")(dsp_ptr)
 
     def create_geometry(self, maxpoligons, maxvertices):
-        geo_ptr = c_int()
+        geo_ptr = c_void_p()
         ckresult(_dll.FMOD_System_CreateGeometry(self._ptr, maxpoligons, maxvertices, byref(geo_ptr)))
         return get_class("Geometry")(geo_ptr)
 
     def create_reverb(self):
-        r_ptr = c_int()
+        r_ptr = c_void_p()
         ckresult(_dll.FMOD_System_CreateReverb(self._ptr, byref(r_ptr)))
         return get_class("Reverb")(r_ptr)
 
     def create_sound(self, name_or_addr, mode=FMOD_3D|FMOD_SOFTWARE, exinfo=None):
-        snd_ptr = c_int()
+        snd_ptr = c_void_p()
         if exinfo is not None: exinfo = byref(exinfo)
         ckresult(_dll.FMOD_System_CreateSound(self._ptr, name_or_addr, mode, exinfo, byref(snd_ptr)))
         return get_class("Sound")(snd_ptr)
 
     def create_sound_group(self, name):
-        sg_ptr = c_int()
+        sg_ptr = c_void_p()
         ckresult(_dll.FMOD_System_CreateSoundGroup(self._ptr, name, byref(sg_ptr)))
         return get_class("SoundGroup")(sg_ptr)
 
@@ -233,7 +233,7 @@ class System(object):
         return so(dsp=dsp.value, stream=stream.value, geometry=geometry.value, update=update.value, total=total.value)
 
     def get_channel(self, id):
-        c_ptr = c_int()
+        c_ptr = c_void_p()
         ckresult(_dll.FMOD_System_GetChannel(self._ptr, id, byref(c_ptr)))
         return get_class("Channel")(c_ptr)
 
@@ -288,7 +288,7 @@ class System(object):
 
     @property
     def dsp_head(self):
-        dsp_ptr = c_int()
+        dsp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_GetDSPHead(self._ptr, byref(dsp_ptr)))
         return get_class("DSP")(dsp_ptr)
 
@@ -344,13 +344,13 @@ class System(object):
 
     @property
     def master_channel_group(self):
-        grp_ptr = c_int()
+        grp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_GetMasterChannelGroup(self._ptr, byref(grp_ptr)))
         return get_class("ChannelGroup")(grp_ptr)
 
     @property
     def master_sound_group(self):
-        grp_ptr = c_int()
+        grp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_GetMasterSoundGroup(self._ptr, byref(grp_ptr)))
         return get_class("SoundGroup")(grp_ptr)
     
@@ -516,7 +516,7 @@ class System(object):
 
     def load_geometry(self, data):
         d = c_void_p(data)
-        geo_ptr = c_int()
+        geo_ptr = c_void_p()
         ckresult(_dll.FMOD_System_LoadGeometry(self._ptr, d, len(data), byref(geo_ptr)))
         return get_class("Geometry")(geo_ptr)
 
@@ -529,13 +529,13 @@ class System(object):
 
     def play_dsp(self, d, paused=False, channelid=FMOD_CHANNEL_FREE):
         check_type(d, get_class("DSP"))
-        c_ptr = c_int()
+        c_ptr = c_void_p()
         ckresult(_dll.FMOD_System_PlayDSP(self._ptr, channelid, d._ptr, paused, byref(c_ptr)))
         return get_class("Channel")(c_ptr)
 
     def play_sound(self, snd, paused=False, channelid=FMOD_CHANNEL_FREE):
         check_type(snd, get_class("Sound"))
-        c_ptr = c_int()
+        c_ptr = c_void_p()
         ckresult(_dll.FMOD_System_PlaySound(self._ptr, channelid, snd._ptr, paused, byref(c_ptr)))
         return get_class("Channel")(c_ptr)
 
