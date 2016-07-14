@@ -2,6 +2,7 @@ from .fmodobject import *
 from .fmodobject import _dll
 from .structures import TAG, VECTOR
 from .globalvars import get_class
+from .utils import prepare_str
 
 class ConeSettings(object):
     def __init__(self, sptr):
@@ -40,6 +41,7 @@ class ConeSettings(object):
 
 class Sound(FmodObject):
     def add_sync_point(self, offset, offset_type, name):
+        name = prepare_str(name, "ascii")
         s_ptr = c_void_p()
         ckresult(_dll.FMOD_Sound_AddSyncPoint(self._ptr, offset, offset_type, name, byref(s_ptr)))
         return s_ptr
@@ -270,6 +272,7 @@ class Sound(FmodObject):
         return self.system_object.play_sound(self, paused)
 
     def get_tag(self, index, name=None):
+        name = prepare_str(name, "ascii")
         tag = TAG()
         ckresult(_dll.FMOD_Sound_GetTag(self._ptr, name, index, byref(tag)))
         return tag

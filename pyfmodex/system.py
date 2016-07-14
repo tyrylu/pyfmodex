@@ -159,6 +159,7 @@ class System(object):
         return get_class("DSP_Connection")(dsp_ptr)
 
     def create_channel_group(self, name):
+        name = prepare_str(name)
         cp = c_int()
         ckresult(_dll.FMOD_System_CreateChannelGroup(self._ptr, name, byref(cp)))
         return get_class("ChannelGroup")(cp)
@@ -192,17 +193,20 @@ class System(object):
         return get_class("Reverb")(r_ptr)
 
     def create_sound(self, name_or_addr, mode=FMOD_3D|FMOD_SOFTWARE, exinfo=None):
+        name_or_addr = prepare_str(name_or_addr)
         snd_ptr = c_void_p()
         if exinfo is not None: exinfo = byref(exinfo)
         ckresult(_dll.FMOD_System_CreateSound(self._ptr, name_or_addr, mode, exinfo, byref(snd_ptr)))
         return get_class("Sound")(snd_ptr)
 
     def create_sound_group(self, name):
+        name = prepare_str(name)
         sg_ptr = c_void_p()
         ckresult(_dll.FMOD_System_CreateSoundGroup(self._ptr, name, byref(sg_ptr)))
         return get_class("SoundGroup")(sg_ptr)
 
     def create_stream(self, name_or_addr, mode=FMOD_3D|FMOD_SOFTWARE, exinfo=None):
+        name_or_addr = prepare_str(name_or_addr)
         mode = mode|FMOD_CREATESTREAM
         return self.create_sound(name_or_addr, mode, exinfo)
     
@@ -521,6 +525,7 @@ class System(object):
         return get_class("Geometry")(geo_ptr)
 
     def load_plugin(self, filename, priority):
+        filename = prepare_str(filename)
         handle = c_uint()
         ckresult(_dll.FMOD_System_LoadPlugin(self._ptr, filename, byref(handle), priority))
 

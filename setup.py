@@ -12,4 +12,4 @@ clfs.append("Operating System :: POSIX :: Linux")
 clfs.append("Programming Language :: Python :: 2")
 clfs.append("Programming Language :: Python :: 3")
 
-setup(name="pyfmodex", version="0.3.3", author="Lukas Tyrychtr", author_email="lukastyrychtr@gmail.com", url="https://www.github.com/tyrylu/pyfmodex", packages=["pyfmodex"], long_description=open("readme.md", "r").read(), description="Python bindings to the Fmod Ex library.", license="MIT", classifiers=clfs)
+setup(name="pyfmodex", version="0.4.0", author="Lukas Tyrychtr", author_email="lukastyrychtr@gmail.com", url="https://www.github.com/tyrylu/pyfmodex", packages=["pyfmodex"], long_description=open("readme.md", "r").read(), description="Python bindings to the Fmod Ex library.", license="MIT", classifiers=clfs)
