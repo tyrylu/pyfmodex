@@ -1,7 +1,8 @@
 *.pyc
-scripts/enums.py
-scripts/structures.py
-scripts/callbackprototypes.py
 build/*
+dist/*
+pyfmodex.egg-info/*
+.cache/*
 *.py,cover
 .coverage
+MANIFEST
