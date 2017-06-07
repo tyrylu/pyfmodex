@@ -1,6 +1,8 @@
-from .fmodobject import *
+from ctypes import *
+from .fmodobject import FmodObject
 from .globalvars import dll as _dll
 from .structures import VECTOR
+from .utils import ckresult
 
 class PolygonAttributes(object):
     def __init__(self, gptr, index):
@@ -9,28 +11,33 @@ class PolygonAttributes(object):
         self._directocclusion = c_float()
         self._reverbocclusion = c_float()
         self._doublesided = c_bool()
-        ckresult(_dll.FMOD_Geometry_GetPolygonAttributes(self._ptr, self.index, byref(self._directocclusion), byref(self._reverbocclusion), byref(self._doublesided)))
+        self._refresh_state()
 
+    def _refresh_state(self):
+        ckresult(_dll.FMOD_Geometry_GetPolygonAttributes(self._gptr, self.index, byref(self._directocclusion), byref(self._reverbocclusion), byref(self._doublesided)))
     @property
     def direct_occlusion(self):
+        self._refresh_state()
         return self._directocclusion.value
     @direct_occlusion.setter
     def direct_occlusion(self, occ):
-                ckresult(_dll.FMOD_Geometry_SetPolygonAttributes(self._gptr, self.index, occ, self._reverbocclusion, self._doublesided))
+                ckresult(_dll.FMOD_Geometry_SetPolygonAttributes(self._gptr, self.index, c_float(occ), self._reverbocclusion, self._doublesided))
 
     @property
     def reverb_occlusion(self):
+        self._refresh_state()
         return self._reverbocclusion.value
     @reverb_occlusion.setter
     def reverb_occlusion(self, occ):
-                ckresult(_dll.FMOD_Geometry_SetPolygonAttributes(self._gptr, self.index, self._directocclusion, occ, self._doublesided))
+                ckresult(_dll.FMOD_Geometry_SetPolygonAttributes(self._gptr, self.index, self._directocclusion, c_float(occ), self._doublesided))
 
     @property
     def double_sided(self):
+        self._refresh_state()
         return self._doublesided
     @double_sided.setter
     def double_sided(self, dval):
-                ckresult(_dll.FMOD_Geometry_SetPolygonAttributes(self._gptr, self.index, occ, self._reverbocclusion, dval))
+                ckresult(_dll.FMOD_Geometry_SetPolygonAttributes(self._gptr, self.index, self._directocclusion, self._reverbocclusion, dval))
 
     @property
     def num_vertices(self):
@@ -54,7 +61,7 @@ class Geometry(FmodObject):
         va = VECTOR * len(vertices)
         varray = va(*vertices)
         idx = c_int()
-        self._call_fmod("FMOD_Geometry_AddPolyGon", directocclusion, reverbocclusion, doublesided, len(vertices), byref(varray), byref(idx))
+        self._call_fmod("FMOD_Geometry_AddPolygon", c_float(directocclusion), c_float(reverbocclusion), c_bool(doublesided), len(vertices), varray, byref(idx))
         return idx.value
 
     @property
@@ -109,7 +116,7 @@ class Geometry(FmodObject):
     def _rotation(self, rot):
         fwd = VECTOR.from_list(rot[0])
         up = VECTOR.from_list(rot[1])
-        self._call_fmod("Geometry_SetRotation", fwd, up)
+        self._call_fmod("FMOD_Geometry_SetRotation", fwd, up)
 
     @property
     def forward_rotation(self):
@@ -135,17 +142,17 @@ class Geometry(FmodObject):
         self._call_fmod("FMOD_Geometry_GetScale", byref(scale))
         return scale.to_list()
     @scale.setter
-    def position(self, scale):
+    def scale(self, scale):
         scalev = VECTOR.from_list(scale)
-        self._call_fmod("FMOD_Geometry_SetScale", scalev)
+        self._call_fmod("FMOD_Geometry_SetScale", byref(scalev))
 
     def release(self):
         self._call_fmod("FMOD_Geometry_Release")
 
     def save(self):
         size = c_int()
-        ptr = c_void_p()
-        self._call_fmod("FMOD_Geometry_Save", 0, byref(size))
+        self._call_fmod("FMOD_Geometry_Save", None, byref(size))
+        ptr = create_string_buffer(size.value)    
         self._call_fmod("FMOD_Geometry_Save", ptr, byref(size))
-        return ptr.value
+        return ptr.raw
         return string_at(ptr, size)

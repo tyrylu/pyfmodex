@@ -1,7 +1,6 @@
-from ctypes import *
-from .utils import *
 from .globalvars import dll as _dll
-from .structobject import Structobject as so
+from .enums import RESULT
+from .exceptions import FmodError
 
 class FmodObject(object):
     """A base Fmod ex object."""
@@ -13,5 +12,11 @@ class FmodObject(object):
 
     def _call_fmod(self, funcname, *args):
         result = getattr(_dll, funcname)(self._ptr, *args)
-        if result != 0:
+        result = RESULT(result)
+        if result is not RESULT.OK:
             raise FmodError(result)
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self._ptr.value == other._ptr.value
+        else:
+            return False

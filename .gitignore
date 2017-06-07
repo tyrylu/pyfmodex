@@ -3,3 +3,5 @@ scripts/enums.py
 scripts/structures.py
 scripts/callbackprototypes.py
 build/*
+*.py,cover
+.coverage

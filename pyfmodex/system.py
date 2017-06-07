@@ -5,8 +5,10 @@ from .structures import *
 from .globalvars import dll as _dll
 from .structobject import Structobject as so
 from .globalvars import get_class
-from .constants import FMOD_3D, FMOD_SOFTWARE, FMOD_INIT_NORMAL, FMOD_CHANNEL_FREE, FMOD_CREATESTREAM
-from .callbackprototypes import SYSTEM_CALLBACK, ROLLOFF_CALLBACK
+from .flags import INIT_FLAGS, MODE, TIMEUNIT
+from .enums import OUTPUTTYPE, PLUGINTYPE
+from .callback_prototypes import SYSTEM_CALLBACK, ROLLOFF_CALLBACK
+from .fmodobject import FmodObject
 
 class Listener(object):
     """An 3d listener."""
@@ -143,33 +145,43 @@ class ThreedSettings(object):
         ckresult(_dll.FMOD_System_Set3DSettings(self._sysptr, c_float(self._distancefactor), c_float(self._dopplerscale), c_float(rscale)))
         self._rolloffscale = rscale
 
-class System(object):
+class System(FmodObject):
     def __init__(self, ptr=None, create=True):
         """If create is True, new instance is created. Otherwise ptr must be a valid pointer."""
+        self._system_callbacks = {}
         if create:
             self._ptr = c_void_p()
             ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
         else:
             self._ptr = ptr
 
-    def add_dsp(self,d):
-        check_type(d, get_class("DSP"))
-        dsp_ptr = c_void_p()
-        ckresult(_dll.FMOD_System_AddDSP(self._ptr, d._ptr, byref(dsp_ptr)))
-        return get_class("DSP_Connection")(dsp_ptr)
+    def attach_channel_group_to_port(self, port_type, port_index, group, passthru=False):
+        ckresult(_dll.FMOD_System_AttachChannelGroupToPort(self._ptr, port_type, port_index, group._ptr, passthru))
+
+    def attach_file_system(self, user_open, user_close, user_read, user_seek):
+        if user_open:
+            user_open = FILE_OPEN_CALLBACK(user_open)
+        if user_close:
+            user_close = FILE_CLOSE_CALLBACK(user_close)
+        if user_read:
+            file_read = FILE_READ_CALLBACK(user_read)
+        if user_seek:
+            user_seek = FILE_SEEK_CALLBACK(user_seek)
+        self._call_fmod("FMOD_System_AttachFileSystem", user_open, user_close, user_read, user_seek)
+        self._user_open = user_open
+        self._user_close = user_close
+        self._user_read = user_read
+        self._user_seek = user_seek
 
     def create_channel_group(self, name):
         name = prepare_str(name)
-        cp = c_int()
+        cp = c_void_p()
         ckresult(_dll.FMOD_System_CreateChannelGroup(self._ptr, name, byref(cp)))
         return get_class("ChannelGroup")(cp)
 
-    def create_codec(self, desc, priority):
-        ckresult(_dll.FMOD_System_CreateCodec(self._ptr, desc, priority))
-
     def create_dsp(self, dspdesc):
         dsp_ptr = c_void_p()
-        ckresult(_dll.FMOD_System_CreateDSP(self._ptr, dspdesc, byref(dsp_ptr)))
+        ckresult(_dll.FMOD_System_CreateDSP(self._ptr, byref(dspdesc), byref(dsp_ptr)))
         return get_class("DSP")(dsp_ptr)
 
     def create_dsp_by_plugin(self, plugin_handle):
@@ -179,7 +191,7 @@ class System(object):
 
     def create_dsp_by_type(self, type):
         dsp_ptr = c_void_p()
-        ckresult(_dll.FMOD_System_CreateDSPByType(self._ptr, type, byref(dsp_ptr)))
+        ckresult(_dll.FMOD_System_CreateDSPByType(self._ptr, type.value, byref(dsp_ptr)))
         return get_class("DSP")(dsp_ptr)
 
     def create_geometry(self, maxpoligons, maxvertices):
@@ -187,16 +199,16 @@ class System(object):
         ckresult(_dll.FMOD_System_CreateGeometry(self._ptr, maxpoligons, maxvertices, byref(geo_ptr)))
         return get_class("Geometry")(geo_ptr)
 
-    def create_reverb(self):
+    def create_reverb_3d(self):
         r_ptr = c_void_p()
-        ckresult(_dll.FMOD_System_CreateReverb(self._ptr, byref(r_ptr)))
-        return get_class("Reverb")(r_ptr)
+        ckresult(_dll.FMOD_System_CreateReverb3D(self._ptr, byref(r_ptr)))
+        return get_class("Reverb3D")(r_ptr)
 
-    def create_sound(self, name_or_addr, mode=FMOD_3D|FMOD_SOFTWARE, exinfo=None):
+    def create_sound(self, name_or_addr, mode=MODE.THREED, exinfo=None):
         name_or_addr = prepare_str(name_or_addr)
         snd_ptr = c_void_p()
         if exinfo is not None: exinfo = byref(exinfo)
-        ckresult(_dll.FMOD_System_CreateSound(self._ptr, name_or_addr, mode, exinfo, byref(snd_ptr)))
+        ckresult(_dll.FMOD_System_CreateSound(self._ptr, name_or_addr, int(mode), exinfo, byref(snd_ptr)))
         return get_class("Sound")(snd_ptr)
 
     def create_sound_group(self, name):
@@ -205,27 +217,24 @@ class System(object):
         ckresult(_dll.FMOD_System_CreateSoundGroup(self._ptr, name, byref(sg_ptr)))
         return get_class("SoundGroup")(sg_ptr)
 
-    def create_stream(self, name_or_addr, mode=FMOD_3D|FMOD_SOFTWARE, exinfo=None):
-        name_or_addr = prepare_str(name_or_addr)
-        mode = mode|FMOD_CREATESTREAM
+    def create_stream(self, name_or_addr, mode=MODE.THREED, exinfo=None):
+        mode = mode|MODE.CREATESTREAM
         return self.create_sound(name_or_addr, mode, exinfo)
     
     def close(self):
         ckresult(_dll.FMOD_System_Close(self._ptr))
 
+    def detach_channel_group_from_port(self, group):
+        ckresult(_dll.FMOD_System_DetachChannelGroupFromPort(self._ptr, group._ptr))
     @property
     def num_3d_listeners(self):
         num = c_int()
         ckresult(_dll.FMOD_System_Get3DNumListeners(self._ptr, byref(num)))
         return num.value
 
-    def get_cdrom_drive_name(self, index):
-        n1 = create_string_buffer(256)
-        n2 = create_string_buffer(256)
-        n3 = create_string_buffer(256)
-        ckresult(_dll.FMOD_System_GetCDROMDriveName(self._ptr, index, byref(n1), sizeof(n1), byref(n2), sizeof(n2), byref(n3), sizeof(n3)))
-        return so(drive_name=n1.value, scsi_name=n2.value, device_name=n3.value)
-
+    @num_3d_listeners.setter
+    def num_3d_listeners(self, num):
+        self._call_fmod("FMOD_System_Set3DNumListeners", num)
     @property
     def cpu_usage(self):
         dsp = c_float()
@@ -244,7 +253,7 @@ class System(object):
     @property
     def channels_playing(self):
         channels = c_int()
-        ckresult(_dll.FMOD_System_GetChannelsPlaying(self._ptr, byref(channels)))
+        self._call_fmod("FMOD_System_GetChannelsPlaying", byref(channels))
         return channels.value
 
     @property
@@ -254,16 +263,6 @@ class System(object):
         rscale = c_float()
         ckresult(_dll.FMOD_System_Get3DSettings(self._ptr, byref(dscale), byref(distancefactor), byref(rscale)))
         return ThreedSettings(self._ptr, distancefactor.value, dscale.value, rscale.value)
-
-    def get_3d_speaker_position(self, speaker):
-        x = c_float()
-        y = c_float()
-        active = c_int()
-        ckresult(_dll.FMOD_System_Get3DSpeakerPosition(self._ptr, speaker, byref(x), byref(y), byref(active)))
-        return so(x=x.value, y=y.value, active=active.value)
-
-    def set_3d_speaker_position(self, speaker, x, y, active):
-        ckresult(_dll.FMOD_System_Set3DSpeakerPosition(self._ptr, speaker, c_float(x), c_float(y), active))
 
     @property
     def advanced_settings(self):
@@ -276,25 +275,26 @@ class System(object):
         ckresult(_dll.FMOD_System_SetAdvancedSettings(self._ptr, byref(settings)))
 
     @property
-    def DSP_buffer_size(self):
+    def dsp_buffer_size(self):
         size = c_uint()
         count = c_int()
         ckresult(_dll.FMOD_System_GetDSPBufferSize(self._ptr, byref(size), byref(count)))
         return DSPBufferSizeInfo(self._ptr, size.value, count.value)
 
-    @property
-    def DSP_clock(self):
-        hi = c_uint()
-        lo = c_uint()
-        ckresult(_dll.FMOD_System_GetDSPClock(self._ptr, byref(hi), byref(lo)))
-        return MAKELONG(hi.value, lo.value)
+    def get_dsp_info_by_plugin(self, handle):
+        desc = DSP_DESCRIPTION()
+        self._call_fmod("FMOD_System_GetDSPInfoByPlugin", byref(desc))
+        return desc
 
-
-    @property
-    def dsp_head(self):
-        dsp_ptr = c_void_p()
-        ckresult(_dll.FMOD_System_GetDSPHead(self._ptr, byref(dsp_ptr)))
-        return get_class("DSP")(dsp_ptr)
+    def get_default_mix_matrix(self, source_speaker_mode, target_speaker_mode, matrix_hop=0):
+        target_channels = self.get_speaker_mode_channels(target_speaker_mode)
+        if matrix_hop:
+            source_channels = matrix_hop
+        else:
+            source_channels = self.get_speaker_mode_channels(source_speaker_mode)
+        matrix = (c_float * (source_channels * target_channels))()
+        self._call_fmod("FMOD_System_GetDefaultMixMatrix", source_speaker_mode.value, target_speaker_mode.value, matrix, matrix_hop)
+        return matrix
 
     @property
     def driver(self):
@@ -306,18 +306,22 @@ class System(object):
     def driver(self, driver):
         ckresult(_dll.FMOD_System_SetDriver(self._ptr, driver))
 
-    def get_driver_caps(self, id):
-        caps = c_uint()
-        outputfreq = c_int()
-        mode = c_uint()
-        ckresult(_dll.FMOD_System_GetDriverCaps(self._ptr, id, byref(caps), byref(outputfreq), byref(mode)))
-        return so(caps=caps.value, moutput_frequency=outputfreq.value, mode=mode.value)
-
     def get_driver_info(self, id):
         name = create_string_buffer(256)
         guid = GUID()
-        ckresult(_dll.FMOD_System_GetDriverInfo(self._ptr, id, name, 256, byref(guid)))
-        return so(name=name.value, guid=guid)
+        system_rate = c_int()
+        speaker_mode = c_int()
+        channels = c_int()
+        ckresult(_dll.FMOD_System_GetDriverInfo(self._ptr, id, name, 256, byref(guid), byref(system_rate), byref(speaker_mode), byref(channels)))
+        return so(name=name.value, guid=guid, system_rate=system_rate.value, speaker_mode=speaker_mode.value, speaker_mode_channels=channels.value)
+
+    @property
+    def file_usage(self):
+        sample_bytes = c_longlong()
+        stream_bytes = c_longlong()
+        other_bytes = c_longlong()
+        self._call_fmod("FMOD_System_GetFileUsage", byref(sample_bytes), byref(stream_bytes), byref(other_bytes))
+        return so(sample_bytes_read=sample_bytes.value, stream_bytes_read=stream_bytes.value, other_bytes_read=other_bytes.value)
 
     def get_geometry_occlusion(self, listener, source):
         listener = VECTOR.from_list(listener)
@@ -337,15 +341,7 @@ class System(object):
     def geometry_max_world_size(self, size):
         ckresult(_dll.FMOD_System_SetGeometrySettings(self._ptr, c_float(size)))
 
-    @property
-    def hardware_channels(self):
-        num2d = c_int()
-        num3d = c_int()
-        total = c_int()
-        ckresult(_dll.FMOD_System_GetHardwareChannels(self._ptr, byref(num2d), byref(num3d), byref(total)))
-        return so(num_2d=num2d.value, num_3d=num3d.value, total=total.value)
-
-
+    
     @property
     def master_channel_group(self):
         grp_ptr = c_void_p()
@@ -357,20 +353,19 @@ class System(object):
         grp_ptr = c_void_p()
         ckresult(_dll.FMOD_System_GetMasterSoundGroup(self._ptr, byref(grp_ptr)))
         return get_class("SoundGroup")(grp_ptr)
-    
-    def get_memory_info(self, membits, event_membits):
-        #Detailed memory info support will be there, but currently this is not the most important thing.
-        usage = c_uint()
-        ckresult(_dll.FMOD_System_GetMemoryInfo(self._ptr, membits, event_membits, byref(usage), None))
-        return usage.value
+    def get_nested_plugin(self, handle, index):
+        nested = c_uint()
+        self._call_fmod("FMOD_System_GetNestedPlugin", handle, index, byref(nested))
+        return nested.value
 
     @property
     def network_proxy(self):
         server = create_string_buffer(256)
         ckresult(_dll.FMOD_System_GetNetworkProxy(self._ptr, byref(server), sizeof(server)))
-
+        return server.value
     @network_proxy.setter
     def network_proxy(self, proxy):
+        proxy = prepare_str(proxy)
         ckresult(_dll.FMOD_System_SetNetworkProxy(self._ptr, proxy))
 
     @property
@@ -384,31 +379,29 @@ class System(object):
         ckresult(_dll.FMOD_System_SetNetworkTimeout(self._ptr, timeout))
 
     @property
-    def num_cdrom_drives(self):
-        num = c_int()
-        ckresult(_dll.FMOD_System_GetNumCDROMDrives(self._ptr, byref(num)))
-        return num.value
-
-    @property
     def num_drivers(self):
         num = c_int()
         ckresult(_dll.FMOD_System_GetNumDrivers(self._ptr, byref(num)))
         return num.value
 
+    def get_num_nested_plugins(self, handle):
+        num = c_int()
+        self._call_fmod("FMOD_System_GetNumNestedPlugins", handle, byref(num))
+        return num.value
     def get_num_plugins(self, plugintype):
         num = c_int()
-        ckresult(_dll.FMOD_System_GetNumPlugins(self._ptr, plugintype, byref(num)))
+        ckresult(_dll.FMOD_System_GetNumPlugins(self._ptr, plugintype.value, byref(num)))
         return num.value
 
     @property
     def output(self):
         output = c_int()
         ckresult(_dll.FMOD_System_GetOutput(self._ptr, byref(output)))
-        return output.value
+        return OUTPUTTYPE(output.value)
 
     @output.setter
     def output(self, out):
-        ckresult(_dll.FMOD_System_SetOutput(self._ptr, out))
+        ckresult(_dll.FMOD_System_SetOutput(self._ptr, out.value))
 
     @property
     def output_by_plugin(self):
@@ -428,7 +421,7 @@ class System(object):
 
     def get_plugin_handle(self, type, index):
         handle = c_uint()
-        ckresult(_dll.FMOD_System_GetPluginHandle(self._ptr, type, index, byref(handle)))
+        ckresult(_dll.FMOD_System_GetPluginHandle(self._ptr, type.value, index, byref(handle)))
         return handle.value
 
     def get_plugin_info(self, handle):
@@ -436,20 +429,17 @@ class System(object):
         name = create_string_buffer(256)
         ver = c_uint()
         ckresult(_dll.FMOD_System_GetPluginInfo(self._ptr, handle, byref(type), byref(name), 256, byref(ver)))
-        return so(type=type.value, name=name.value, version=ver.value)
-
-    def get_record_driver_caps(self, id):
-        caps = c_uint()
-        minfreq = c_int()
-        maxfreq = c_int()
-        ckresult(_dll.FMOD_System_GetRecordDriverCaps(self._ptr, id, byref(caps), byref(minfreq), byref(maxfreq)))
-        return so(caps=caps.value, minfreq=minfreq.value, maxfreq=maxfreq.value)
+        return so(type=PLUGINTYPE(type.value), name=name.value, version=ver.value)
 
     def get_record_driver_info(self, index):
         name = create_string_buffer(256)
         guid = GUID()
-        ckresult(_dll.FMOD_System_GetRecordDriverInfo(self._ptr, index, byref(name), sizeof(name), byref(guid)))
-        return so(name=name.value, guid=guid)
+        system_rate = c_int()
+        speaker_mode = c_int()
+        channels = c_int()
+        state = c_int()
+        ckresult(_dll.FMOD_System_GetRecordDriverInfo(self._ptr, index, byref(name), sizeof(name), byref(guid), byref(system_rate), byref(speaker_mode), byref(channels), byref(state)))
+        return so(name=name.value, guid=guid, system_rate=system_rate.value, speaker_mode=speaker_mode.value, speaker_mode_channels=channels.value, state=state.value)
 
     @property
     def record_num_drivers(self):
@@ -462,25 +452,14 @@ class System(object):
         ckresult(_dll.FMOD_System_GetRecordPosition(self._ptr, index, byref(pos)))
         return pos.value
 
-    @property
-    def reverb_ambient_properties(self):
-        props = REVERBPROPERTIES()
-        ckresult(_dll.FMOD_System_GetReverbAmbientProperties(self._ptr, byref(props)))
-
-    @reverb_ambient_properties.setter
-    def reverb_ambient_properties(self, props):
-        ckresult(_dll.FMOD_System_SetReverbAmbientProperties(self._ptr, byref(props)))
-
     def get_reverb_properties(self, instance = 0):
-        props = REVERBPROPERTIES()
+        props = REVERB_PROPERTIES()
         props.Instance = instance
-        ckresult(_dll.FMOD_System_GetReverbProperties(self._ptr, byref(props)))
+        ckresult(_dll.FMOD_System_GetReverbProperties(self._ptr, instance, byref(props)))
         return props
 
-    def set_reverb_properties(self, props, instance=0):
-        props.Instance = instance
-        ckresult(_dll.FMOD_System_SetReverbProperties(self._ptr, byref(props)))
-
+    def set_reverb_properties(self, instance, props):
+        self._call_fmod("FMOD_System_SetReverbProperties", instance, props)
     @property
     def software_channels(self):
         channels = c_int()
@@ -490,28 +469,50 @@ class System(object):
     @software_channels.setter
     def software_channels(self, num):
         ckresult(_dll.FMOD_System_SetSoftwareChannels(self._ptr, num))
+    @property
+    def software_format(self):
+        rate = c_int()
+        mode = c_int()
+        speakers = c_int()
+        self._call_fmod("FMOD_System_GetSoftwareFormat", byref(rate), byref(mode), byref(speakers))
+        return so(sample_rate=rate.value, speaker_mode=mode.value, raw_speakers=speakers.value)
+    @software_format.setter
+    def software_format(self, format):
+        self._call_fmod("FMOD_System_SetSoftwareFormat", format.sample_rate, format.speaker_mode, format.raw_speakers)
 
     @property
-    def speaker_mode(self):
-        mode = c_int()
-        ckresult(_dll.FMOD_System_GetSpeakerMode(self._ptr, byref(mode)))
-        return mode.value
-    @speaker_mode.setter
-    def speaker_mode(self, mode):
-        ckresult(_dll.FMOD_System_SetSpeakerMode(self._ptr, mode))
+    def sound_ram(self):
+        current = c_int()
+        max = c_int()
+        total = c_int()
+        self._call_fmod("FMOD_System_GetSoundRAM", byref(current), byref(max), byref(total))
+        return so(current=current.value, max=max.value, total=total.value)
+    def get_speaker_mode_channels(self, mode):
+        channels = c_int()
+        self._call_fmod("FMOD_System_GetSpeakerModeChannels", mode.value, byref(channels))
+        return channels.value
 
-    def get_spectrum(self, numvalues, channeloffset, window):
-        arr = c_float * numvalues
-        arri = arr()
-        ckresult(_dll.FMOD_System_GetSpectrum(self._ptr, byref(arri), numvalues, channeloffset, window))
-        return list(arri)
-    def get_wave_data(self, numvalues, channeloffset):
-        arr = c_float * numvalues
-        arri = arr()
-        ckresult(_dll.FMOD_System_GetWaveData(self._ptr, byref(arri), numvalues, channeloffset))
-        return list(arri)
-    def init(self, maxchannels=1000, flags=FMOD_INIT_NORMAL, extra=None):
-        ckresult(_dll.FMOD_System_Init(self._ptr, maxchannels, flags, extra))
+    def get_speaker_position(self, speaker):
+        x = c_float()
+        y = c_float()
+        active = c_bool()
+        self._call_fmod("FMOD_System_GetSpeakerPosition", speaker.value, byref(x), byref(y), byref(active))
+        return so(x=x.value, y=y.value, active=active.value)
+    def set_speaker_position(self, speaker, pos):
+        self._call_fmod("FMOD_System_SetSpeakerPosition", speaker.value, c_float(pos.x), c_float(pos.y), pos.active)
+
+    @property
+    def stream_buffer_size(self):
+        size = c_uint()
+        unit = c_int()
+        self._call_fmod("FMOD_System_GetStreamBufferSize", byref(size), byref(unit))
+        return so(size=size.value, unit=TIMEUNIT(unit.value))
+    @stream_buffer_size.setter
+    def stream_buffer_size(self, size):
+        self._call_fmod("FMOD_System_SetStreamBufferSize", size.size, int(size.unit))
+
+    def init(self, maxchannels=1000, flags=INIT_FLAGS.NORMAL, extra=None):
+        ckresult(_dll.FMOD_System_Init(self._ptr, maxchannels, int(flags), extra))
 
     def is_recording(self, id):
         rec = c_int()
@@ -519,7 +520,8 @@ class System(object):
         return rec.value
 
     def load_geometry(self, data):
-        d = c_void_p(data)
+        d = create_string_buffer(data)
+        print(len(data))
         geo_ptr = c_void_p()
         ckresult(_dll.FMOD_System_LoadGeometry(self._ptr, d, len(data), byref(geo_ptr)))
         return get_class("Geometry")(geo_ptr)
@@ -528,20 +530,36 @@ class System(object):
         filename = prepare_str(filename)
         handle = c_uint()
         ckresult(_dll.FMOD_System_LoadPlugin(self._ptr, filename, byref(handle), priority))
-
+        return handle.value
+    
     def lock_dsp(self):
         ckresult(_dll.FMOD_System_LockDSP(self._ptr))
 
-    def play_dsp(self, d, paused=False, channelid=FMOD_CHANNEL_FREE):
+    def mixer_resume(self):
+        self._call_fmod("FMOD_System_MixerResume")
+
+    def mixer_suspend(self):
+        self._call_fmod("FMOD_System_MixerSuspend")
+    def play_dsp(self, d, channel_group=None, paused=False):
         check_type(d, get_class("DSP"))
+        if channel_group:
+            check_type(channel_group, get_class("ChannelGroup"))
+            group_ptr = channel_group._ptr
+        else:
+            group_ptr = None
         c_ptr = c_void_p()
-        ckresult(_dll.FMOD_System_PlayDSP(self._ptr, channelid, d._ptr, paused, byref(c_ptr)))
+        self._call_fmod("FMOD_System_PlayDSP", d._ptr, group_ptr, paused, byref(c_ptr))
         return get_class("Channel")(c_ptr)
 
-    def play_sound(self, snd, paused=False, channelid=FMOD_CHANNEL_FREE):
+    def play_sound(self, snd, channel_group=None, paused=False):
         check_type(snd, get_class("Sound"))
+        if channel_group:
+            check_type(channel_group, get_class("ChannelGroup"))
+            group_ptr = channel_group._ptr
+        else:
+            group_ptr = None
         c_ptr = c_void_p()
-        ckresult(_dll.FMOD_System_PlaySound(self._ptr, channelid, snd._ptr, paused, byref(c_ptr)))
+        ckresult(_dll.FMOD_System_PlaySound(self._ptr, snd._ptr, group_ptr, paused, byref(c_ptr)))
         return get_class("Channel")(c_ptr)
 
     def record_start(self, id, snd, loop=False):
@@ -550,16 +568,36 @@ class System(object):
 
     def record_stop(self, id):
         ckresult(_dll.FMOD_System_RecordStop(self._ptr, id))
+    def register_codec(self, description, priority):
+        handle = c_uint()
+        self._call_fmod("FMOD_System_RegisterCodec", byref(description), byref(handle), priority)
+        return handle.value
 
+    def register_dsp(self, description):
+        handle = c_uint()
+        self._call_fmod("FMOD_System_RegisterDSP", byref(description), byref(handle))
+        return handle.value
+    
+    def register_output(self, description):
+        handle = c_uint()
+        self._call_fmod("FMOD_System_RegisterOutput", byref(description), byref(handle))
+        return handle.value
+    
     def release(self):
         ckresult(_dll.FMOD_System_Release(self._ptr))
 
     def set_3d_rolloff_callback(self, callback):
-        cb = ROLLOFF_CALLBACK(callback)
+        cb = ROLLOFF_CALLBACK(callback or 0)
+        self._rolloff_callback = cb
         ckresult(_dll.FMOD_System_Set3DRolloffCallback(self._ptr, cb))
-    def set_callback(self, callback):
-        cb = FMOD_SYSTEM_CALLBACK(callback)
-        ckresult(_dll.FMOD_System_SetCallback(self._ptr, cb))
+
+    def set_callback(self, callback, callback_mask):
+        cb = SYSTEM_CALLBACK(callback or 0)
+        self._system_callbacks[callback_mask] = cb
+        ckresult(_dll.FMOD_System_SetCallback(self._ptr, cb, int(callback_mask)))
+
+    def set_file_system(self, user_open, user_close, user_read, user_seek, user_async_read, user_async_cancel, block_align=-1):
+        self._call_fmod("FMOD_System_SetFileSystem", FILE_OPEN_CALLBACK(user_open), FILE_CLOSE_CALLBACK(user_close), FILE_READ_CALLBACK(user_read), FILE_SEEK_CALLBACK(user_seek), FILE_ASYNC_READ(user_async_read), FILE_ASYNC_CANCEL(user_async_cancel), block_align)
 
     def set_plugin_path(self, path):
         ckresult(_dll.FMOD_System_SetPluginPath(self._ptr, path))
@@ -582,8 +620,3 @@ class System(object):
     def listener(self, id=0):
         return Listener(self._ptr, id)
 
-    @property
-    def num_record_drivers(self):
-        num = c_int()
-        ckresult(_dll.FMOD_System_GetRecordNumDrivers(self._ptr, byref(num)))
-        return num.value
