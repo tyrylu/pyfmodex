@@ -205,7 +205,8 @@ class Sound(FmodObject):
     @property
     def num_tags(self):
         num = c_int()
-        self._call_fmod("FMOD_Sound_GetNumTags", byref(num))
+        # When using self._call_fmod, it results in an access violation writing some weird address. Yes, it works in a similar situation in the method above, but...
+        ckresult(_dll.FMOD_Sound_GetNumTags(self._ptr, byref(num)))
         return num.value
 
     @property

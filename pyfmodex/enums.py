@@ -135,6 +135,9 @@ class DSP_ENVELOPEFOLLOWER(IntEnum):
     ENVELOPE = 2
     USESIDECHAIN = 3
 
+class DSP_FADER(IntEnum):
+    GAIN = 0
+
 class DSP_FFT(IntEnum):
     WINDOWSIZE = 0
     WINDOWTYPE = 1
@@ -236,6 +239,7 @@ class DSP_OBJECTPAN(IntEnum):
     THREED_MIN_EXTENT = 6
     OVERALL_GAIN = 7
     OUTPUT_GAIN = 8
+
 class DSP_OSCILLATOR(IntEnum):
     TYPE = 0
     RATE = 1
@@ -262,6 +266,7 @@ class DSP_PAN(IntEnum):
     LFE_UPMIX_ENABLED = 18
     OVERALL_GAIN = 19
     SURROUND_SPEAKER_MODE = 20
+    TWOD_HEIGHT_BLEND = 21
 
 class DSP_PAN_MODE_TYPE(IntEnum):
     MONO = 0
@@ -622,7 +627,8 @@ class SPEAKERMODE(Enum):
     SURROUND = 5
     FIVEPOINTONE = 6
     SEVENPOINTONE = 7
-    MAX = 8
+    SEVENPOINTONEPOINTFOUR = 8
+    MAX = 9
 
 class TAGDATATYPE(Enum):
     BINARY = 0

@@ -3,7 +3,7 @@ from .fmodobject import *
 from .globalvars import dll as _dll
 from .globalvars import get_class
 from .channel_control import ChannelControl
-from .utils import check_type
+from .utils import check_type, ckresult
 
 
 class ChannelGroup(ChannelControl):
@@ -21,7 +21,7 @@ class ChannelGroup(ChannelControl):
 
     def get_group(self, idx):
         grp_ptr = c_void_p()
-        self._call_fmod("FMOD_ChannelGroup_GetGroup", idx)
+        ckresult(_dll.FMOD_ChannelGroup_GetGroup(self._ptr, idx, byref(grp_ptr)))
         return ChannelGroup(grp_ptr)
 
     @property

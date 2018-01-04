@@ -253,7 +253,7 @@ class System(FmodObject):
     @property
     def channels_playing(self):
         channels = c_int()
-        self._call_fmod("FMOD_System_GetChannelsPlaying", byref(channels))
+        ckresult(_dll.FMOD_System_GetChannelsPlaying(self._ptr, byref(channels)))
         return channels.value
 
     @property

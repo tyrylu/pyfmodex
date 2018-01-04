@@ -89,7 +89,7 @@ def test_driver(system):
 
 def test_get_driver_info(system):
     info = system.get_driver_info(0)
-    assert info.system_rate == 44100
+    assert info.system_rate == 44100 or info.system_rate == 48000
     assert len(info.name) > 0
 
 def test_file_usage(system):
@@ -145,10 +145,9 @@ def test_get_plugin_info(system):
 
 def test_get_record_driver_info(initialized_system):
     info = initialized_system.get_record_driver_info(0)
-    assert info.system_rate == 44100
+    assert info.system_rate == 44100 or info.system_rate == 48000
         
 
-@pytest.mark.skip("It causes a python crash at exit.")
 def test_record_num_drivers(initialized_system):
     assert initialized_system.record_num_drivers > 0
 

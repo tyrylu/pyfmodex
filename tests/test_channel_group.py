@@ -9,7 +9,6 @@ def test_add_dsp(echo, channel_group):
 def test_add_fade_point(channel_group):
     channel_group.add_fade_point(40000000000, 0.5)
 
-@pytest.mark.skip("Also causes python crash on exit.")
 def test_add_get_group(channel_group, initialized_system):
     new_group = initialized_system.create_channel_group("Group 2")
     conn = channel_group.add_group(new_group, False)
