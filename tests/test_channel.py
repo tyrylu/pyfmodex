@@ -1,3 +1,4 @@
+import os
 from unittest import mock
 from pyfmodex.enums import DSP_TYPE, CHANNELCONTROL_DSP_INDEX
 from pyfmodex.flags import TIMEUNIT, MODE
@@ -208,8 +209,12 @@ def test_set_mix_levels_input(channel):
     channel.set_mix_levels_input(0.5, 0.5)
     
 
-def test_set_mix_levels_output(channel):
-    channel.set_mix_levels_output(0.5,  1.0, 1.0, 0.25, 0.0, 0.0, 0.5, 0.8)
+def test_set_mix_levels_output(many_speakers_system):
+    many_speakers_system.init()
+    snd = many_speakers_system.create_sound(os.path.join(os.path.dirname(__file__), "test.fsb"))
+    channel = snd.get_subsound(0).play(paused=True)
+    channel.set_mix_levels_output(0.5, 1.0, 1.0, 0.25, 0.0, 0.0, 0.5, 0.125)
+    print(channel.get_mix_matrix())
 
 def test_set_pan(channel):
     channel.set_pan(-1.0)

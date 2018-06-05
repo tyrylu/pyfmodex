@@ -3,6 +3,14 @@ import pyfmodex
 import pytest
 from pyfmodex.enums import DSP_TYPE, DSPCONNECTION_TYPE
 
+@pytest.fixture()
+def many_speakers_system():
+    system = pyfmodex.System()
+    format = system.software_format
+    format.speaker_mode = 7
+    system.software_format = format
+    yield system
+
 @pytest.fixture(scope="session")
 def system():
     system = pyfmodex.System()
