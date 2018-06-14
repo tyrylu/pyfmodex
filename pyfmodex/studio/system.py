@@ -5,6 +5,7 @@ from .. import System
 from .studio_object import StudioObject
 from .flags import STUDIO_INIT_FLAGS, LOAD_BANK_FLAGS
 from .bank import Bank
+from .event_description import EventDescription
 from .library import get_library
 
 class StudioSystem(StudioObject):
@@ -38,3 +39,8 @@ class StudioSystem(StudioObject):
         system_ptr = c_void_p()
         self._call("GetLowLevelSystem", byref(system_ptr))
         return System(system_ptr)
+
+    def get_event(self, path):
+        ptr = c_void_p()
+        self._call("GetEvent", prepare_str(path), byref(ptr))
+        return EventDescription(ptr)
