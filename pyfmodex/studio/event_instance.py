@@ -46,12 +46,16 @@ class EventInstance(StudioObject):
         return (val.value, actual.value)
 
     def set_parameter_value(self, name, value):
-        self._call("SetParameterValue", prepare_str(name), value)
+        self._call("SetParameterValue", prepare_str(name), c_float(value))
 
     def set_parameter_value_by_index(self, index, value):
-        self._call("SetParameterValueByIndex", index, value)
+        self._call("SetParameterValueByIndex", index, c_float(value)
 
     def set_parameter_values_by_indices(self, indices, values):
         if len(indices) != len(values):
             raise ValueError("Indices and values must have same length.")
-        self._call("SetParameterValuesByIndices", indices, values, len(indices))
+        num_params = len(indices)
+        array = (c_float * num_params)
+        for i, val in enumerate(values):
+            array[i] = val
+        self._call("SetParameterValuesByIndices", indices, array, num_params)
