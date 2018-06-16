@@ -3,7 +3,7 @@ from .studio_object import StudioObject
 from .enums import PLAYBACK_STATE
 from .parameter_instance import ParameterInstance
 from ..utils import prepare_str
-
+from ..channel_group import ChannelGroup
 
 class EventInstance(StudioObject):
     function_prefix = "FMOD_Studio_EventInstance"
@@ -59,3 +59,10 @@ class EventInstance(StudioObject):
         for i, val in enumerate(values):
             array[i] = val
         self._call("SetParameterValuesByIndices", indices, array, num_params)
+
+
+    @property
+    def channel_group(self):
+        ptr = c_void_p()
+        self._call("GetChannelGroup", byref(ptr))
+        return ChannelGroup(ptr)
