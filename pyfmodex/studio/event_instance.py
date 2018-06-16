@@ -49,7 +49,7 @@ class EventInstance(StudioObject):
         self._call("SetParameterValue", prepare_str(name), c_float(value))
 
     def set_parameter_value_by_index(self, index, value):
-        self._call("SetParameterValueByIndex", index, c_float(value)
+        self._call("SetParameterValueByIndex", index, c_float(value))
 
     def set_parameter_values_by_indices(self, indices, values):
         if len(indices) != len(values):
