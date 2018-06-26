@@ -194,7 +194,7 @@ class DSP(FmodObject):
     def system_object(self):
         sptr = c_void_p()
         self._call_fmod("FMOD_DSP_GetSystemObject", byref(sptr))
-        return get_class("System")(sptr, False)
+        return get_class("System")(sptr)
 
     @property
     def type(self):

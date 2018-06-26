@@ -59,7 +59,7 @@ class SoundGroup(FmodObject):
     def system_object(self):
         sysptr = c_void_p()
         self._call_fmod("FMOD_SoundGroup_GetSystemObject", byref(sysptr))
-        return get_class("System")(sysptr, False)
+        return get_class("System")(sysptr)
 
     @property
     def volume(self):

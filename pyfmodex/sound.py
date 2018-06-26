@@ -254,7 +254,7 @@ class Sound(FmodObject):
     def system_object(self):
         sptr = c_void_p()
         self._call_fmod("FMOD_Sound_GetSystemObject", byref(sptr))
-        return get_class("System")(sptr, False)
+        return get_class("System")(sptr)
 
     def play(self, channel_group=None, paused=False):
         return self.system_object.play_sound(self, channel_group, paused)

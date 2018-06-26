@@ -146,10 +146,10 @@ class ThreedSettings(object):
         self._rolloffscale = rscale
 
 class System(FmodObject):
-    def __init__(self, ptr=None, create=True):
-        """If create is True, new instance is created. Otherwise ptr must be a valid pointer."""
+    def __init__(self, ptr=None):
+        """If ptr is None, new instance is created. Otherwise it must be a valid pointer of a System object."""
         self._system_callbacks = {}
-        if create:
+        if ptr is None:
             self._ptr = c_void_p()
             ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
         else:

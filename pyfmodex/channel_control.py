@@ -291,7 +291,7 @@ class ChannelControl(FmodObject):
     def system_object(self):
         sptr = c_void_p()
         self._call_specific("GetSystemObject", byref(sptr))
-        return get_class("System")(sptr, False)
+        return get_class("System")(sptr)
 
     @property
     def volume(self):
