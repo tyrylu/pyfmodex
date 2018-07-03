@@ -19,9 +19,11 @@ import pyfmodex
 system = pyfmodex.System()
 system.init()
 sound = system.create_sound("somefile.mp3")
-sound.play()
+channel = sound.play()
+while channel.is_playing: pass
 ```
 Of course, somefile.mp3 must be replaced with somethink that actually exists. Here, i used the default parameters and not used features like 3d positioning. For more info, you can use dir function and of course the source.
+Note that the while loop is necessary at least in this simple example to keep the main thread alive long enough.
 Python 3 compatibility
 ----------------------
 Pyfmodex works with python 3 (tested on version 3.5, older versions than python 3.4 will not work, because the library depends on the enum module.
