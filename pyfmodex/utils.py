@@ -14,3 +14,4 @@ def check_type(obj, cls, msg="Bad type of passed argument (%s), expected %s"):
 def prepare_str(string, encoding=sys.getfilesystemencoding()):
     if hasattr(string, "encode"):
         return string.encode(encoding)
+    return string
