@@ -1,16 +1,21 @@
 from ctypes import *
 import os, platform
 arch = platform.architecture()[0]
-if os.name == 'nt':
+if platform.system() == 'Windows':
     if arch == "32bit":
         _dll = windll.fmod
     else:
         _dll = windll.fmod64
-elif os.name == "posix":
+elif platform.system() == "Linux":
     if arch == "32bit":
         _dll = CDLL('libfmod.so')
     else:
         _dll = CDLL('libfmod64.so')
+elif platform.system() == "Darwin":
+    if arch == "32bit":
+        raise RuntimeError("No 32-bit fmod library for Mac Os exists")
+    else:
+        _dll = CDLL("libfmod.dylib")
 from . import globalvars
 globalvars.dll = _dll
 from .callback_prototypes import DEBUG_CALLBACK
