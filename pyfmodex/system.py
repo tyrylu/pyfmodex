@@ -253,8 +253,9 @@ class System(FmodObject):
     @property
     def channels_playing(self):
         channels = c_int()
-        ckresult(_dll.FMOD_System_GetChannelsPlaying(self._ptr, byref(channels)))
-        return channels.value
+        real = c_int()
+        ckresult(_dll.FMOD_System_GetChannelsPlaying(self._ptr, byref(channels), byref(real)))
+        return so(channels=channels.value, real_channels=real.value)
 
     @property
     def threed_settings(self):
@@ -444,8 +445,9 @@ class System(FmodObject):
     @property
     def record_num_drivers(self):
         num = c_int()
-        ckresult(_dll.FMOD_System_GetRecordNumDrivers(self._ptr, byref(num)))
-        return num.value
+        connected = c_int()
+        ckresult(_dll.FMOD_System_GetRecordNumDrivers(self._ptr, byref(num), byref(connected)))
+        return so(drivers=num.value, connected=connected.value)
 
     def get_record_position(self, index):
         pos = c_uint()

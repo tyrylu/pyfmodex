@@ -168,10 +168,9 @@ class DSP(FmodObject):
         return value.value, value_str.value
 
     def get_parameter_info(self, index):
-        descs = (DSP_PARAMETER_DESC * 2)()
-        desc = (DSP_PARAMETER_DESC * 1)()
-        self._call_fmod("FMOD_DSP_GetParameterInfo", index, byref(desc))    
-        return desc[0]
+        descs = (DSP_PARAMETER_DESC * self.num_parameters)()
+        self._call_fmod("FMOD_DSP_GetParameterInfo", index, byref(descs))    
+        return descs[index]
 
     def get_parameter_int(self, index):
         value_str = create_string_buffer(256)

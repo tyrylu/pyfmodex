@@ -86,7 +86,8 @@ def test_num_sync_points(sound):
     assert sound.num_sync_points == 0
 
 def test_num_tags(sound):
-    assert sound.num_tags == 0
+    assert sound.num_tags.tags == 0
+    assert sound.num_tags.updated_tags == 0
 
 def test_open_state(sound):
     state = sound.open_state

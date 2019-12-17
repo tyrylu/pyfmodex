@@ -60,7 +60,8 @@ def test_get_channel(channel):
     assert chan.index == channel.index
 
 def test_channels_playing(initialized_system):
-    assert initialized_system.channels_playing == 0
+    assert initialized_system.channels_playing.channels == 0
+    assert initialized_system.channels_playing.real_channels == 0
 
 def test_threed_settings(initialized_system):
     settings = initialized_system.threed_settings
@@ -149,7 +150,7 @@ def test_get_record_driver_info(initialized_system):
         
 
 def test_record_num_drivers(initialized_system):
-    assert initialized_system.record_num_drivers > 0
+    assert initialized_system.record_num_drivers.drivers > 0
 
 def test_reverb_properties(initialized_system):
     props = initialized_system.get_reverb_properties(0)
