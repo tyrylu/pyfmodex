@@ -4,7 +4,7 @@ from . import globalvars
 # Avoid recursive import hell
 from . import dsp, dsp_connection, geometry, channel, channel_group, reverb, sound, sound_group, system 
 from .utils import FmodError
-__version__ = "0.5.4"
+__version__ = "0.6.0"
 
 c = {}
 c["DSP"] = dsp.DSP

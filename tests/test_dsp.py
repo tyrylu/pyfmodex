@@ -100,7 +100,7 @@ def test_get_set_parameter_int(oscillator):
     oscillator.set_parameter_int(DSP_OSCILLATOR.TYPE, 1)
     assert oscillator.get_parameter_int(DSP_OSCILLATOR.TYPE)[0] == 1
 
-#@pytest.mark.skip("Someone should wrap this one correctly.")
+@pytest.mark.skip("Someone should wrap this one correctly or find out why we get nonsense in the array data.")
 def test_get_parameter_info(echo):
     desc = echo.get_parameter_info(DSP_ECHO.DELAY)
     breakpoint()

@@ -482,13 +482,6 @@ class System(FmodObject):
     def software_format(self, format):
         self._call_fmod("FMOD_System_SetSoftwareFormat", format.sample_rate, format.speaker_mode, format.raw_speakers)
 
-    @property
-    def sound_ram(self):
-        current = c_int()
-        max = c_int()
-        total = c_int()
-        self._call_fmod("FMOD_System_GetSoundRAM", byref(current), byref(max), byref(total))
-        return so(current=current.value, max=max.value, total=total.value)
     def get_speaker_mode_channels(self, mode):
         channels = c_int()
         self._call_fmod("FMOD_System_GetSpeakerModeChannels", mode.value, byref(channels))

@@ -2,15 +2,9 @@ from ctypes import *
 import os, platform
 arch = platform.architecture()[0]
 if platform.system() == 'Windows':
-    if arch == "32bit":
-        _dll = windll.fmod
-    else:
-        _dll = windll.fmod64
+    _dll = windll.fmod
 elif platform.system() == "Linux":
-    if arch == "32bit":
-        _dll = CDLL('libfmod.so')
-    else:
-        _dll = CDLL('libfmod64.so')
+    _dll = CDLL('libfmod.so')
 elif platform.system() == "Darwin":
     if arch == "32bit":
         raise RuntimeError("No 32-bit fmod library for Mac Os exists")

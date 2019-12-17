@@ -6,7 +6,7 @@ from .structure_declarations import *
 GUID._fields_ = [("data1", c_uint), ("data2", c_ushort), ("data3", c_ushort), ("data4", c_char * 8)]
 
 class ADVANCEDSETTINGS(Structure):
-    _fields_ = [("cbsize", c_int), ("maxMPEGcodecs", c_int), ("maxADPCMcodecs", c_int), ("maxXMAcodecs", c_int), ("maxVorbisCodecs", c_int), ("maxAT9Codecs", c_int), ("maxFADPCMCodecs", c_int), ("maxPCMcodecs", c_int), ("ASIONumChannels", c_int), ("ASIOChannelList", POINTER(c_char_p)), ("ASIOSpeakerList", POINTER(c_int)), ("HRTFMinAngle", c_float), ("HRTFMaxAngle", c_float), ("HRTFFreq", c_float), ("vol0virtualvol", c_float), ("defaultDecodeBufferSize", c_uint), ("profileport", c_ushort), ("geometryMaxFadeTime", c_uint), ("distanceFilterCenterFreq", c_float), ("reverb3Dinstance", c_int), ("DSPBufferPoolSize", c_int), ("stackSizeStream", c_uint), ("stackSizeNonBlocking", c_uint), ("stackSizeMixer", c_uint), ("resamplerMethod", c_int), ("commandQueueSize", c_uint), ("randomSeed", c_uint)]
+    _fields_ = [("cbsize", c_int), ("maxMPEGcodecs", c_int), ("maxADPCMcodecs", c_int), ("maxXMAcodecs", c_int), ("maxVorbisCodecs", c_int), ("maxAT9Codecs", c_int), ("maxFADPCMCodecs", c_int), ("maxPCMcodecs", c_int), ("ASIONumChannels", c_int), ("ASIOChannelList", POINTER(c_char_p)), ("ASIOSpeakerList", POINTER(c_int)), ("vol0virtualvol", c_float), ("defaultDecodeBufferSize", c_uint), ("profileport", c_ushort), ("geometryMaxFadeTime", c_uint), ("distanceFilterCenterFreq", c_float), ("reverb3Dinstance", c_int), ("DSPBufferPoolSize", c_int), ("stackSizeStream", c_uint), ("stackSizeNonBlocking", c_uint), ("stackSizeMixer", c_uint), ("resamplerMethod", c_int), ("commandQueueSize", c_uint), ("randomSeed", c_uint)]
 
     def __init__(self, *args, **kwargs):
         Structure.__init__(self, *args, **kwargs)
@@ -93,7 +93,7 @@ class DSP_STATE_PAN_FUNCTIONS(Structure):
 class DSP_STATE_FUNCTIONS(Structure):
     _fields_ = [("alloc", DSP_ALLOC_FUNC), ("realloc", DSP_REALLOC_FUNC), ("free", DSP_FREE_FUNC), ("getsamplerate", DSP_GETSAMPLERATE_FUNC), ("getblocksize", DSP_GETBLOCKSIZE_FUNC), ("dft", POINTER(DSP_STATE_DFT_FUNCTIONS)), ("pan", POINTER(DSP_STATE_PAN_FUNCTIONS)), ("getspeakermode", DSP_GETSPEAKERMODE_FUNC), ("getclock", DSP_GETCLOCK_FUNC), ("getlistenerattributes", DSP_GETLISTENERATTRIBUTES_FUNC), ("log", DSP_LOG_FUNC), ("getuserdata", DSP_GETUSERDATA_FUNC)]
 
-DSP_STATE._fields_ = [("instance", c_void_p), ("plugindata", c_void_p), ("channelmask", c_int), ("sourcespeakermode", c_int), ("sidechaindata", POINTER(c_float)), ("sidechainchannels", c_int), ("functions", POINTER(DSP_STATE_FUNCTIONS)), ("systemobject", c_int)]
+DSP_STATE._fields_ = [("instance", c_void_p), ("plugindata", c_void_p), ("ask", c_int), ("sourcespeakermode", c_int), ("sidechaindata", POINTER(c_float)), ("sidechainchannels", c_int), ("functions", POINTER(DSP_STATE_FUNCTIONS)), ("systemobject", c_int)]
 
 class DSP_PARAMETER_DESC(Structure):
     _fields_ = [("type", c_int), ("name", c_char * 16), ("label", c_char * 16), ("description", c_char_p), ("floatdesc", DSP_PARAMETER_DESC_FLOAT), ("intdesc", DSP_PARAMETER_DESC_INT), ("descbool", DSP_PARAMETER_DESC_BOOL), ("datadesc", DSP_PARAMETER_DESC_DATA)]

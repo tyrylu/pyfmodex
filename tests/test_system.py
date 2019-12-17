@@ -172,9 +172,6 @@ def test_software_format(system):
     system.software_format = format
     assert system.software_format.sample_rate == 96000
 
-def test_sound_ram(initialized_system):
-    assert initialized_system.sound_ram.current == 0
-
 def test_get_speaker_mode_channels(initialized_system):
     assert initialized_system.get_speaker_mode_channels(SPEAKERMODE.STEREO) == 2
 
