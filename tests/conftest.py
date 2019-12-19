@@ -1,7 +1,47 @@
 import os
 import pyfmodex
+import pyfmodex.studio
 import pytest
 from pyfmodex.enums import DSP_TYPE, DSPCONNECTION_TYPE
+
+@pytest.fixture(scope="session")
+def instance(event):
+    yield event.create_instance()
+
+@pytest.fixture(scope="session")
+def event(system_with_banks):
+    yield system_with_banks.get_event("event:/Vehicles/Car Engine")
+
+@pytest.fixture(scope="session")
+def bank(system_with_banks):
+    bank = system_with_banks.get_bank("bank:/Vehicles")
+    yield bank
+
+@pytest.fixture()
+def studio_system():
+    system = pyfmodex.studio.StudioSystem()
+    yield system
+    system.release()
+
+@pytest.fixture(scope="session")
+def initialized_studio_system():
+    system = pyfmodex.studio.StudioSystem()
+    system.initialize()
+    yield system
+    system.release()
+
+@pytest.fixture(scope="session")
+def system_with_banks():
+    system = pyfmodex.studio.StudioSystem()
+    system.initialize()
+    conf_dir = os.path.dirname(__file__)
+
+    system.load_bank_file(os.path.join(conf_dir, "Master Bank.bank"))
+    system.load_bank_file(os.path.join(conf_dir, "Master Bank.strings.bank"))
+    system.load_bank_file(os.path.join(conf_dir, "Vehicles.bank"))
+    yield system
+    system.release()
+
 
 @pytest.fixture()
 def many_speakers_system():

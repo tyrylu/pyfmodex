@@ -19,9 +19,9 @@ class EventDescription(StudioObject):
         return EventInstance(instance_ptr)
 
     @property
-    def parameter_count(self):
+    def parameter_description_count(self):
         count = c_int()
-        self._call("GetParameterCount", byref(count))
+        self._call("GetParameterDescriptionCount", byref(count))
         return count.value
 
     @property

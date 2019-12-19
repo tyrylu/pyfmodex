@@ -20,3 +20,9 @@ class StudioObject(object):
             return self._ptr.value == other._ptr.value
         else:
             return False
+
+    @property
+    def is_valid(self):
+        func_name = "%s_%s"%(self.function_prefix, "IsValid")
+        result = getattr(self._lib, func_name)(self._ptr)
+        return bool(result)
