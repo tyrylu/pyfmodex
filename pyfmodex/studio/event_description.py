@@ -1,13 +1,24 @@
-from ctypes import c_int, c_void_p, byref, create_string_buffer
-from .studio_object import StudioObject
+"""The description for an FMOD Studio Event."""
+
+from ctypes import byref, c_int, c_void_p, create_string_buffer
+
 from .event_instance import EventInstance
+from .studio_object import StudioObject
 
 
 class EventDescription(StudioObject):
+    """The description for an FMOD Studio Event.
+
+    Event descriptions belong to banks and can be queried after the relevant
+    bank has been loaded. Event descriptions may be retrieved via path or GUID
+    lookup, or by enumerating all descriptions in a bank.
+    """
+
     function_prefix = "FMOD_Studio_EventDescription"
 
     @property
     def path(self):
+        """The path."""
         required = c_int()
         self._call("GetPath", None, 0, byref(required))
         path_buffer = create_string_buffer(required.value)
@@ -15,18 +26,21 @@ class EventDescription(StudioObject):
         return path_buffer.value.decode("utf-8")
 
     def create_instance(self):
+        """Create a playable instance."""
         instance_ptr = c_void_p()
         self._call("CreateInstance", byref(instance_ptr))
         return EventInstance(instance_ptr)
 
     @property
     def parameter_description_count(self):
+        """The number of parameters in the event."""
         count = c_int()
         self._call("GetParameterDescriptionCount", byref(count))
         return count.value
 
     @property
     def user_property_count(self):
+        """The number of user properties attached to the event."""
         count = c_int()
         self._call("GetUserPropertyCount", byref(count))
         return count.value

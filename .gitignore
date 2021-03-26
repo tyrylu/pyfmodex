@@ -1,8 +1,9 @@
+.py,cover
 *.pyc
+.cache/*
+.coverage
+.ropeproject
+MANIFEST
 build/*
 dist/*
 pyfmodex.egg-info/*
-.cache/*
-*.py,cover
-.coverage
-MANIFEST
