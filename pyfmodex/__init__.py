@@ -28,7 +28,7 @@ from .reverb_presets import REVERB_PRESET, set_reverb_preset
 # import structures to be used with Resonance Audio plugin
 from .roomproperties import MaterialNames, RoomProperties
 
-__version__ = "0.6.1"
+__version__ = "0.7.0"
 
 c = {}
 c["DSP"] = dsp.DSP
