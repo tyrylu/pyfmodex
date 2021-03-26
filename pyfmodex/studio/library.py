@@ -1,6 +1,6 @@
 import os
 import platform
-from ctypes import cdll, windll
+from ctypes import *
 
 arch = platform.architecture()[0]
 if os.name == 'nt':
