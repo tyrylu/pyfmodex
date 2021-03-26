@@ -23,7 +23,7 @@ from . import (
 from .utils import FmodError
 
 # import reverb presets
-from .reverb_presets import FMOD_REVERB_PRESET, set_reverb_preset
+from .reverb_presets import REVERB_PRESET, set_reverb_preset
 
 # import structures to be used with Resonance Audio plugin
 from .roomproperties import MaterialNames, RoomProperties

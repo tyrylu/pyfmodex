@@ -16,7 +16,7 @@ To verify if everything works, open python interactive interpreter and try impor
 import pyfmodex
 ```
 
-If there is no error, good. It worked. Playing a sound is a little bit more complicated, than the import, but nothing horrible:
+If there is no error, good. It worked. Playing a sound is a little bit more complicated than the import, but nothing horrible:
 
 ```python
 import pyfmodex
@@ -32,7 +32,7 @@ while channel.is_playing:
 
 Of course, somefile.mp3 must be replaced with somethink that actually exists. 
 Here, i used the default parameters and not used features like 3d positioning. 
-For more info, you can use dir function and of course the source.
+For more info, you can use the dir function and of course the source.
 Note that the while loop is necessary at least in this simple example to keep the main thread alive long enough.
 
 Python 3 compatibility

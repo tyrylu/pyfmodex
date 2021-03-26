@@ -177,7 +177,7 @@ class StudioSystem(StudioObject):
     def get_event(self, path):
         """An EventDescription.
 
-        :patam str path: The path or the ID string that identifies the event or
+        :param str path: The path or the ID string that identifies the event or
         snapshot.
         """
         ptr = c_void_p()
