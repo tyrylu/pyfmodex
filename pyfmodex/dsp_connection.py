@@ -3,8 +3,8 @@ from .fmodobject import *
 from .globalvars import get_class
 from .enums import DSPCONNECTION_TYPE
 
-class DSPConnection(FmodObject):
 
+class DSPConnection(FmodObject):
     @property
     def input(self):
         dsp_ptr = c_void_p()
@@ -16,6 +16,7 @@ class DSPConnection(FmodObject):
         m_val = c_float()
         self._call_fmod("FMOD_DSPConnection_GetMix", byref(m_val))
         return m_val.value
+
     @mix.setter
     def mix(self, m):
         self._call_fmod("FMOD_DSPConnection_SetMix", c_float(m))
@@ -23,10 +24,22 @@ class DSPConnection(FmodObject):
     def get_mix_matrix(self, hop=0):
         in_channels = c_int()
         out_channels = c_int()
-        self._call_fmod("FMOD_DSPConnection_GetMixMatrix", None, byref(out_channels), byref(in_channels), hop)
+        self._call_fmod(
+            "FMOD_DSPConnection_GetMixMatrix",
+            None,
+            byref(out_channels),
+            byref(in_channels),
+            hop,
+        )
         matrix = (c_float * (hop or in_channels.value * out_channels.value))()
-        self._call_fmod("FMOD_DSPConnection_GetMixMatrix", matrix, byref(out_channels), byref(in_channels), hop)
-        return  list(matrix)
+        self._call_fmod(
+            "FMOD_DSPConnection_GetMixMatrix",
+            matrix,
+            byref(out_channels),
+            byref(in_channels),
+            hop,
+        )
+        return list(matrix)
 
     def set_mix_matrix(self, matrix, rows, cols):
         if not matrix:
@@ -40,6 +53,7 @@ class DSPConnection(FmodObject):
         o_ptr = c_void_p()
         self._call_fmod("FMOD_DSPConnection_GetOutput", byref(o_ptr))
         return get_class("DSP")(o_ptr)
+
     @property
     def type(self):
         typ = c_int()

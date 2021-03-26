@@ -3,13 +3,14 @@ from .globalvars import get_class
 from .fmodobject import *
 from .enums import SOUNDGROUP_BEHAVIOR
 
-class SoundGroup(FmodObject):
 
-    @property    
+class SoundGroup(FmodObject):
+    @property
     def max_audible(self):
         val = c_int()
         self._call_fmod("FMOD_SoundGroup_GetMaxAudible", byref(val))
         return val.value
+
     @max_audible.setter
     def max_audible(self, val):
         self._call_fmod("FMOD_SoundGroup_SetMaxAudible", val)
@@ -19,6 +20,7 @@ class SoundGroup(FmodObject):
         behavior = c_int()
         self._call_fmod("FMOD_SoundGroup_GetMaxAudibleBehavior", byref(behavior))
         return SOUNDGROUP_BEHAVIOR(behavior.value)
+
     @max_audible_behavior.setter
     def max_audible_behavior(self, behavior):
         self._call_fmod("FMOD_SoundGroup_SetMaxAudibleBehavior", behavior.value)
@@ -28,6 +30,7 @@ class SoundGroup(FmodObject):
         speed = c_float()
         self._call_fmod("FMOD_SoundGroup_GetMuteFadeSpeed", byref(speed))
         return speed.value
+
     @mute_fade_speed.setter
     def mute_fade_speed(self, speed):
         self._call_fmod("FMOD_SoundGroup_SetMuteFadeSpeed", c_float(speed))
@@ -66,6 +69,7 @@ class SoundGroup(FmodObject):
         vol = c_float()
         self._call_fmod("FMOD_SoundGroup_GetVolume", byref(vol))
         return vol.value
+
     @volume.setter
     def volume(self, vol):
         self._call_fmod("FMOD_SoundGroup_SetVolume", c_float(vol))

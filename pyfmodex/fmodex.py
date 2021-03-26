@@ -1,20 +1,23 @@
 from ctypes import *
 import os, platform
+
 arch = platform.architecture()[0]
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     _dll = windll.fmod
 elif platform.system() == "Linux":
-    _dll = CDLL('libfmod.so')
+    _dll = CDLL("libfmod.so")
 elif platform.system() == "Darwin":
     if arch == "32bit":
         raise RuntimeError("No 32-bit fmod library for Mac Os exists")
     else:
         _dll = CDLL("libfmod.dylib")
 from . import globalvars
+
 globalvars.dll = _dll
 from .callback_prototypes import DEBUG_CALLBACK
 from .utils import ckresult
 from .structobject import Structobject as so
+
 
 def get_disk_busy():
     """Gets the busy status of the disk.
@@ -25,12 +28,13 @@ def get_disk_busy():
     ckresult(_dll.FMOD_File_GetDiskBusy(byref(busy)))
     return busy.value
 
+
 def set_disk_busy(busy):
     """Sets the busy status.
     :param busy: The busy status.
-    :type busy: boolean
-"""
+    :type busy: boolean"""
     ckresult(_dll.FMOD_File_SetDiskBusy(busy))
+
 
 def get_memory_stats(blocking):
     """Returns the current memory stats.
@@ -42,6 +46,7 @@ def get_memory_stats(blocking):
     max = c_int()
     ckresult(_dll.FMOD_Memory_GetStats(byref(current), byref(max), blocking))
     return so(current=current.value, maximum=max.value)
+
 
 def initialize_memory(poolmem, poollen, useralloc, userrealloc, userfree, memtypeflags):
     """Initialize fmod memory routines.
@@ -57,8 +62,13 @@ def initialize_memory(poolmem, poollen, useralloc, userrealloc, userfree, memtyp
     :type userfree: function having a free like behavior and signature.
     :param memtypeflags: The types of memory this configuration applies to.
     :type memtypeflags: MEMORY_FLAGS"""
-    ckresult(_dll.FMOD_Memory_Initialize(poolmem, poollen, useralloc, userrealloc, userfree, memtypeflags))
-    
+    ckresult(
+        _dll.FMOD_Memory_Initialize(
+            poolmem, poollen, useralloc, userrealloc, userfree, memtypeflags
+        )
+    )
+
+
 def initialize_debugging(flags, mode, callback, filename):
     """Initializes the logging system.
     :param flags: The debug output control flags.
@@ -69,4 +79,6 @@ def initialize_debugging(flags, mode, callback, filename):
     :type callback: DEBUG_CALLBACK like function
     :param filename: The file to log to, if applicable.
     :param filename: str"""
-    ckresult(_dll.FMOD_Debug_Initialize(flags, mode, DEBUG_CALLBACK(callback), filename))
+    ckresult(
+        _dll.FMOD_Debug_Initialize(flags, mode, DEBUG_CALLBACK(callback), filename)
+    )
