@@ -9,23 +9,24 @@ from .flags import MODE
 
 from .channel_control import ChannelControl
 
-class Channel(ChannelControl):
 
+class Channel(ChannelControl):
     @property
     def pan_level(self):
         l = c_float()
         ckresult(_dll.FMOD_Channel_Get3DPanLevel(self._ptr, byref(l)))
         return l.value
+
     @pan_level.setter
     def pan_level(self, l):
         ckresult(_dll.FMOD_Channel_Set3DPanLevel(self._ptr, c_float(l)))
-    
-    
+
     @property
     def channel_group(self):
         grp_ptr = c_void_p()
         ckresult(_dll.FMOD_Channel_GetChannelGroup(self._ptr, byref(grp_ptr)))
         return get_class("ChannelGroup")(grp_ptr)
+
     @channel_group.setter
     def channel_group(self, group):
         check_type(group, get_class("ChannelGroup"))
@@ -36,12 +37,13 @@ class Channel(ChannelControl):
         snd_ptr = c_void_p()
         ckresult(_dll.FMOD_Channel_GetCurrentSound(self._ptr, byref(snd_ptr)))
         return get_class("Sound")(snd_ptr)
-    
+
     @property
     def frequency(self):
         freq = c_float()
         ckresult(_dll.FMOD_Channel_GetFrequency(self._ptr, byref(freq)))
         return freq.value
+
     @frequency.setter
     def frequency(self, freq):
         ckresult(_dll.FMOD_Channel_SetFrequency(self._ptr, c_float(freq)))
@@ -57,19 +59,28 @@ class Channel(ChannelControl):
         c = c_int()
         ckresult(_dll.FMOD_Channel_GetLoopCount(self._ptr, byref(c)))
         return c.value
+
     @loop_count.setter
     def loop_count(self, count):
         ckresult(_dll.FMOD_Channel_SetLoopCount(self._ptr, c_int(count)))
 
     def get_loop_points(self, startunit, endunit):
-        "Returns tuple(start, end)"""
+        "Returns tuple(start, end)" ""
         start = c_uint()
         end = c_uint()
-        ckresult(_dll.FMOD_Channel_GetLoopPoints(self._ptr, byref(start), int(startunit), byref(end), int(endunit)))
+        ckresult(
+            _dll.FMOD_Channel_GetLoopPoints(
+                self._ptr, byref(start), int(startunit), byref(end), int(endunit)
+            )
+        )
         return start.value, end.value
 
     def set_loop_points(self, start, startunit, end, endunit):
-        ckresult(_dll.FMOD_Channel_SetLoopPoints(self._ptr, c_uint(start), int(startunit), c_uint(end), int(endunit)))
+        ckresult(
+            _dll.FMOD_Channel_SetLoopPoints(
+                self._ptr, c_uint(start), int(startunit), c_uint(end), int(endunit)
+            )
+        )
 
     def get_position(self, unit):
         pos = c_uint()
@@ -84,9 +95,10 @@ class Channel(ChannelControl):
         pri = c_int()
         ckresult(_dll.FMOD_Channel_GetPriority(self._ptr, byref(pri)))
         return pri.value
+
     @priority.setter
     def priority(self, pri):
-        ckresult(_dll.FMOD_Channel_SetPriority(self._ptr, pri))    
+        ckresult(_dll.FMOD_Channel_SetPriority(self._ptr, pri))
 
     @property
     def is_virtual(self):

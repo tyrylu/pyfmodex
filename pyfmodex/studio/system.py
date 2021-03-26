@@ -10,9 +10,10 @@ from .event_description import EventDescription
 from .library import get_library
 from .utils import fmod_version
 
+
 class StudioSystem(StudioObject):
     function_prefix = "FMOD_Studio_System"
-    
+
     def __init__(self, ptr=None, create=True, version=None):
         """If create is True, new instance is created. Otherwise ptr must be a valid pointer."""
         super().__init__(ptr)
@@ -30,16 +31,18 @@ class StudioSystem(StudioObject):
         settings = ADVANCEDSETTINGS()
         self._call("GetAdvancedSettings", byref(settings))
         return settings
+
     @advanced_settings.setter
     def advanced_settings(self, value):
         check_type(value, ADVANCEDSETTINGS)
         self._call("SetAdvancedSettings", byref(value))
+
     def get_bank(self, path):
         path = prepare_str(path)
         ptr = c_void_p()
         self._call("GetBank", path, byref(ptr))
         return Bank(ptr)
-    
+
     @property
     def bank_count(self):
         count = c_int()
@@ -51,14 +54,20 @@ class StudioSystem(StudioObject):
         array = (c_void_p * self.bank_count)()
         self._call("GetBankList", byref(array), len(array), None)
         return [Bank(ptr) for ptr in array]
-    
+
     @property
     def buffer_usage(self):
         usage = BUFFER_USAGE()
         self._call("GetBufferUsage", byref(usage))
         return usage
 
-    def initialize(self, max_channels=1000, studio_flags=STUDIO_INIT_FLAGS.NORMAL, flags=INIT_FLAGS.NORMAL, extra=None):
+    def initialize(
+        self,
+        max_channels=1000,
+        studio_flags=STUDIO_INIT_FLAGS.NORMAL,
+        flags=INIT_FLAGS.NORMAL,
+        extra=None,
+    ):
         self._call("Initialize", max_channels, int(studio_flags), int(flags), extra)
 
     def release(self):

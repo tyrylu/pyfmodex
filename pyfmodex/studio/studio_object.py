@@ -1,8 +1,10 @@
 from ..utils import ckresult
 from .library import get_library
 
+
 class StudioObject(object):
     """A base Fmod studio object."""
+
     def __init__(self, ptr):
         """Constructor.
         :param ptr: The pointer representing this object.
@@ -11,10 +13,10 @@ class StudioObject(object):
         self._lib = get_library()
 
     def _call(self, specific_function_suffix, *args):
-        func_name = "%s_%s"%(self.function_prefix, specific_function_suffix)
+        func_name = "%s_%s" % (self.function_prefix, specific_function_suffix)
         result = getattr(self._lib, func_name)(self._ptr, *args)
         ckresult(result)
-    
+
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self._ptr.value == other._ptr.value
@@ -23,6 +25,6 @@ class StudioObject(object):
 
     @property
     def is_valid(self):
-        func_name = "%s_%s"%(self.function_prefix, "IsValid")
+        func_name = "%s_%s" % (self.function_prefix, "IsValid")
         result = getattr(self._lib, func_name)(self._ptr)
         return bool(result)

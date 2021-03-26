@@ -2,9 +2,10 @@ from ctypes import c_int, c_void_p, byref, create_string_buffer
 from .studio_object import StudioObject
 from .event_instance import EventInstance
 
+
 class EventDescription(StudioObject):
     function_prefix = "FMOD_Studio_EventDescription"
-    
+
     @property
     def path(self):
         required = c_int()

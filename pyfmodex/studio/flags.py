@@ -1,5 +1,6 @@
 from flags import Flags
 
+
 class STUDIO_INIT_FLAGS(Flags):
     __no_flags_name__ = "NORMAL"
     LIVEUPDATE = 0x00000001
@@ -7,6 +8,7 @@ class STUDIO_INIT_FLAGS(Flags):
     SYNCHRONOUS_UPDATE = 0x00000004
     DEFERRED_CALLBACKS = 0x00000008
     LOAD_FROM_UPDATE = 0x00000010
+
 
 class LOAD_BANK_FLAGS(Flags):
     __no_flags_name__ = "NORMAL"

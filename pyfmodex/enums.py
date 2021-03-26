@@ -1,6 +1,7 @@
 """Fmod API enumeration types."""
 from enum import Enum, IntEnum
 
+
 class CHANNELCONTROL_CALLBACK_TYPE(Enum):
     END = 0
     VIRTUALVOICE = 1
@@ -8,15 +9,18 @@ class CHANNELCONTROL_CALLBACK_TYPE(Enum):
     OCCLUSION = 3
     MAX = 4
 
+
 class CHANNELCONTROL_DSP_INDEX(IntEnum):
     HEAD = 0
     FADER = 1
     TAIL = 3
+
+
 class CHANNELCONTROL_TYPE(Enum):
     CHANNEL = 0
     CHANNELGROUP = 1
-    
-    
+
+
 class CHANNELORDER(Enum):
     DEFAULT = 0
     WAVEFORMAT = 1
@@ -26,10 +30,12 @@ class CHANNELORDER(Enum):
     ALSA = 5
     MAX = 6
 
+
 class DEBUG_MODE(Enum):
     TTY = 0
     FILE = 1
     CALLBACK = 2
+
 
 class DSPCONNECTION_TYPE(Enum):
     STANDARD = 0
@@ -37,6 +43,7 @@ class DSPCONNECTION_TYPE(Enum):
     SEND = 2
     SEND_SIDECHAIN = 3
     MAX = 4
+
 
 class DSP_CHANNELMIX(Enum):
     OUTPUTGROUPING = 0
@@ -115,10 +122,12 @@ class DSP_CHANNELMIX_OUTPUT(Enum):
     ALL7POINT1 = 5
     ALLLFE = 6
 
+
 class DSP_CHORUS(IntEnum):
     MIX = 0
     RATE = 1
     DEPTH = 2
+
 
 class DSP_COMPRESSOR(IntEnum):
     THRESHOLD = 0
@@ -129,11 +138,13 @@ class DSP_COMPRESSOR(IntEnum):
     USESIDECHAIN = 5
     LINKED = 6
 
+
 class DSP_CONVOLUTION_REVERB(IntEnum):
     PARAM_IR = 0
     PARAM_WET = 1
     PARAM_DRY = 2
     PARAM_LINKED = 3
+
 
 class DSP_DELAY(IntEnum):
     CH0 = 0
@@ -154,13 +165,17 @@ class DSP_DELAY(IntEnum):
     CH15 = 15
     MAXDELAY = 16
 
+
 class DSP_DISTORTION(IntEnum):
     LEVEL = 0
+
+
 class DSP_ECHO(IntEnum):
     DELAY = 0
     FEEDBACK = 1
     DRYLEVEL = 2
     WETLEVEL = 3
+
 
 class DSP_ENVELOPEFOLLOWER(IntEnum):
     ATTACK = 0
@@ -168,14 +183,18 @@ class DSP_ENVELOPEFOLLOWER(IntEnum):
     ENVELOPE = 2
     USESIDECHAIN = 3
 
+
 class DSP_FADER(IntEnum):
     GAIN = 0
+
 
 class DSP_FFT(IntEnum):
     WINDOWSIZE = 0
     WINDOWTYPE = 1
     SPECTRUMDATA = 2
     DOMINANT_FREQ = 3
+
+
 class DSP_FFT_WINDOW(IntEnum):
     RECT = 0
     TRIANGLE = 1
@@ -184,17 +203,21 @@ class DSP_FFT_WINDOW(IntEnum):
     BLACKMAN = 4
     BLACKMANHARRIS = 5
 
+
 class DSP_FLANGE(IntEnum):
     MIX = 0
     DEPTH = 1
     RATE = 2
 
+
 class DSP_HIGHPASS(IntEnum):
     CUTOFF = 0
     RESONANCE = 1
 
+
 class DSP_HIGHPASS_SIMPLE(IntEnum):
     CUTOFF = 0
+
 
 class DSP_ITECHO(IntEnum):
     WETDRYMIX = 0
@@ -203,22 +226,27 @@ class DSP_ITECHO(IntEnum):
     RIGHTDELAY = 3
     PANDELAY = 4
 
+
 class DSP_ITLOWPASS(IntEnum):
     CUTOFF = 0
     RESONANCE = 1
+
 
 class DSP_LIMITER(IntEnum):
     RELEASETIME = 0
     CEILING = 1
     MAXIMIZERGAIN = 2
     MODE = 3
-    
+
+
 class DSP_LOWPASS(IntEnum):
     CUTOFF = 0
     RESONANCE = 1
 
+
 class DSP_LOWPASS_SIMPLE(IntEnum):
     CUTOFF = 0
+
 
 class DSP_MULTIBAND_EQ(IntEnum):
     A_FILTER = 0
@@ -241,7 +269,8 @@ class DSP_MULTIBAND_EQ(IntEnum):
     E_FREQUENCY = 17
     E_Q = 18
     E_GAIN = 19
-    
+
+
 class DSP_MULTIBAND_EQ_FILTER_TYPE(IntEnum):
     DISABLED = 0
     LOWPASS_12DB = 1
@@ -256,11 +285,13 @@ class DSP_MULTIBAND_EQ_FILTER_TYPE(IntEnum):
     BANDPASS = 10
     NOTCH = 11
     ALLPASS = 12
-    
+
+
 class DSP_NORMALIZE(IntEnum):
     FADETIME = 0
     THRESHOLD = 1
     MAXAMP = 2
+
 
 class DSP_OBJECTPAN(IntEnum):
     THREED_POSITION = 0
@@ -273,9 +304,11 @@ class DSP_OBJECTPAN(IntEnum):
     OVERALL_GAIN = 7
     OUTPUT_GAIN = 8
 
+
 class DSP_OSCILLATOR(IntEnum):
     TYPE = 0
     RATE = 1
+
 
 class DSP_PAN(IntEnum):
     MODE = 0
@@ -301,19 +334,23 @@ class DSP_PAN(IntEnum):
     SURROUND_SPEAKER_MODE = 20
     TWOD_HEIGHT_BLEND = 21
 
+
 class DSP_PAN_MODE_TYPE(IntEnum):
     MONO = 0
     STEREO = 1
     SURROUND = 2
 
+
 class DSP_PAN_SURROUND_FLAGS(IntEnum):
     DEFAULT = 0
     ROTATION_NOT_BIASED = 1
+
 
 class DSP_PARAMEQ(IntEnum):
     CENTER = 0
     BANDWIDTH = 1
     GAIN = 2
+
 
 class DSP_PARAMETER_DATA_TYPE(Enum):
     USER = 0
@@ -323,11 +360,13 @@ class DSP_PARAMETER_DATA_TYPE(Enum):
     FFT = 4
     THREEDATTRIBUTES_MULTI = 5
 
+
 class DSP_PARAMETER_FLOAT_MAPPING_TYPE(Enum):
     LINEAR = 0
     AUTO = 1
     PIECEWISE_LINEAR = 2
-    
+
+
 class DSP_PARAMETER_TYPE(Enum):
     FLOAT = 0
     INT = 1
@@ -335,15 +374,18 @@ class DSP_PARAMETER_TYPE(Enum):
     DATA = 3
     MAX = 4
 
+
 class DSP_PITCHSHIFT(IntEnum):
     PITCH = 0
     FFTSIZE = 1
     OVERLAP = 3
     MAXCHANNELS = 4
 
+
 class DSP_PROCESS_OPERATION(Enum):
     PERFORM = 0
     QUERY = 1
+
 
 class DSP_RESAMPLER(IntEnum):
     DEFAULT = 0
@@ -353,13 +395,16 @@ class DSP_RESAMPLER(IntEnum):
     SPLINE = 4
     MAX = 5
 
+
 class DSP_RETURN(IntEnum):
     ID = 0
     INPUT_SPEAKER_MODE = 1
 
+
 class DSP_SEND(IntEnum):
     RETURNID = 0
     LEVEL = 1
+
 
 class DSP_SFXREVERB(IntEnum):
     DECAYTIME = 0
@@ -376,6 +421,7 @@ class DSP_SFXREVERB(IntEnum):
     WETLEVEL = 11
     DRYLEVEL = 12
 
+
 class DSP_THREE_EQ(IntEnum):
     LOWGAIN = 0
     MIDGAIN = 1
@@ -384,21 +430,26 @@ class DSP_THREE_EQ(IntEnum):
     HIGHCROSSOVER = 4
     CROSSOVERSLOPE = 5
 
+
 class DSP_THREE_EQ_CROSSOVERSLOPE_TYPE(IntEnum):
     SLOPE_12DB = 0
     SLOPE_24DB = 1
     SLOPE_48DB = 2
+
 
 class DSP_TRANSCEIVER(IntEnum):
     TRANSMIT = 0
     GAIN = 1
     CHANNEL = 2
     TRANSMITSPEAKERMODE = 3
+
+
 class DSP_TRANSCEIVER_SPEAKERMODE(IntEnum):
     AUTO = 0
     MONO = 1
     STEREO = 2
     SURROUND = 3
+
 
 class DSP_TREMOLO(IntEnum):
     FREQUENCY = 0
@@ -409,6 +460,7 @@ class DSP_TREMOLO(IntEnum):
     SQUARE = 5
     PHASE = 6
     SPREAD = 7
+
 
 class DSP_TYPE(IntEnum):
     UNKNOWN = 0
@@ -450,6 +502,7 @@ class DSP_TYPE(IntEnum):
     MULTIBAND_EQ = 36
     MAX = 37
 
+
 class ERRORCALLBACK_INSTANCETYPE(Enum):
     NONE = 0
     SYSTEM = 1
@@ -471,6 +524,7 @@ class ERRORCALLBACK_INSTANCETYPE(Enum):
     STUDIO_BANK = 16
     STUDIO_COMMANDREPLAY = 17
 
+
 class OPENSTATE(Enum):
     READY = 0
     LOADING = 1
@@ -481,6 +535,7 @@ class OPENSTATE(Enum):
     PLAYING = 6
     SETPOSITION = 7
     MAX = 8
+
 
 class OUTPUTTYPE(Enum):
     AUTODETECT = 0
@@ -504,11 +559,13 @@ class OUTPUTTYPE(Enum):
     AAUDIO = 18
     MAX = 19
 
+
 class PLUGINTYPE(Enum):
     OUTPUT = 0
     CODEC = 1
     DSP = 2
     MAX = 3
+
 
 class RESULT(Enum):
     OK = 0
@@ -594,11 +651,13 @@ class RESULT(Enum):
     RECORD_DISCONNECTED = 80
     TOOMANYSAMPLES = 81
 
+
 class SOUNDGROUP_BEHAVIOR(Enum):
     FAIL = 0
     MUTE = 1
     STEALLOWEST = 2
     MAX = 3
+
 
 class SOUND_FORMAT(Enum):
     NONE = 0
@@ -609,6 +668,7 @@ class SOUND_FORMAT(Enum):
     PCMFLOAT = 5
     BITSTREAM = 6
     MAX = 7
+
 
 class SOUND_TYPE(Enum):
     UNKNOWN = 0
@@ -637,6 +697,7 @@ class SOUND_TYPE(Enum):
     FADPCM = 23
     MAX = 24
 
+
 class SPEAKER(Enum):
     FRONT_LEFT = 0
     FRONT_RIGHT = 1
@@ -647,6 +708,7 @@ class SPEAKER(Enum):
     BACK_LEFT = 6
     BACK_RIGHT = 7
     MAX = 8
+
 
 class SPEAKERMODE(Enum):
     DEFAULT = 0
@@ -660,6 +722,7 @@ class SPEAKERMODE(Enum):
     SEVENPOINTONEPOINTFOUR = 8
     MAX = 9
 
+
 class TAGDATATYPE(Enum):
     BINARY = 0
     INT = 1
@@ -670,6 +733,7 @@ class TAGDATATYPE(Enum):
     STRING_UTF8 = 6
     CDTOC = 7
     MAX = 8
+
 
 class TAGTYPE(Enum):
     UNKNOWN = 0

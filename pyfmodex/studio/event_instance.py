@@ -4,6 +4,7 @@ from .enums import PLAYBACK_STATE
 from ..utils import prepare_str
 from ..channel_group import ChannelGroup
 
+
 class EventInstance(StudioObject):
     function_prefix = "FMOD_Studio_EventInstance"
 
@@ -18,6 +19,7 @@ class EventInstance(StudioObject):
         paused = c_bool()
         self._call("GetPaused", byref(paused))
         return paused.value
+
     @paused.setter
     def paused(self, val):
         self._call("SetPaused", c_bool(val))
@@ -35,11 +37,12 @@ class EventInstance(StudioObject):
         return (val.value, actual.value)
 
     def set_parameter_by_name(self, name, value, ignoreseekspeed=False):
-        self._call("SetParameterByName", prepare_str(name), c_float(value), ignoreseekspeed)
+        self._call(
+            "SetParameterByName", prepare_str(name), c_float(value), ignoreseekspeed
+        )
 
     @property
     def channel_group(self):
         ptr = c_void_p()
         self._call("GetChannelGroup", byref(ptr))
         return ChannelGroup(ptr)
-
