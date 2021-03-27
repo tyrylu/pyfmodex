@@ -301,6 +301,13 @@ DSP_STATE._fields_ = [
     ("systemobject", c_int),
 ]
 
+class DSP_PARAMETER_DESC_UNION(Union):
+    _fields_ = [
+        ("floatdesc", DSP_PARAMETER_DESC_FLOAT),
+        ("intdesc", DSP_PARAMETER_DESC_INT),
+        ("descbool", DSP_PARAMETER_DESC_BOOL),
+        ("datadesc", DSP_PARAMETER_DESC_DATA),
+    ]
 
 class DSP_PARAMETER_DESC(Structure):
     _fields_ = [
@@ -308,10 +315,7 @@ class DSP_PARAMETER_DESC(Structure):
         ("name", c_char * 16),
         ("label", c_char * 16),
         ("description", c_char_p),
-        ("floatdesc", DSP_PARAMETER_DESC_FLOAT),
-        ("intdesc", DSP_PARAMETER_DESC_INT),
-        ("descbool", DSP_PARAMETER_DESC_BOOL),
-        ("datadesc", DSP_PARAMETER_DESC_DATA),
+        ("desc_union", DSP_PARAMETER_DESC_UNION),
     ]
 
 

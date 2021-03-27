@@ -4,7 +4,7 @@ from ctypes import byref, c_int, c_void_p, create_string_buffer
 
 from .event_instance import EventInstance
 from .studio_object import StudioObject
-
+from .enums import LOADING_STATE
 
 class EventDescription(StudioObject):
     """The description for an FMOD Studio Event.
@@ -44,3 +44,14 @@ class EventDescription(StudioObject):
         count = c_int()
         self._call("GetUserPropertyCount", byref(count))
         return count.value
+
+    def load_sample_data(self):
+        """Loads non-streaming sample data used by the event."""
+        self._call("LoadSampleData")
+
+    @property
+    def sample_loading_state(self):
+        """Retrieves the sample data loading state."""
+        state = c_int()
+        self._call("GetSampleLoadingState", byref(state))
+        return LOADING_STATE(state.value)

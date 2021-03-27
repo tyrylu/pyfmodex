@@ -3,9 +3,13 @@ import pyfmodex
 import pyfmodex.studio
 import pytest
 from pyfmodex.enums import DSP_TYPE, DSPCONNECTION_TYPE
+from pyfmodex.studio.enums import LOADING_STATE
 
 @pytest.fixture(scope="session")
-def instance(event):
+def instance(system_with_banks, event):
+    event.load_sample_data()
+    system_with_banks.flush_commands()
+    while event.sample_loading_state is not LOADING_STATE.LOADED: pass
     yield event.create_instance()
 
 @pytest.fixture(scope="session")
