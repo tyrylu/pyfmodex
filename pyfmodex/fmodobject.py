@@ -3,8 +3,10 @@ from .enums import RESULT
 from .exceptions import FmodError
 from .utils import ckresult
 
+
 class FmodObject(object):
     """A base Fmod ex object."""
+
     def __init__(self, ptr):
         """Constructor.
         :param ptr: The pointer representing this object.

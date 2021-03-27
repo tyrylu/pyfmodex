@@ -7,13 +7,17 @@ from .utils import check_type, ckresult
 
 
 class ChannelGroup(ChannelControl):
-
     def add_group(self, group, propagate_dsp_clock):
         check_type(group, ChannelGroup)
         conn_ptr = c_void_p()
-        self._call_fmod("FMOD_ChannelGroup_AddGroup", group._ptr, propagate_dsp_clock, byref(conn_ptr))
+        self._call_fmod(
+            "FMOD_ChannelGroup_AddGroup",
+            group._ptr,
+            propagate_dsp_clock,
+            byref(conn_ptr),
+        )
         return get_class("DSP_Connection")(conn_ptr)
-    
+
     def get_channel(self, idx):
         c_ptr = c_void_p()
         self._call_fmod("FMOD_ChannelGroup_GetChannel", idx, byref(c_ptr))
@@ -50,4 +54,3 @@ class ChannelGroup(ChannelControl):
 
     def release(self):
         self._call_fmod("FMOD_ChannelGroup_Release")
-
