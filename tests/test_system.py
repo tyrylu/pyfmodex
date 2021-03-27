@@ -69,10 +69,10 @@ def test_threed_settings(initialized_system):
     settings.rolloff_scale = 2.0
     assert settings.rolloff_scale == 2.0
 
-def test_advanced_settings(initialized_system):
-    settings = initialized_system.advanced_settings
+def test_advanced_settings(system):
+    settings = system.advanced_settings
     assert settings.maxAT9Codecs == 0
-    initialized_system.advanced_settings = settings
+    system.advanced_settings = settings
 
 def test_dsp_buffer_size(system):
     size = system.dsp_buffer_size

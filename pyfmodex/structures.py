@@ -31,12 +31,9 @@ class ADVANCEDSETTINGS(Structure):
         ("distanceFilterCenterFreq", c_float),
         ("reverb3Dinstance", c_int),
         ("DSPBufferPoolSize", c_int),
-        ("stackSizeStream", c_uint),
-        ("stackSizeNonBlocking", c_uint),
-        ("stackSizeMixer", c_uint),
         ("resamplerMethod", c_int),
-        ("commandQueueSize", c_uint),
         ("randomSeed", c_uint),
+        ("maxConvolutionThreads", c_int)
     ]
 
     def __init__(self, *args, **kwargs):
