@@ -8,7 +8,7 @@ arch = platform.architecture()[0]
 if os.name == "nt":
     from ctypes import windll
     library_type = windll
-    LIBRARY_NAME = "fmodstudio2"
+    LIBRARY_NAME = "fmodstudio"
 elif os.name == "posix":
     from ctypes import cdll
     library_type = cdll
