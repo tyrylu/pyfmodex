@@ -186,6 +186,11 @@ class StudioSystem(StudioObject):
 
     @property
     def core_system(self):
+        """The Core System.
+
+        The Core System object can be retrieved before initializing the Studio
+        System object to call additional core configuration functions.
+        """
         system_ptr = c_void_p()
         self._call("GetCoreSystem", byref(system_ptr))
         return System(system_ptr)
