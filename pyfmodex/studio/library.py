@@ -2,12 +2,13 @@
 
 import os
 import platform
+import sys
 
 arch = platform.architecture()[0]
 if os.name == "nt":
     from ctypes import windll
     library_type = windll
-    LIBRARY_NAME = "fmodstudio"
+    LIBRARY_NAME = "fmodstudio2"
 elif os.name == "posix":
     from ctypes import cdll
     library_type = cdll
@@ -15,10 +16,19 @@ elif os.name == "posix":
 
 LIBRARY = None
 
-
 def get_library():
     """Load libary file according to architecture's ctype method."""
     global LIBRARY
     if not LIBRARY:
-        LIBRARY = library_type.LoadLibrary(LIBRARY_NAME)
+        try:
+            LIBRARY = library_type.LoadLibrary(LIBRARY_NAME)
+        except:
+            current_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+            try:
+                LIBRARY = library_type.LoadLibrary(os.path.join(current_directory, LIBRARY_NAME))
+            except:
+                raise RuntimeError(
+                    "Pyfmodex could not find the fmodstudio.dll in the following folders: " + str(
+                        sys.executable) + ", " + str(sys.path) + ", " + str(current_directory))
+
     return LIBRARY
