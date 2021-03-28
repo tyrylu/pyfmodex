@@ -1,11 +1,23 @@
 from ctypes import *
-import os, platform
+import os
+import platform
+import sys
 
 arch = platform.architecture()[0]
 if platform.system() == "Windows":
-    _dll = windll.fmod
+    try:
+        _dll = windll.fmod
+    except Exception as e:
+        current_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+        try:
+            _dll = CDLL(os.path.join(current_directory, 'fmod'))
+        except:
+            raise RuntimeError(
+            "Pyfmodex could not find the fmod.dll in the following folders: " + str(sys.executable) + ", " + str(sys.path) + ", " + str(current_directory))
+
 elif platform.system() == "Linux":
     _dll = CDLL("libfmod.so")
+
 elif platform.system() == "Darwin":
     if arch == "32bit":
         raise RuntimeError("No 32-bit fmod library for Mac Os exists")
