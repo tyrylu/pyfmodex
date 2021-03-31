@@ -1,4 +1,4 @@
-""""Flags."""
+"""Flags."""
 
 from flags import Flags
 
@@ -6,12 +6,16 @@ from flags import Flags
 class STUDIO_INIT_FLAGS(Flags):  # pylint: disable=invalid-name
     """Studio System initialization flags.
 
-    NORMAL: Use defaults for all initialization options.
-    LIVEUPDATE: Enable live update.
-    ALLOW_MISSING_PLUGINS: Load banks even if they reference plugins that have not been loaded.
-    SYNCHRONOUS_UPDATE: Disable asynchronous processing and perform all processing on the calling thread instead.
-    DEFERRED_CALLBACKS: Defer timeline callbacks until the main update.
-    LOAD_FROM_UPDATE: No additional threads are created for bank and resource loading.
+    The zero flag is called "NORMAL".
+
+    :cvar int LIVEUPDATE: Enable live update.
+    :cvar int ALLOW_MISSING_PLUGINS: Load banks even if they reference plugins
+        that have not been loaded.
+    :cvar int SYNCHRONOUS_UPDATE: Disable asynchronous processing and perform
+        all processing on the calling thread instead. DEFERRED_CALLBACKS: Defer
+        timeline callbacks until the main update.
+    :cvar int LOAD_FROM_UPDATE: No additional threads are created for bank and
+        resource loading.
     """
 
     __no_flags_name__ = "NORMAL"
@@ -25,10 +29,15 @@ class STUDIO_INIT_FLAGS(Flags):  # pylint: disable=invalid-name
 class LOAD_BANK_FLAGS(Flags):  # pylint: disable=invalid-name
     """Flags to control bank loading.
 
-    NORMAL: Standard behavior.
-    NONBLOCKING: Bank loading occurs asynchronously rather than occurring immediately.
-    DECOMPRESS_SAMPLES: Force samples to decompress into memory when they are loaded, rather than staying compressed.
-    UNENCRYPTED: Ignore the encryption key specified by Advanced Settings when loading sounds from this bank (assume the sounds in the bank are not encrypted).
+    The zero flag is called "NORMAL".
+
+    :cvar int NONBLOCKING: Bank loading occurs asynchronously rather than
+        occurring immediately.
+    :cvar int DECOMPRESS_SAMPLES: Force samples to decompress into memory when
+        they are loaded, rather than staying compressed.
+    :cvar int UNENCRYPTED: Ignore the encryption key specified by Advanced
+        Settings when loading sounds from this bank (assume the sounds in the
+        bank are not encrypted).
     """
 
     __no_flags_name__ = "NORMAL"
