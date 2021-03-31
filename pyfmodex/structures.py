@@ -31,12 +31,9 @@ class ADVANCEDSETTINGS(Structure):
         ("distanceFilterCenterFreq", c_float),
         ("reverb3Dinstance", c_int),
         ("DSPBufferPoolSize", c_int),
-        ("stackSizeStream", c_uint),
-        ("stackSizeNonBlocking", c_uint),
-        ("stackSizeMixer", c_uint),
         ("resamplerMethod", c_int),
-        ("commandQueueSize", c_uint),
         ("randomSeed", c_uint),
+        ("maxConvolutionThreads", c_int)
     ]
 
     def __init__(self, *args, **kwargs):
@@ -304,6 +301,13 @@ DSP_STATE._fields_ = [
     ("systemobject", c_int),
 ]
 
+class DSP_PARAMETER_DESC_UNION(Union):
+    _fields_ = [
+        ("floatdesc", DSP_PARAMETER_DESC_FLOAT),
+        ("intdesc", DSP_PARAMETER_DESC_INT),
+        ("descbool", DSP_PARAMETER_DESC_BOOL),
+        ("datadesc", DSP_PARAMETER_DESC_DATA),
+    ]
 
 class DSP_PARAMETER_DESC(Structure):
     _fields_ = [
@@ -311,10 +315,7 @@ class DSP_PARAMETER_DESC(Structure):
         ("name", c_char * 16),
         ("label", c_char * 16),
         ("description", c_char_p),
-        ("floatdesc", DSP_PARAMETER_DESC_FLOAT),
-        ("intdesc", DSP_PARAMETER_DESC_INT),
-        ("descbool", DSP_PARAMETER_DESC_BOOL),
-        ("datadesc", DSP_PARAMETER_DESC_DATA),
+        ("desc_union", DSP_PARAMETER_DESC_UNION),
     ]
 
 

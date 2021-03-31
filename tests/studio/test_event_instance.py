@@ -1,3 +1,4 @@
+import time
 from pyfmodex.studio.enums import PLAYBACK_STATE
 
 def test_start(instance):
@@ -26,5 +27,6 @@ def test_set_parameter_by_name(instance):
     assert val == 8000.0
     assert actual == 0.0
 
-def test_channel_group(instance):
+def test_channel_group(system_with_banks, instance):
+    system_with_banks.flush_commands()
     group = instance.channel_group

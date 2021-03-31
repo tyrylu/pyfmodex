@@ -1,4 +1,4 @@
-"""Playback state of various objects."""
+"""Various Fmod studio enumerations."""
 
 from enum import Enum
 
@@ -18,3 +18,18 @@ class PLAYBACK_STATE(Enum):  # pylint: disable=invalid-name
     STOPPED = 2
     STARTING = 3
     STOPPING = 4
+
+class LOADING_STATE(Enum):
+    """Loading state of various objects.
+    UNLOADING: Currently unloading.
+    UNLOADED: Not loaded.
+    LOADING: Loading in progress.
+    LOADED: Loaded and ready to play.
+    ERROR: Failed to load.
+    """
+    
+    UNLOADING = 0
+    UNLOADED = 1
+    LOADING = 2
+    LOADED = 3
+    ERROR = 4

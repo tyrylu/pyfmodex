@@ -11,7 +11,7 @@ from .library import get_library
 from .structures import ADVANCEDSETTINGS, BUFFER_USAGE
 from .studio_object import StudioObject
 from .utils import fmod_version
-
+from .. import System
 
 class StudioSystem(StudioObject):
     """The main system object for FMOD Studio.
@@ -183,3 +183,14 @@ class StudioSystem(StudioObject):
         ptr = c_void_p()
         self._call("GetEvent", prepare_str(path), byref(ptr))
         return EventDescription(ptr)
+
+    @property
+    def core_system(self):
+        """The Core System.
+
+        The Core System object can be retrieved before initializing the Studio
+        System object to call additional core configuration functions.
+        """
+        system_ptr = c_void_p()
+        self._call("GetCoreSystem", byref(system_ptr))
+        return System(system_ptr)
