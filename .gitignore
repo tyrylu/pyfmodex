@@ -1,9 +1,11 @@
-.py,cover
 *.pyc
 .cache/*
 .coverage
+.py,cover
 .ropeproject
 MANIFEST
+_build
 build/*
 dist/*
 pyfmodex.egg-info/*
+apidoc

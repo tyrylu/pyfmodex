@@ -14,6 +14,7 @@ class StudioObject:
         """
         self._ptr = ptr
         self._lib = get_library()
+        self.function_prefix = ''  # to be overridden in subclasses
 
     def _call(self, specific_function_suffix, *args):
         func_name = "%s_%s" % (self.function_prefix, specific_function_suffix)

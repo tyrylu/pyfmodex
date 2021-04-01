@@ -1,5 +1,6 @@
 import os
 from ctypes import *
+
 from .structure_declarations import *
 
 if os.name == "nt":

@@ -39,7 +39,8 @@ class EventInstance(StudioObject):
     def paused(self, val):
         """Set the pause state.
 
-        :param bool val: The desired pause state. True = paused, False = unpaused.
+        :param bool val: The desired pause state. True = paused, False =
+            unpaused.
         """
         self._call("SetPaused", c_bool(val))
 
@@ -67,7 +68,8 @@ class EventInstance(StudioObject):
 
         :param str name: Parameter name (case-insensitive).
         :param float value: Value for given name.
-        :param bool ignoreseekspeed: Specifies whether to ignore the parameter's seek speed and set the value immediately.
+        :param bool ignoreseekspeed: Specifies whether to ignore the
+            parameter's seek speed and set the value immediately.
         """
         self._call(
             "SetParameterByName", prepare_str(name), c_float(value), ignoreseekspeed
@@ -78,7 +80,7 @@ class EventInstance(StudioObject):
         """The core channel group corresponding to the master track.
 
         Until the event instance has been fully created this function will
-        return STUDIO_NOT_LOADED.
+        return :py:attr:`pyfmodex.enums.RESULT.STUDIO_NOT_LOADED`.
         """
         ptr = c_void_p()
         self._call("GetChannelGroup", byref(ptr))

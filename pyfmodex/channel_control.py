@@ -1,12 +1,13 @@
 from ctypes import *
-from .fmodobject import FmodObject
-from .cone_settings import ConeSettings
-from .utils import check_type
-from .globalvars import get_class
-from .structures import VECTOR
-from .structobject import Structobject as so
-from .flags import MODE
+
 from .callback_prototypes import CHANNELCONTROL_CALLBACK
+from .cone_settings import ConeSettings
+from .flags import MODE
+from .fmodobject import FmodObject
+from .globalvars import get_class
+from .structobject import Structobject as so
+from .structures import VECTOR
+from .utils import check_type
 
 
 class ChannelControl(FmodObject):
@@ -16,6 +17,12 @@ class ChannelControl(FmodObject):
         )
 
     def add_dsp(self, index, dsp):
+        """Add a DSP unit to the specified index in the DSP chain.
+
+        :param int index: Offset into the DSP chain. Has to be between 0 and
+            the number of DSPs.
+        :param DSP dsp: DSP unit to be added.
+        """
         check_type(dsp, get_class("DSP"))
         c_ptr = c_void_p()
         self._call_specific("AddDSP", int(index), dsp._ptr, byref(c_ptr))
