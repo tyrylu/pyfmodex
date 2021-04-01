@@ -18,7 +18,7 @@ def test_custom_rolloff(sound):
     assert sound.custom_rolloff == []
     curve = [[0,1,0],[3,0.5,0]]
     sound.custom_rolloff = curve
-    assert sound.custom_rolloff == sound.custom_rolloff
+    assert sound.custom_rolloff == curve
     sound.custom_rolloff = []
 
 def test_min_distance(sound):
