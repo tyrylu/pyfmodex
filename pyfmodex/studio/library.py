@@ -28,7 +28,6 @@ def get_library():
                 LIBRARY = library_type.LoadLibrary(os.path.join(current_directory, LIBRARY_NAME))
             except:
                 raise RuntimeError(
-                    "Pyfmodex could not find the fmodstudio.dll in the following folders: " + str(
-                        sys.executable) + ", " + str(sys.path) + ", " + str(current_directory))
+                    "Pyfmodex could not find the " + LIBRARY_NAME + " library")
 
     return LIBRARY
