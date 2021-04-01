@@ -1,6 +1,6 @@
-from .globalvars import dll as _dll
 from .enums import RESULT
 from .exceptions import FmodError
+from .globalvars import dll as _dll
 from .utils import ckresult
 
 
@@ -12,6 +12,7 @@ class FmodObject(object):
         :param ptr: The pointer representing this object.
         """
         self._ptr = ptr
+        self._cb = None
 
     def _call_fmod(self, funcname, *args):
         result = getattr(_dll, funcname)(self._ptr, *args)
