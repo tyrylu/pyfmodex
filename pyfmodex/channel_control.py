@@ -630,7 +630,8 @@ class ChannelControl(FmodObject):
     def mute(self):
         """The mute state.
 
-        True = silent. False = audible.
+         - True: silent
+         - False: audible
 
         Mute is an additional control for volume, the effect of which is
         equivalent to setting the volume to zero.
@@ -667,7 +668,8 @@ class ChannelControl(FmodObject):
     def paused(self):
         """The paused state.
 
-        True = playback halted. False = playback active.
+         - True: playback halted
+         - False: playback active
 
         An individual pause state is kept for each object, a parent
         :py:class:`~pyfmodex.channel_group.ChannelGroup` being paused will
