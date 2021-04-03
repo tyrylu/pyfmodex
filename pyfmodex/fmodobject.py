@@ -1,5 +1,3 @@
-from .enums import RESULT
-from .exceptions import FmodError
 from .globalvars import dll as _dll
 from .utils import ckresult
 
@@ -21,5 +19,4 @@ class FmodObject(object):
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self._ptr.value == other._ptr.value
-        else:
-            return False
+        return False

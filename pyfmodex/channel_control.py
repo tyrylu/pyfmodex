@@ -530,8 +530,8 @@ class ChannelControl(FmodObject):
         self._call_specific("SetLowPassGain", c_float(gain))
 
     def get_mix_matrix(self, hop=0):
-        """A 2 dimensional pan matrix that maps the signal from input channels
-        (columns) to output speakers (rows).
+        """Retrieve a 2 dimensional pan matrix that maps the signal from input
+        channels (columns) to output speakers (rows).
 
         Matrix element values can be below 0 to invert a signal and above 1 to
         amplify the signal.
@@ -539,7 +539,7 @@ class ChannelControl(FmodObject):
         :returns: Two dimensional list of volume levels in row-major order.
             Each row represents an output speaker, each column represents an
             input channel.
-        :rtype: list of lists of floats
+        :rtype: list of floats
         """
         in_channels = c_int()
         out_channels = c_int()
@@ -556,25 +556,27 @@ class ChannelControl(FmodObject):
         )
         return list(matrix)
 
-    def set_mix_matrix(self, matrix, outchannels, inchannels):
-        """A 2 dimensional pan matrix that maps the signal from input channels
-        (columns) to output speakers (outchannels).
+    def set_mix_matrix(self, matrix, out_channels, in_channels):
+        """Set a 2 dimensional pan matrix that maps the signal from input
+        channels (columns) to output speakers (rows).
 
         Matrix element values can be below 0 to invert a signal and above 1 to
         amplify the signal. Note that increasing the signal level too far may
         cause audible distortion.
 
-        :param list matrix: Two dimensional list of volume levels (float) in
-            row-major order. Each row represents an output speaker, each column
-            represents an input channel.
-        :param int outchannels: Number of output channels (rows) in matrix.
-        :param int inchannels: Number of input channels (columns) in matrix.
+        :param list matrix: List of volume levels (float) in row-major order.
+            Each row represents an output speaker, each column represents an
+            input channel.
+        :param int out_channels: Number of output channels (rows) in matrix.
+            Always assumed 0 if `matrix` is empty.
+        :param int in_channels: Number of input channels (columns) in matrix.
+            Always assumed 0 if `matrix` is empty.
         """
         if not matrix:
-            inchannels = 0
-            outchannels = 0
-        raw_matrix = (c_float * (inchannels * outchannels))(*matrix)
-        self._call_specific("SetMixMatrix", raw_matrix, outchannels, inchannels, 0)
+            in_channels = 0
+            out_channels = 0
+        raw_matrix = (c_float * (in_channels * out_channels))(*matrix)
+        self._call_specific("SetMixMatrix", raw_matrix, out_channels, in_channels, 0)
 
     @property
     def mode(self):
