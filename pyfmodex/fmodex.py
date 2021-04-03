@@ -12,8 +12,7 @@ if platform.system() == "Windows":
         try:
             _dll = CDLL(os.path.join(current_directory, 'fmod'))
         except:
-            raise RuntimeError(
-            "Pyfmodex could not find the fmod.dll in the following folders: " + str(sys.executable) + ", " + str(sys.path) + ", " + str(current_directory))
+            raise RuntimeError("Pyfmodex could not find the fmod library")
 
 elif platform.system() == "Linux":
     _dll = CDLL("libfmod.so")
