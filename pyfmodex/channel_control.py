@@ -24,6 +24,10 @@ class ChannelControl(FmodObject):
     :py:class:`pyfmodex.channel_group.ChannelGroup`.
     """
 
+    def __init__(self, ptr):
+        super().__init__(ptr)
+        self._custom_rolloff_curve = None # To keep the custom rolloff curve alive
+
     def _call_specific(self, specific_function_suffix, *args):
         return self._call_fmod(
             "FMOD_%s_%s" % (self.__class__.__name__, specific_function_suffix), *args
@@ -144,13 +148,14 @@ class ChannelControl(FmodObject):
         num = c_int()
         self._call_specific("Get3DCustomRolloff", None, byref(num))
         curve = (VECTOR * num.value)()
+        curve = POINTER(VECTOR)()
         self._call_specific("Get3DCustomRolloff", byref(curve), None)
-        return [p.to_list() for p in curve]
+        return [curve[i].to_list() for i in range(num.value)]
 
     @custom_rolloff.setter
     def custom_rolloff(self, curve):
-        native_curve = (VECTOR * len(curve))(*[VECTOR.from_list(lst) for lst in curve])
-        self._call_specific("Set3DCustomRolloff", native_curve, len(native_curve))
+        self._custom_rolloff_curve = (VECTOR * len(curve))(*[VECTOR.from_list(lst) for lst in curve])
+        self._call_specific("Set3DCustomRolloff", self._custom_rolloff_curve, len(self._custom_rolloff_curve))
 
     @property
     def threed_distance_filter(self):

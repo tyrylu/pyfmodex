@@ -38,11 +38,10 @@ def test_cone_settings(channel_group):
     assert settings.outside_angle == 360.0
     
 def test_custom_rolloff(channel_group):
-    channel_group.mode = MODE.THREED
     new_curve = [[1.0,0.5,0.0], [4.0,0.0,0.0]]
     assert channel_group.custom_rolloff == []
     channel_group.custom_rolloff = new_curve
-    assert channel_group.custom_rolloff == channel_group.custom_rolloff # Should test equality with the new curve, but the setting or retrieval results in some garbage values
+    assert channel_group.custom_rolloff == new_curve
 
 def test_threed_distance_filter(channel_group):
     channel_group.mode = MODE.THREED

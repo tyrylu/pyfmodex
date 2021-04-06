@@ -7,6 +7,8 @@ from .library import get_library
 class StudioObject:
     """A base FMOD studio object."""
 
+    function_prefix = ''  # to be overridden in subclasses
+    
     def __init__(self, ptr):
         """Constructor.
 
@@ -14,10 +16,10 @@ class StudioObject:
         """
         self._ptr = ptr
         self._lib = get_library()
-        self.function_prefix = ''  # to be overridden in subclasses
 
     def _call(self, specific_function_suffix, *args):
         func_name = "%s_%s" % (self.function_prefix, specific_function_suffix)
+        print(func_name)
         result = getattr(self._lib, func_name)(self._ptr, *args)
         ckresult(result)
 
