@@ -33,7 +33,7 @@ def test_custom_rolloff(channel):
     new_curve = [[1.0,0.5,0.0], [4.0,0.0,0.0]]
     assert channel.custom_rolloff == []
     channel.custom_rolloff = new_curve
-    assert channel.custom_rolloff == channel.custom_rolloff # Should test equality with the new curve, but the setting or retrieval results in some garbage values
+    assert channel.custom_rolloff == new_curve
 
 def test_threed_distance_filter(channel):
     settings = channel.threed_distance_filter

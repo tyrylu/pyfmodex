@@ -1,9 +1,10 @@
 import os
 import unittest.mock as mock
 import pytest
-from pyfmodex.enums import DSP_TYPE, SPEAKERMODE, PLUGINTYPE, OUTPUTTYPE, SPEAKER
-from pyfmodex.flags import TIMEUNIT, SYSTEM_CALLBACK_TYPE
+from pyfmodex.enums import DSP_TYPE, SPEAKERMODE, PLUGINTYPE, OUTPUTTYPE, SPEAKER, SOUND_FORMAT
+from pyfmodex.flags import TIMEUNIT, SYSTEM_CALLBACK_TYPE, MODE
 from pyfmodex import FmodError, System
+from pyfmodex.structures import CREATESOUNDEXINFO
 
 test_file = os.path.join(os.path.dirname(__file__), "test.fsb")
 def test_version(system):
@@ -34,6 +35,15 @@ def test_create_sound(initialized_system):
     initialized_system.create_sound(test_file)
     with pytest.raises(FmodError) as ex:
         initialized_system.create_sound("some nonexistent.wav")
+def test_create_sound_custom(initialized_system):
+    exinfo = CREATESOUNDEXINFO()
+    exinfo.numchannels = 2
+    exinfo.format = SOUND_FORMAT.PCM16.value
+    exinfo.defaultfrequency = 44100
+    exinfo.length = 44100 * 16 * 2
+    sound = initialized_system.create_sound(0, mode=MODE.LOOP_NORMAL | MODE.OPENUSER, exinfo=exinfo)
+    sound.release()
+
 
 def test_create_sound_group(initialized_system):
     initialized_system.create_sound_group("root group")

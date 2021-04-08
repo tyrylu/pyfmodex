@@ -1,4 +1,4 @@
-"""C strucs"""
+"""C structs"""
 
 # pylint: disable=too-few-public-methods,invalid-name
 # these are not your average classes
@@ -9,18 +9,20 @@ from ctypes import Structure, c_char_p, c_float, c_int, c_uint, sizeof
 class ADVANCEDSETTINGS(Structure):
     """Settings for advanced features like configuring memory and cpu usage.
 
-    cbSize: Size of this structure in bytes.
-    commandqueuesize: Command queue size for studio async processing.
-    handleinitialsize: Initial size to allocate for handles. Memory for handles
-        will grow as needed in pages.
-    studioupdateperiod: Update period of Studio when in async mode, in
-        milliseconds. Will be quantized to the nearest multiple of mixer duration.
-    idlesampledatapoolsize: Size in bytes of sample data to retain in memory
-        when no longer used, to avoid repeated disk I/O. Use -1 to disable.
-    streamingscheduledelay: Specify the schedule delay for streams, in samples.
-        Lower values can reduce latency when scheduling events containing streams
-        but may cause scheduling issues if too small.
-    encryptionkey: Specify the key for loading sounds from encrypted banks.
+    :ivar int cbsize: Size of this structure in bytes.
+    :ivar int commandqueuesize: Command queue size for studio async processing.
+    :ivar int handleinitialsize: Initial size to allocate for handles. Memory
+        for handles will grow as needed in pages.
+    :ivar int studioupdateperiod: Update period of Studio when in async mode,
+        in milliseconds. Will be quantized to the nearest multiple of mixer
+        duration.
+    :ivar int idlesampledatapoolsize: Size in bytes of sample data to retain in
+        memory when no longer used, to avoid repeated disk I/O. Use -1 to
+        disable.
+    :ivar int streamingscheduledelay: Specify the schedule delay for streams,
+        in samples. Lower values can reduce latency when scheduling events
+        containing streams but may cause scheduling issues if too small.
+    :ivar str encryptionkey: Specify the key for loading sounds from encrypted banks.
     """
 
     _fields_ = [
@@ -41,12 +43,12 @@ class ADVANCEDSETTINGS(Structure):
 class BUFFER_INFO(Structure):
     """Information for a single buffer in FMOD Studio.
 
-    currentusage: Current buffer usage in bytes.
-    peakusage: Peak buffer usage in bytes.
-    capacity: Buffer capacity in bytes.
-    stallcount: Cumulative number of stalls due to buffer overflow.
-    stalltime:  Cumulative amount of time stalled due to buffer overflow, in
-        seconds.
+    :ivar int currentusage: Current buffer usage in bytes.
+    :ivar int peakusage: Peak buffer usage in bytes.
+    :ivar in capacity: Buffer capacity in bytes.
+    :ivar int stallcount: Cumulative number of stalls due to buffer overflow.
+    :ivar float stalltime: Cumulative amount of time stalled due to buffer
+        overflow, in seconds.
     """
 
     _fields_ = [
@@ -61,8 +63,9 @@ class BUFFER_INFO(Structure):
 class BUFFER_USAGE(Structure):
     """Information for FMOD Studio buffer usage.
 
-    studiocommandqueue: Information for the Studio Async Command buffer.
-    studiohandle: Information for the Studio handle table.
+    :ivar BUFFER_INFO studiocommandqueue: Information for the Studio Async
+        Command buffer.
+    :ivar BUFFER_INFO studiohandle: Information for the Studio handle table.
     """
 
     _fields_ = [("studiocommandqueue", BUFFER_INFO), ("studiohandle", BUFFER_INFO)]
@@ -71,11 +74,12 @@ class BUFFER_USAGE(Structure):
 class PARAMETER_DESCRIPTION(Structure):
     """An event parameter.
 
-    name: Parameter name.
-    minimum: Minimum parameter value.
-    maximum: Maximum parameter value.
-    defaultvalue: Default parameter value.
-    type: Parameter type.
+    :ivar str name: Parameter name.
+    :ivar int index: Parameter id.
+    :ivar float minimum: Minimum parameter value.
+    :ivar float maximum: Maximum parameter value.
+    :ivar float defaultvalue: Default parameter value.
+    :ivar int type: Parameter type.
     """
     # TODO: id vs index, flags -> because of FMOD API update to 2.0?
 

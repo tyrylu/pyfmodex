@@ -1,21 +1,33 @@
 from ctypes import *
-from .fmodobject import FmodObject
-from .cone_settings import ConeSettings
-from .utils import check_type
-from .globalvars import get_class
-from .structures import VECTOR
-from .structobject import Structobject as so
-from .flags import MODE
+
 from .callback_prototypes import CHANNELCONTROL_CALLBACK
+from .cone_settings import ConeSettings
+from .flags import MODE
+from .fmodobject import FmodObject
+from .globalvars import get_class
+from .structobject import Structobject as so
+from .structures import VECTOR
+from .utils import check_type
 
 
 class ChannelControl(FmodObject):
+    
+    def __init__(self, ptr):
+        super().__init__(ptr)
+        self._custom_rolloff_curve = None # To keep the custom rolloff curve alive
+
     def _call_specific(self, specific_function_suffix, *args):
         return self._call_fmod(
             "FMOD_%s_%s" % (self.__class__.__name__, specific_function_suffix), *args
         )
 
     def add_dsp(self, index, dsp):
+        """Add a DSP unit to the specified index in the DSP chain.
+
+        :param int index: Offset into the DSP chain. Has to be between 0 and
+            the number of DSPs.
+        :param DSP dsp: DSP unit to be added.
+        """
         check_type(dsp, get_class("DSP"))
         c_ptr = c_void_p()
         self._call_specific("AddDSP", int(index), dsp._ptr, byref(c_ptr))
@@ -62,7 +74,7 @@ class ChannelControl(FmodObject):
     @cone_orientation.setter
     def cone_orientation(self, ori):
         vec = VECTOR.from_list(ori)
-        self._call_specific("Set3DConeOrientation", vec)
+        self._call_specific("Set3DConeOrientation", byref(vec))
 
     @property
     def cone_settings(self):
@@ -76,8 +88,9 @@ class ChannelControl(FmodObject):
         num = c_int()
         self._call_specific("Get3DCustomRolloff", None, byref(num))
         curve = (VECTOR * num.value)()
+        curve = POINTER(VECTOR)()
         self._call_specific("Get3DCustomRolloff", byref(curve), None)
-        return [p.to_list() for p in curve]
+        return [curve[i].to_list() for i in range(num.value)]
 
     @custom_rolloff.setter
     def custom_rolloff(self, curve):
@@ -85,8 +98,8 @@ class ChannelControl(FmodObject):
         :param curve: The curve to set.
         :type curve: A list of something that can be treated as a list of [x, y, z] values e.g. implements indexing in some way.
         """
-        native_curve = (VECTOR * len(curve))(*[VECTOR.from_list(lst) for lst in curve])
-        self._call_specific("Set3DCustomRolloff", native_curve, len(native_curve))
+        self._custom_rolloff_curve = (VECTOR * len(curve))(*[VECTOR.from_list(lst) for lst in curve])
+        self._call_specific("Set3DCustomRolloff", self._custom_rolloff_curve, len(self._custom_rolloff_curve))
 
     @property
     def threed_distance_filter(self):

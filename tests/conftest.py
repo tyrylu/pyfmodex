@@ -4,6 +4,7 @@ import pyfmodex.studio
 import pytest
 from pyfmodex.enums import DSP_TYPE, DSPCONNECTION_TYPE
 from pyfmodex.studio.enums import LOADING_STATE
+from pyfmodex.flags import MODE
 
 @pytest.fixture(scope="session")
 def instance(system_with_banks, event):

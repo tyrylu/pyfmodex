@@ -7,6 +7,8 @@ from .library import get_library
 class StudioObject:
     """A base FMOD studio object."""
 
+    function_prefix = ''  # to be overridden in subclasses
+    
     def __init__(self, ptr):
         """Constructor.
 

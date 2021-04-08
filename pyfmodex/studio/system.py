@@ -178,7 +178,7 @@ class StudioSystem(StudioObject):
         """An EventDescription.
 
         :param str path: The path or the ID string that identifies the event or
-        snapshot.
+            snapshot.
         """
         ptr = c_void_p()
         self._call("GetEvent", prepare_str(path), byref(ptr))

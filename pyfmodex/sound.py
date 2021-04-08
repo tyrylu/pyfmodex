@@ -12,6 +12,7 @@ from .flags import MODE, TIMEUNIT
 class ConeSettings(object):
     def __init__(self, sptr):
         self._sptr = sptr
+        self._native_curve = None # To keep the custom rolloff curve alive
         self._in = c_float()
         self._out = c_float()
         self._outvol = c_float()
@@ -79,10 +80,9 @@ class Sound(FmodObject):
         """
         num = c_int()
         self._call_fmod("FMOD_Sound_Get3DCustomRolloff", None, byref(num))
-        print(num.value)
-        curve = (VECTOR * num.value)()
-        self._call_fmod("FMOD_Sound_Get3DCustomRolloff", byref(curve), None)
-        return [p.to_list() for p in curve]
+        curve_ptr = POINTER(VECTOR)()
+        self._call_fmod("FMOD_Sound_Get3DCustomRolloff", byref(curve_ptr), None)
+        return [curve_ptr[i].to_list() for i in range(num.value)]
 
     @custom_rolloff.setter
     def custom_rolloff(self, curve):
@@ -90,9 +90,9 @@ class Sound(FmodObject):
         :param curve: The curve to set.
         :type curve: A list of something that can be treated as a list of [x, y, z] values e.g. implements indexing in some way.
         """
-        native_curve = (VECTOR * len(curve))(*[VECTOR.from_list(lst) for lst in curve])
+        self._native_curve = (VECTOR * len(curve))(*[VECTOR.from_list(lst) for lst in curve])
         self._call_fmod(
-            "FMOD_Sound_Set3DCustomRolloff", native_curve, len(native_curve)
+            "FMOD_Sound_Set3DCustomRolloff", self._native_curve, len(self._native_curve)
         )
 
     @property
