@@ -74,7 +74,7 @@ class ChannelControl(FmodObject):
     @cone_orientation.setter
     def cone_orientation(self, ori):
         vec = VECTOR.from_list(ori)
-        self._call_specific("Set3DConeOrientation", vec)
+        self._call_specific("Set3DConeOrientation", byref(vec))
 
     @property
     def cone_settings(self):
