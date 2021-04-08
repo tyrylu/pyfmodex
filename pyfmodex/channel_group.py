@@ -6,7 +6,7 @@
 from ctypes import *
 
 from .channel_control import ChannelControl
-from .globalvars import dll as _dll
+from .globalvars import DLL as _dll
 from .globalvars import get_class
 from .utils import check_type, ckresult
 

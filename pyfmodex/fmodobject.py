@@ -1,6 +1,6 @@
 """A base FMOD object."""
 
-from .globalvars import dll as _dll
+from .globalvars import DLL as _dll
 from .utils import ckresult
 
 

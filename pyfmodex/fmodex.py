@@ -34,7 +34,7 @@ elif platform.system() == "Darwin":
     _dll = CDLL("libfmod.dylib")
 from . import globalvars
 
-globalvars.dll = _dll
+globalvars.DLL = _dll
 from .callback_prototypes import DEBUG_CALLBACK
 from .structobject import Structobject as so
 from .utils import ckresult

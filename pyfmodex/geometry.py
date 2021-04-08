@@ -2,7 +2,7 @@
 from ctypes import *
 
 from .fmodobject import FmodObject
-from .globalvars import dll as _dll
+from .globalvars import DLL as _dll
 from .structures import VECTOR
 from .utils import ckresult
 

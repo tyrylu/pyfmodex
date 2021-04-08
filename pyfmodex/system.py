@@ -2,7 +2,7 @@
 from ctypes import *
 from .utils import *
 from .structures import *
-from .globalvars import dll as _dll
+from .globalvars import DLL as _dll
 from .structobject import Structobject as so
 from .globalvars import get_class
 from .flags import INIT_FLAGS, MODE, TIMEUNIT
