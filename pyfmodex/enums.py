@@ -2014,7 +2014,7 @@ class SPEAKERMODE(Enum):
     #:   and full right in the right speaker. They can be cross faded with
     #:   :py:meth:`~pyfmodex.channel_control.ChannelControl.set_pan`.
     #: - Multichannel sounds have each sound channel played on each speaker at
-    #:  unity.
+    #:   unity.
     #: - Mix behavior for multichannel sounds can be set with
     #:   :py:meth:`~pyfmodex.channel_control.ChannelControl.set_mix_matrix`.
     STEREO = 3
