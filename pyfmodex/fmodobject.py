@@ -1,12 +1,18 @@
+"""A base FMOD object."""
+
 from .globalvars import dll as _dll
 from .utils import ckresult
 
 
 class FmodObject(object):
-    """A base Fmod ex object."""
+    """A base FMOD object.
+
+    All classes wrapped from the C library can subclass this one.
+    """
 
     def __init__(self, ptr):
         """Constructor.
+
         :param ptr: The pointer representing this object.
         """
         self._ptr = ptr
