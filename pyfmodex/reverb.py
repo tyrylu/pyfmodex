@@ -74,7 +74,7 @@ class Reverb3D(FmodObject):
     @properties.setter
     def properties(self, props):
         check_type(props, REVERB_PROPERTIES)
-        self._call_fmod("FMOD_Reverb3D_SetProperties", props)
+        self._call_fmod("FMOD_Reverb3D_SetProperties", byref(props))
 
     def release(self):
         self._call_fmod("FMOD_Reverb3D_Release")
