@@ -1,12 +1,27 @@
+"""An interface that manages virtual 3D reverb spheres."""
+
 from ctypes import *
+
 from .fmodobject import FmodObject
-from .structures import VECTOR, REVERB_PROPERTIES
+from .structures import REVERB_PROPERTIES, VECTOR
 from .utils import check_type
 
 
 class Reverb3D(FmodObject):
+    """An interface that manages virtual 3D reverb spheres."""
+
     @property
     def _threed_attrs(self):
+        """The 3D attributes of a reverb sphere.
+
+        :type: list with
+            - Position in 3D space represnting the center of the reverb as a
+              list of three coordinate floats
+            - Distance from the centerpoint within which the reverb will have
+              full effect
+            - Distance from the centerpoint beyond which the reverb will have
+              no effect
+        """
         pos = VECTOR()
         mindist = c_float()
         maxdist = c_float()
@@ -26,6 +41,10 @@ class Reverb3D(FmodObject):
 
     @property
     def position(self):
+        """Position in 3D space represnting the center of the reverb.
+
+        :type: list of three coordinate floats
+        """
         return self._threed_attrs[0]
 
     @position.setter
@@ -36,6 +55,11 @@ class Reverb3D(FmodObject):
 
     @property
     def min_distance(self):
+        """Distance from the centerpoint within which the reverb will have full
+        effect.
+
+        :type: float
+        """
         return self._threed_attrs[1]
 
     @min_distance.setter
@@ -46,6 +70,11 @@ class Reverb3D(FmodObject):
 
     @property
     def max_distance(self):
+        """Distance from the centerpoint within which the reverb will have no
+        effect.
+
+        :type: float
+        """
         return self._threed_attrs[2]
 
     @max_distance.setter
@@ -56,16 +85,24 @@ class Reverb3D(FmodObject):
 
     @property
     def active(self):
+        """The active state of the reverb sphere.
+
+        :type: bool
+        """
         active = c_bool()
         self._call_fmod("FMOD_Reverb3D_GetActive", byref(active))
         return active.value
 
     @active.setter
-    def active(self, a):
-        self._call_fmod("FMOD_Reverb3D_SetActive", a)
+    def active(self, active):
+        self._call_fmod("FMOD_Reverb3D_SetActive", active)
 
     @property
     def properties(self):
+        """The environmental properties of a reverb sphere.
+
+        :type: REVERB_PROPERTIES
+        """
         props = REVERB_PROPERTIES()
         self._call_fmod("FMOD_Reverb3D_GetProperties", byref(props))
         return props
@@ -76,4 +113,10 @@ class Reverb3D(FmodObject):
         self._call_fmod("FMOD_Reverb3D_SetProperties", props)
 
     def release(self):
+        """Release the memory for a reverb object and make it inactive.
+
+        If you release all Reverb3D objects and have not added a new Reverb3D
+        object, :py:meth:`~pyfmodex.system.System.set_reverb_properties` should
+        be called to reset the reverb properties.
+        """
         self._call_fmod("FMOD_Reverb3D_Release")
