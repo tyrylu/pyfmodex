@@ -1945,20 +1945,20 @@ class SOUND_TYPE(Enum):
 class SPEAKER(Enum):
     """Assigns an enumeration for a speaker index."""
 
-    NONE = 0  #: No speaker.
-    FRONT_LEFT = 1  #: The front left speaker.
-    FRONT_RIGHT = 2  #: The front right speaker.
-    FRONT_CENTER = 3  #: The front center speaker.
-    LOW_FREQUENCY = 4  #: The LFE or 'subwoofer' speaker.
-    SURROUND_LEFT = 5  #: The surround left (usually to the side) speaker.
-    SURROUND_RIGHT = 6  #: The surround right (usually to the side) speaker.
-    BACK_LEFT = 7  #: The back left speaker.
-    BACK_RIGHT = 8  #: The back right speaker.
-    TOP_FRONT_LEFT = 9  #: The top front left speaker
-    TOP_FRONT_RIGHT = 10  #: The top front right speaker
-    TOP_BACK_LEFT = 11  #: The top back left speaker
-    TOP_BACK_RIGHT = 12  #: The top back right speaker
-    MAX = 13  #: Maximum number of speaker types supported.
+    NONE = -1  #: No speaker.
+    FRONT_LEFT = 0  #: The front left speaker.
+    FRONT_RIGHT = 1  #: The front right speaker.
+    FRONT_CENTER = 2  #: The front center speaker.
+    LOW_FREQUENCY = 3  #: The LFE or 'subwoofer' speaker.
+    SURROUND_LEFT = 4  #: The surround left (usually to the side) speaker.
+    SURROUND_RIGHT = 5  #: The surround right (usually to the side) speaker.
+    BACK_LEFT = 6  #: The back left speaker.
+    BACK_RIGHT = 7  #: The back right speaker.
+    TOP_FRONT_LEFT = 8  #: The top front left speaker
+    TOP_FRONT_RIGHT = 9  #: The top front right speaker
+    TOP_BACK_LEFT = 10  #: The top back left speaker
+    TOP_BACK_RIGHT = 11  #: The top back right speaker
+    MAX = 12  #: Maximum number of speaker types supported.
 
 
 class SPEAKERMODE(Enum):
