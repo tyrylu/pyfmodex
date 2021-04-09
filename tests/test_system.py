@@ -143,7 +143,8 @@ def test_output(system):
     system.output = OUTPUTTYPE.AUTODETECT
 
 def test_output_handle(initialized_system):
-    assert initialized_system.output_handle > 0
+    if initialized_system.output_handle:
+        assert initialized_system.output_handle > 0
 
 def test_get_plugin_handle(system):
     assert system.get_plugin_handle(PLUGINTYPE.CODEC,  0) > 0

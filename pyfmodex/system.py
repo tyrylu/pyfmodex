@@ -631,7 +631,7 @@ class System(FmodObject):
         return props
 
     def set_reverb_properties(self, instance, props):
-        self._call_fmod("FMOD_System_SetReverbProperties", instance, props)
+        self._call_fmod("FMOD_System_SetReverbProperties", instance, byref(props))
 
     @property
     def software_channels(self):
