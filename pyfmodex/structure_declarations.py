@@ -1,45 +1,62 @@
+"""Strcuture declarations."""
+
+# pylint: disable=too-few-public-methods
+# Just declaring at this point...
+
+# pylint: disable=invalid-name
+# Just staying close to the original names here.
+
+
 from ctypes import Structure
 
 
 class CODEC_STATE(Structure):
-    pass
+    """Codec state structure that is passed into each callback."""
 
 
 class CREATESOUNDEXINFO(Structure):
-    pass
+    """Additional options for creating a Sound."""
 
 
 class DSP_STATE(Structure):
-    pass
+    """DSP plugin structure that is passed into each callback."""
 
 
 class DSP_BUFFER_ARRAY(Structure):
-    pass
+    """Structure for input and output buffers."""
 
 
 class ASYNCREADINFO(Structure):
-    pass
+    """Information about a single asynchronous file operation."""
 
 
 class OUTPUT_STATE(Structure):
-    pass
+    """Output object state passed into every callback provides access to plugin
+    developers data and system functionality.
+    """
 
 
 class GUID(Structure):
-    pass
+    """Structure describing a globally unique identifier."""
 
 
 class OUTPUT_OBJECT3DINFO(Structure):
-    pass
+    """Output 3D Object Info."""
 
 
 class CODEC_WAVEFORMAT(Structure):
-    pass
+    """Codec wave format.
+
+    This structure defines the attributes of a sound, and determines the format
+    of the Sound object when it is created with
+    :py:meth:`~pyfmodex.system.System.create_sound` or
+    :py:meth:`~pyfmodex.system.System.create_stream`.
+    """
 
 
 class THREED_ATTRIBUTES(Structure):
-    pass
+    """Structure describing a position, velocity and orientation."""
 
 
 class COMPLEX(Structure):
-    pass
+    """Complex number structure."""
