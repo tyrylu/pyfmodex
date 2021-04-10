@@ -77,6 +77,7 @@ def test_occlusion(channel_group):
     assert channel_group.direct_occlusion == 0.0
     assert channel_group.reverb_occlusion == 0.0
     channel_group.reverb_occlusion = 0.5
+    channel_group.system_object.update()
     assert channel_group.reverb_occlusion == 0.5
 
 def test_spread(channel_group):

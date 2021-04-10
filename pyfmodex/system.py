@@ -1415,7 +1415,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         physical SFX reverb DSP unit that takes up several hundred kilobytes of
         memory and some CPU.
         """
-        self._call_fmod("FMOD_System_SetReverbProperties", instance, props)
+        self._call_fmod("FMOD_System_SetReverbProperties", instance, byref(props))
 
     @property
     def software_channels(self):

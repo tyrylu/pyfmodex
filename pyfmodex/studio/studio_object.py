@@ -19,7 +19,6 @@ class StudioObject:
 
     def _call(self, specific_function_suffix, *args):
         func_name = "%s_%s" % (self.function_prefix, specific_function_suffix)
-        print(func_name)
         result = getattr(self._lib, func_name)(self._ptr, *args)
         ckresult(result)
 

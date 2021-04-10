@@ -32,9 +32,10 @@ class Reverb3D(FmodObject):
 
     @_threed_attrs.setter
     def _threed_attrs(self, attrs):
+        pos = VECTOR.from_list(attrs[0])
         self._call_fmod(
             "FMOD_Reverb3D_Set3DAttributes",
-            VECTOR.from_list(attrs[0]),
+            byref(pos),
             c_float(attrs[1]),
             c_float(attrs[2]),
         )
@@ -110,7 +111,7 @@ class Reverb3D(FmodObject):
     @properties.setter
     def properties(self, props):
         check_type(props, REVERB_PROPERTIES)
-        self._call_fmod("FMOD_Reverb3D_SetProperties", props)
+        self._call_fmod("FMOD_Reverb3D_SetProperties", byref(props))
 
     def release(self):
         """Release the memory for a reverb object and make it inactive.
