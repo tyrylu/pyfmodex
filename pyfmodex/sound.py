@@ -608,7 +608,7 @@ class Sound(FmodObject):
             - Tags can be retrieved by specifying -1 as the index and only
               updating tags that are returned. If all tags are retrieved and
               this method is called it will raise an
-              :py:class:`~pyfmodex.exceptions.FmodError` with code
+              :py:exc:`~pyfmodex.exceptions.FmodError` with code
               :py:attr:`~pyfmodex.enums.RESULT.TAGNOTFOUND`.
 
             - Specific tags can be retrieved by specifying a name parameter.
@@ -650,11 +650,11 @@ class Sound(FmodObject):
         It is not possible to lock the following:
 
             - A parent sound containing subsounds. A parent sound has no audio
-              data and :py:class:`~pyfmodex.exceptions.FmodError` will be
+              data and :py:exc:`~pyfmodex.exceptions.FmodError` will be
               raised with code :py:attr:`~pyfmodex.enums.RESULT.SUBSOUNDS`
             - A stream / sound created with
               :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM`.
-              An :py:class:`~pyfmodex.exceptions.FmodError` will be
+              An :py:exc:`~pyfmodex.exceptions.FmodError` will be
               raised with code
               :py:attr:`~pyfmodex.enums.RESULT.BADCOMMAND` in this case.
 
@@ -760,7 +760,7 @@ class Sound(FmodObject):
         data.
 
         If too much data is read, it is possible an
-        :py:class:`~pyfmodex.exceptions.FmodError` will be raised with code
+        :py:exc:`~pyfmodex.exceptions.FmodError` will be raised with code
         :py:attr:`~pyfmodex.enums.RESULT.FILE_EOF`, meaning it is out of data.
 
         As a non streaming sound reads and decodes the whole file then closes

@@ -147,6 +147,7 @@ OUTPUT_UNLOCK_CALLBACK = func(
     c_int, POINTER(OUTPUT_STATE), c_void_p, c_void_p, c_uint, c_uint
 )
 OUTPUT_UPDATE_CALLBACK = func(c_int, POINTER(OUTPUT_STATE))
+OUTPUT_DEVICELISTCHANGED_CALLBACK = func(c_int, POINTER(OUTPUT_STATE))
 SOUND_NONBLOCKCALLBACK = func(c_int, c_void_p, c_int)
 SOUND_PCMREADCALLBACK = func(c_int, c_void_p, c_void_p, c_uint)
 SOUND_PCMSETPOSCALLBACK = func(c_int, c_void_p, c_int, c_uint, c_int)

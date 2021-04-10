@@ -1055,11 +1055,11 @@ class DSP_PROCESS_OPERATION(Enum):
      - return normal: Meaning yes, it should execute the dsp process function
        with :py:attr:`PERFORM`
 
-     - raise :py:class:`~pyfmodex.exceptions.FmodError` with code
+     - raise :py:exc:`~pyfmodex.exceptions.FmodError` with code
        :py:attr:`~RESULT.DSP_DONTPROCESS` - Meaning no, it should skip the
        process function and not call it with :py:attr:`PERFORM`.
 
-     - raise :py:class:`~pyfmodex.exceptions.FmodError` with code
+     - raise :py:exc:`~pyfmodex.exceptions.FmodError` with code
        :py:attr:`~RESULT.DSP_SILENCE` - Meaning no, it should skip the process
        function and not call it with :py:attr:`PERFORM`, AND, tell the signal
        chain to follow that it is now idle, so that no more processing happens
@@ -1081,7 +1081,7 @@ class DSP_PROCESS_OPERATION(Enum):
 
     #: The DSP is being queried for the expected output format and whether it
     #: needs to process audio or should be bypassed. The function should
-    #: succeed, or raise :py:class:`~pyfmodex.exceptions.FmodError` if audio
+    #: succeed, or raise :py:exc:`~pyfmodex.exceptions.FmodError` if audio
     #: can pass through unprocessed. If audio is to be processed,
     #: 'outbufferarray' must be filled with the expected output format, channel
     #: count and mask.
@@ -1453,14 +1453,14 @@ class OPENSTATE(Enum):
     NONBLOCKING, note that if the user calls
     :py:meth:`~pyfmodex.sound.Sound.get_subsound`, a stream will go into
     :py:attr:`SEEKING` state and sound related commands will raise
-    :py:class:`~pyfmodex.exceptions.FmodError` with code
+    :py:exc:`~pyfmodex.exceptions.FmodError` with code
     :py:attr:`~RESULT.NOTREADY`.
 
     With streams, if you are using the :py:class:`~pyfmodex.flags.MODE` flag
     NONBLOCKING, note that if the user calls
     :py:meth:`~pyfmodex.channel.Channel.get_position`, a stream will go into
     :py:attr:`SETPOSITION` state and sound related commands will raise
-    :py:class:`~pyfmodex.exceptions.FmodError` with code
+    :py:exc:`~pyfmodex.exceptions.FmodError` with code
     :py:attr:`~RESULT.NOTREADY`.
     """
 
@@ -1468,7 +1468,7 @@ class OPENSTATE(Enum):
     LOADING = 1  #: Initial load in progress.
 
     #: Failed to open - file not found, out of memory etc. See
-    #: :py:class:`~pyfmodex.exceptions.FmodError` code from
+    #: :py:exc:`~pyfmodex.exceptions.FmodError` code from
     #: :py:attr:`~pyfmodex.sound.Sound.open_state` for what happened.
     ERROR = 2
 
@@ -1570,7 +1570,7 @@ class PLUGINTYPE(Enum):
 
 
 class RESULT(Enum):
-    """Error codes for :py:class:`~pyfmodex.exceptions.FmodError` raised by
+    """Error codes for :py:exc:`~pyfmodex.exceptions.FmodError` raised by
     every function.
     """
 
@@ -2162,3 +2162,36 @@ class TAGTYPE(Enum):
 
     #: Maximum number of tag types supported.
     MAX = 11
+
+
+class OUTPUT_METHOD(IntEnum):
+    """Output method used to interact with the mixer.
+
+    If the hardware presents a ring buffer without synchronization primitives
+    :py:attr:`POLLING` is the recommended approach where FMOD will call
+    into the plugin regularly to check the play position of the buffer.
+
+    For hardware that presents a callback that must be filled immediately
+    :py:attr:`MIX_BUFFERED` is recommended as buffering occurs in a separate
+    thread, reading from the mixer is simply a memcpy.
+
+    Using :py:attr:`MIX_DIRECT` is recommended if you want to take direct
+    control of how and when the mixer runs.
+    """
+
+    #: Mixer will execute directly when calling
+    #: :py:data:`~pyfmodex.function_prototypes.OUTPUT_READFROMMIXER`, buffering
+    #: must be performed by plugin code.
+    MIX_DIRECT = 0
+
+    #: Mixer will execute and buffer indirectly (on a separate thread) in
+    #: response to
+    #: :py:data:`~pyfmodex.callback_prototypes.OUTPUT_GETPOSITION_CALLBACK` /
+    #: :py:data:`~pyfmodex.callback_prototypes.OUTPUT_LOCK_CALLBACK` /
+    #: :py:data:`~pyfmodex.callback_prototypes.OUTPUT_UNLOCK_CALLBACK`.
+    POLLING = 1
+
+    #: Mixer will execute and buffer automatically (on a separate thread) and
+    #: can be read from with
+    #: :py:data:`~pyfmodex.function_prototypes.OUTPUT_READFROMMIXER`.
+    MIX_BUFFERED = 2

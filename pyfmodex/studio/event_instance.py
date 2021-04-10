@@ -79,8 +79,9 @@ class EventInstance(StudioObject):
     def channel_group(self):
         """The core channel group corresponding to the master track.
 
-        Until the event instance has been fully created this function will
-        return :py:attr:`pyfmodex.enums.RESULT.STUDIO_NOT_LOADED`.
+        Until the event instance has been fully created calling this property
+        will raise an :py:exc:`~pyfmodex.exceptions.FmodError` with code
+        :py:attr:`~pyfmodex.enums.RESULT.STUDIO_NOT_LOADED`.
         """
         ptr = c_void_p()
         self._call("GetChannelGroup", byref(ptr))
