@@ -86,3 +86,12 @@ class EventInstance(StudioObject):
         ptr = c_void_p()
         self._call("GetChannelGroup", byref(ptr))
         return ChannelGroup(ptr)
+
+    @property
+    def reverb_level(self):
+        """Not Implemented."""
+        raise NotImplementedError
+
+    @reverb_level.setter
+    def reverb_level(self, level):
+        raise NotImplementedError

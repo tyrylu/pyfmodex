@@ -453,11 +453,18 @@ class Sound(FmodObject):
 
         :type: Structobject with the following components:
 
-            - Open state of a sound (:py:class:`~pyfmodex.flags.OPENSTATE`)
-            - Filled percentage of a stream's file buffer (int)
-            - Starving state. true if a stream has decoded more than the stream
-              file buffer has ready (bool)
-            - Disk is currently being accessed for this sound (bool)
+            state (:py:class:`~pyfmodex.enums.OPENSTATE`)
+              Open state of a sound.
+
+            percentbuffered (int)
+              Filled percentage of a stream's file buffer.
+
+            starving (bool)
+              Starving state. True if a stream has decoded more than the stream
+              file buffer has ready.
+
+            diskbusy (bool)
+              Disk is currently being accessed for this sound.
         """
         state = c_int()
         percentbuffered = c_uint()
