@@ -34,6 +34,24 @@ class EventInstance(StudioObject):
         paused = c_bool()
         self._call("GetPaused", byref(paused))
         return paused.value
+    
+    @paused.setter
+    def paused(self, p):
+        self._call("SetPaused", c_bool(p))
+
+    @property
+    def volume(self):
+
+        volume = c_float()
+        actual_volume = c_float()
+
+        vol = c_float()
+        self._call("GetVolume", byref(volume), byref(actual_volume))
+        return actual_volume.value
+
+    @volume.setter
+    def volume(self, vol):
+        self._call("SetVolume", c_float(vol))
 
     @paused.setter
     def paused(self, val):
