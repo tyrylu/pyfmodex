@@ -16,8 +16,7 @@ class ConeSettings:
         Creates ConeSettings for an FMOD object.
 
         Usually not called directly, but through the
-        :py:attr:`~pyfmodex.channel_control.ChannelControl.cone_settings`
-        property of the FMOD object.
+        `cone_settings` or `threed_cone_settings` property of an FMOD object.
 
         The :py:class:`~pyfmodex.flags.MODE` flag THREED must be set on this
         object otherwise :py:const:`~pyfmodex.enums.RESULT.NEEDS3D` is
