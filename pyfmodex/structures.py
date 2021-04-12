@@ -258,12 +258,6 @@ CREATESOUNDEXINFO._fields_ = [
     ("minmidigranularity", c_uint),
     ("nonblockthreadid", c_int),
     ("fsbguid", POINTER(GUID)),
-    ("fileuseropen", FILE_OPEN_CALLBACK),
-    ("fileuserclose", FILE_CLOSE_CALLBACK),
-    ("fileuserread", FILE_READ_CALLBACK),
-    ("fileuserseek", FILE_SEEK_CALLBACK),
-    ("fileuserasyncread", FILE_ASYNCREAD_CALLBACK),
-    ("fileuserasynccancel", FILE_ASYNCCANCEL_CALLBACK),
 ]
 
 
