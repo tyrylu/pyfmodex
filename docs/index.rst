@@ -6,10 +6,16 @@
 Welcome to Pyfmodex's documentation!
 ====================================
 
+This is pyfmodex, an `FMOD <https://fmod.com>`_ Python binding using `ctypes <https://docs.python.org/3/library/ctypes.html>`_.
+While the FMOD library is not Source, this Python binding is available under the MIT license from `GitHub <https://github.com/tyrylu/pyfmodex>`_ or `PyPI <https://pypi.org/project/pyfmodex/>`_.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   usage/installation
+   usage/quickstart
+   apidoc/modules
 
 
 Indices and tables
