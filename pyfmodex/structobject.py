@@ -19,7 +19,7 @@ class Structobject:
 
     def __remember(self, k):
         """Add k to the list of explicitly set values."""
-        if not k in self.__members:
+        if k not in self.__members:
             self.__members.append(k)
 
     def __getitem__(self, key):

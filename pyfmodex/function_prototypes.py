@@ -1,15 +1,12 @@
 """Function prototypes."""
 
+
 import os
 from ctypes import *
 
 from .structure_declarations import *
 
-if os.name == "nt":
-    func = WINFUNCTYPE
-else:
-    func = CFUNCTYPE
-
+func = WINFUNCTYPE if os.name == "nt" else CFUNCTYPE
 #: Function to allocate memory using the FMOD memory system.
 DSP_ALLOC_FUNC = func(c_void_p, c_uint, c_int, c_char_p)
 
