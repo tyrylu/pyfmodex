@@ -1,15 +1,12 @@
 """Function prototypes."""
 
+
 import os
 from ctypes import *
 
 from .structure_declarations import *
 
-if os.name == "nt":
-    func = WINFUNCTYPE
-else:
-    func = CFUNCTYPE
-
+func = WINFUNCTYPE if os.name == "nt" else CFUNCTYPE
 #: Function to allocate memory using the FMOD memory system.
 DSP_ALLOC_FUNC = func(c_void_p, c_uint, c_int, c_char_p)
 
@@ -158,3 +155,13 @@ OUTPUT_FREE = func(None, c_void_p, c_char_p, c_int)
 OUTPUT_LOG = func(
     None, c_int, c_char_p, c_int, c_char_p, c_char_p, c_void_p
 )  # Varargs, again
+
+#: Output request reset function.
+#:
+#: Request the output to shut down and restart.
+#:
+#: If this is issued, the output will not reset immediately, but on the next
+#: update the output will first shut down with a call to the
+#: `OUTPUT_STOP_CALLBACK` then `OUTPUT_CLOSE_CALLBACK`, followed by a restart
+#: with `OUTPUT_INIT_CALLBACK` and `OUTPUT_START_CALLBACK`.
+OUTPUT_REQUESTRESET = func(None, POINTER(OUTPUT_STATE))

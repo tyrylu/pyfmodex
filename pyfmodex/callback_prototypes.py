@@ -3,11 +3,7 @@ from ctypes import *
 
 from .structure_declarations import *
 
-if os.name == "nt":
-    func = WINFUNCTYPE
-else:
-    func = CFUNCTYPE
-
+func = WINFUNCTYPE if os.name == "nt" else CFUNCTYPE
 ROLLOFF_CALLBACK = func(c_float, c_void_p, c_float)
 CHANNELCONTROL_CALLBACK = func(c_int, c_void_p, c_int, c_int, c_void_p, c_void_p)
 CODEC_CLOSE_CALLBACK = func(c_int, POINTER(CODEC_STATE))
@@ -147,6 +143,7 @@ OUTPUT_UNLOCK_CALLBACK = func(
     c_int, POINTER(OUTPUT_STATE), c_void_p, c_void_p, c_uint, c_uint
 )
 OUTPUT_UPDATE_CALLBACK = func(c_int, POINTER(OUTPUT_STATE))
+OUTPUT_DEVICELISTCHANGED_CALLBACK = func(c_int, POINTER(OUTPUT_STATE))
 SOUND_NONBLOCKCALLBACK = func(c_int, c_void_p, c_int)
 SOUND_PCMREADCALLBACK = func(c_int, c_void_p, c_void_p, c_uint)
 SOUND_PCMSETPOSCALLBACK = func(c_int, c_void_p, c_int, c_uint, c_int)

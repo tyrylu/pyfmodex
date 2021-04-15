@@ -123,7 +123,7 @@ def initialize_memory(poolmem, poollen, useralloc, userrealloc, userfree, memtyp
     Callback implementations must be thread safe.
 
     If you specify a fixed size pool that is too small, FMOD will return
-    raise an :py:class:`~pyfmodex.exceptions.FmodError` with code
+    raise an :py:exc:`~pyfmodex.exceptions.FmodError` with code
     :py:attr:`~pyfmodex.enums.RESULT.MEMORY` when the limit of the fixed size
     pool is exceeded. At this point, it's possible that FMOD may become
     unstable. To maintain stability, do not allow FMOD to run out of memory.
@@ -154,7 +154,7 @@ def initialize_debugging(flags, mode, callback, filename):
     """Specify the level and delivery method of log messages when using the
     logging version of FMOD.
 
-    This function will raise an :py:class:`~pyfmodex.exceptions.FmodError` with
+    This function will raise an :py:exc:`~pyfmodex.exceptions.FmodError` with
     code :py:attr:`~pyfmodex.enums.RESULT.UNSUPPORTED` when using the
     non-logging (release) versions of FMOD.
 
