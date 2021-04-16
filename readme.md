@@ -1,6 +1,6 @@
 Pyfmodex
 ========
-This is pyfmodex, an [FMOD](https://fmod.com) Python binding using [ctypes](https://docs.python.org/3/library/ctypes.html).
+This is pyfmodex, an [FMOD Engine](https://fmod.com) Python binding using [ctypes](https://docs.python.org/3/library/ctypes.html).
 
 Installation
 ------------

@@ -333,6 +333,8 @@ class Sound(FmodObject):
     def mode(self):
         """The mode of a sound.
 
+        :type: MODE
+
         The mode is dependent on  the mode set by
         :py:meth:`~pyfmodex.system.create_sound`,
         :py:meth:`~pyfmodex.system.create_stream` or :py:attr:`mode`.
@@ -347,8 +349,6 @@ class Sound(FmodObject):
 
         Changing mode on an already buffered stream may not produced desired
         output.
-
-        :type: MODE
         """
         mode = c_int()
         self._call_fmod("FMOD_Sound_GetMode", byref(mode))

@@ -2185,7 +2185,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         specified 3D sound listener.
 
         :param int aaidee: Listener ID in a multi-listener environment. Specify
-            0 if there is only 1 listener.
+            0 if there is only one listener.
         :rtype: Listener
         """
         return Listener(self._ptr, aaidee)
