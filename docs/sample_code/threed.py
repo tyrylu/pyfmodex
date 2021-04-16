@@ -64,14 +64,11 @@ def main(stdscr):
         "Press 1 to toggle sound 1 (16bit Mono 3D)\n"
         "Press 2 to toggle sound 2 (8bit Mono 3D)\n"
         "Press 3 to play a sound (16bit Stereo 2D)\n"
-        "Press h or l to move listener (when in still mode)\n"
-        "Press space to toggle listener auto moveement\n"
+        "Press h or l to move listener\n"
         "Press q to quit\n"
         "\n"
     )
 
-    listener_automove = True
-    listener_prevposx = 0
     while True:
         listener_posx = listener.position[0]
 
@@ -80,7 +77,7 @@ def main(stdscr):
         environment[pos_ch2 - 1 : pos_ch2 + 2] = list("<2>")
         environment[int(listener_posx / DISTANCEFACTOR) + 25] = "L"
 
-        stdscr.addstr(11, 0, "".join(environment))
+        stdscr.addstr(10, 0, "".join(environment))
         stdscr.addstr("\n")
 
         # Listen to the user
@@ -100,7 +97,6 @@ def main(stdscr):
 
         # Update the listener
         listener.position = [listener_posx, 0, 0]
-        listener_prevposx = listener_posx
 
         system.update()
 
