@@ -13,6 +13,6 @@ This is a sample script pretty printing the audio and recording devices detected
 
 This is a sample script demonstrating the very basics of 3D sound positioning:
 
-.. literalinclude:: ../sample_code/3d.py
+.. literalinclude:: ../sample_code/threed.py
    :linenos:
    :language: python
