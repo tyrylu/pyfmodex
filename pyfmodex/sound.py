@@ -828,9 +828,9 @@ class Sound(FmodObject):
         lead to de-synchronization of position information for the stream and
         audible playback.
 
-        A stream can be reset its stream buffer and position synchronization by
-        calling :py:meth:`~pyfmodex.channel.Channel.set_position`. This causes
-        reset and flush of the stream buffer.
+        A stream can have its stream buffer and position synchronization reset
+        by calling :py:meth:`~pyfmodex.channel.Channel.set_position`. This
+        causes a reset and flush of the stream buffer.
 
         :param int offset: Seek offset.
         """
