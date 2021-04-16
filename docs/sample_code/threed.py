@@ -1,11 +1,16 @@
+#!/usr/bin/env python
 """Sample code to show basic positioning of 3D sounds."""
 
 import curses
 import sys
+import time
+from math import sin
 
 import pyfmodex
 from pyfmodex.flags import MODE
 
+INTERFACE_UPDATETIME = 50
+DISTANCEFACTOR = 1
 MIN_FMOD_VERSION = 0x00020108
 
 # Create system object and initialize
@@ -20,7 +25,8 @@ if VERSION < MIN_FMOD_VERSION:
 
 system.init(maxchannels=3)
 
-DISTANCEFACTOR = system.threed_settings.distance_factor
+THREED_SETTINGS = system.threed_settings
+THREED_SETTINGS.distance_factor = DISTANCEFACTOR
 
 # Load some sounds
 sound1 = system.create_sound("media/drumloop.wav", mode=MODE.THREED)
@@ -54,6 +60,7 @@ def main(stdscr):
     pos_ch2 = int((channel2.position[0]) / DISTANCEFACTOR) + 25
 
     stdscr.clear()
+    stdscr.nodelay(True)
 
     # Create small visual display
     stdscr.addstr(
@@ -64,41 +71,71 @@ def main(stdscr):
         "Press 1 to toggle sound 1 (16bit Mono 3D)\n"
         "Press 2 to toggle sound 2 (8bit Mono 3D)\n"
         "Press 3 to play a sound (16bit Stereo 2D)\n"
-        "Press h or l to move listener\n"
+        "Press h or l to move listener (when in still mode)\n"
+        "Press space to toggle listener still mode\n"
         "Press q to quit\n"
         "\n"
     )
 
+    listener_automove = True
+    listener_prevposx = 0
+    listener_velx = 0
+    clock = 0
     while True:
-        listener_posx = listener.position[0]
+        tic = time.time()
 
+        listener_posx = listener.position[0]
         environment = list("|" + 48 * "." + "|")
         environment[pos_ch1 - 1 : pos_ch1 + 2] = list("<1>")
         environment[pos_ch2 - 1 : pos_ch2 + 2] = list("<2>")
         environment[int(listener_posx / DISTANCEFACTOR) + 25] = "L"
 
-        stdscr.addstr(10, 0, "".join(environment))
+        stdscr.addstr(11, 0, "".join(environment))
         stdscr.addstr("\n")
 
         # Listen to the user
-        keypress = stdscr.getkey()
-        if keypress == "1":
-            channel1.paused = not channel1.paused
-        elif keypress == "2":
-            channel2.paused = not channel2.paused
-        elif keypress == "3":
-            system.play_sound(sound3)
-        elif keypress == "h":
-            listener_posx = max(-24 * DISTANCEFACTOR, listener_posx - DISTANCEFACTOR)
-        elif keypress == "l":
-            listener_posx = min(23 * DISTANCEFACTOR, listener_posx + DISTANCEFACTOR)
-        elif keypress == "q":
-            break
+        try:
+            keypress = stdscr.getkey()
+            if keypress == "1":
+                channel1.paused = not channel1.paused
+            elif keypress == "2":
+                channel2.paused = not channel2.paused
+            elif keypress == "3":
+                system.play_sound(sound3)
+            elif keypress == " ":
+                listener_automove = not listener_automove
+            elif keypress == "q":
+                break
+
+            if not listener_automove:
+                if keypress == "h":
+                    listener_posx = max(
+                        -24 * DISTANCEFACTOR, listener_posx - DISTANCEFACTOR
+                    )
+                elif keypress == "l":
+                    listener_posx = min(
+                        23 * DISTANCEFACTOR, listener_posx + DISTANCEFACTOR
+                    )
+        except curses.error as cerr:
+            if cerr.args[0] != "no input":
+                raise cerr
 
         # Update the listener
-        listener.position = [listener_posx, 0, 0]
+        if listener_automove:
+            listener_posx = sin(clock * 0.05) * 24 * DISTANCEFACTOR
+        listener_velx = (listener_posx - listener_prevposx) * (
+            1000 / INTERFACE_UPDATETIME
+        )
 
+        listener.position = (listener_posx, 0, 0)
+        listener.velocity = (listener_velx, 0, 0)
+        listener_prevposx = listener_posx
+
+        clock += 30 * (1 / INTERFACE_UPDATETIME)
         system.update()
+
+        toc = time.time()
+        time.sleep(max(0, INTERFACE_UPDATETIME / 1000 - (toc - tic)))
 
 
 curses.wrapper(main)
