@@ -4,7 +4,7 @@ import sys
 import time
 
 import pyfmodex
-from pyfmodex.flags import INIT_FLAGS, MODE
+from pyfmodex.flags import MODE
 
 MIN_FMOD_VERSION = 0x00020108
 
@@ -18,7 +18,7 @@ if VERSION < MIN_FMOD_VERSION:
     )
     sys.exit(1)
 
-system.init(maxchannels=100, flags=INIT_FLAGS.NORMAL)
+system.init(maxchannels=100)
 
 DISTANCEFACTOR = system.threed_settings.distance_factor
 
@@ -33,7 +33,7 @@ sound2.min_distance = 0.5 * DISTANCEFACTOR
 sound2.max_distance = 5000 * DISTANCEFACTOR
 sound2.mode = MODE.LOOP_NORMAL
 
-sound3 = system.create_sound("media/swish.wav", mode=MODE.TWOD)
+sound3 = system.create_sound("media/swish.wav")
 
 # Play sounds at certain positions
 channel1 = system.play_sound(sound1, paused=True)
@@ -53,10 +53,9 @@ while True:
     LISTENER_POSX = listener.position[0]
 
     # Create small visual display
-    print("===============================================")
+    print("===========")
     print("3D Example.")
-    print("Copyright (c) Firelight Technologies 2004-2021.")
-    print("===============================================")
+    print("===========")
     print()
     print("Press 1 to toggle sound 1 (16bit Mono 3D)")
     print("Press 2 to toggle sound 2 (8bit Mono 3D)")
@@ -80,7 +79,7 @@ while True:
     elif keypress == "2":
         channel2.paused = not channel2.paused
     elif keypress == "3":
-        system.play_sound(sound3, paused=False)
+        system.play_sound(sound3)
     elif keypress == "h":
         LISTENER_POSX = max(-24 * DISTANCEFACTOR, LISTENER_POSX - DISTANCEFACTOR)
     elif keypress == "l":
