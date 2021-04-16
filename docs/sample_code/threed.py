@@ -72,7 +72,7 @@ def main(stdscr):
     while True:
         listener_posx = listener.position[0]
 
-        environment = list("|" + 47 * "." + "|")
+        environment = list("|" + 48 * "." + "|")
         environment[pos_ch1 - 1 : pos_ch1 + 2] = list("<1>")
         environment[pos_ch2 - 1 : pos_ch2 + 2] = list("<2>")
         environment[int(listener_posx / DISTANCEFACTOR) + 25] = "L"
