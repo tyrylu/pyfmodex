@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Sample code to show basic positioning of 3D sounds."""
 
 import curses
@@ -18,8 +17,8 @@ system = pyfmodex.System()
 VERSION = system.version
 if VERSION < MIN_FMOD_VERSION:
     print(
-        f"FMOD lib version 0x{VERSION:08x} doesn't meet "
-        f"minimum requirement of version 0x{MIN_FMOD_VERSION:08x}"
+        f"FMOD lib version {VERSION:#08x} doesn't meet "
+        f"minimum requirement of version {MIN_FMOD_VERSION:#08x}"
     )
     sys.exit(1)
 
@@ -74,7 +73,6 @@ def main(stdscr):
         "Press h or l to move listener (when in still mode)\n"
         "Press space to toggle listener still mode\n"
         "Press q to quit\n"
-        "\n"
     )
 
     listener_automove = True

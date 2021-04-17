@@ -1856,6 +1856,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
         :param Sound snd: Sound to play.
         :param ChannelGroup channel_group: Group to output to instead of the
+            master.
         :param bool paused: Whether to start in the paused state. Start a
             Channel paused to allow altering attributes without it being
             audible, then follow it up with setting
