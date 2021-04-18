@@ -72,7 +72,7 @@ def main(stdscr):
         "Press 3 to play a sound (16bit Stereo 2D)\n"
         "Press h or l to move listener (when in still mode)\n"
         "Press space to toggle listener still mode\n"
-        "Press q to quit\n"
+        "Press q to quit"
     )
 
     listener_automove = True

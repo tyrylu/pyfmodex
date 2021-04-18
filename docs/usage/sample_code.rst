@@ -32,3 +32,13 @@ This is sample script showing how to put channels into channel groups.
 .. literalinclude:: ../sample_code/channel_groups.py
    :linenos:
    :language: python
+
+Convolution reverb
+------------------
+
+This is a sample script showing how to set up a convolution reverb DSP and work with it.
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/convolution_reverb.py
+   :linenos:
+   :language: python

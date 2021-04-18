@@ -9,7 +9,7 @@ from pyfmodex.flags import MODE
 
 MIN_FMOD_VERSION = 0x00020108
 
-# Create a System object and initialize.
+# Create a System object and initialize
 system = pyfmodex.System()
 VERSION = system.version
 if VERSION < MIN_FMOD_VERSION:
@@ -36,19 +36,19 @@ group_b = system.create_channel_group("Group B")
 group_master = system.master_channel_group
 
 # Instead of being independent, set the group A and B to be children of the
-# master group.
-group_master.add_group(group_a, True)
-group_master.add_group(group_b, True)
+# master group
+group_master.add_group(group_a)
+group_master.add_group(group_b)
 
-# Start all the sounds.
+# Start all the sounds
 for idx, sound in enumerate(sounds):
     system.play_sound(sound, channel_group=group_a if idx < 3 else group_b)
 
-# Change the volume of each group, just because we can! (reduce overall noise).
+# Change the volume of each group, just because we can! (reduce overall noise)
 group_a.volume = 0.5
 group_b.volume = 0.5
 
-# Main loop.
+# Main loop
 def main(stdscr):
     """Draw a simple TUI, grab keypresses and let the user manipulate the
     channel groups.
@@ -68,7 +68,7 @@ def main(stdscr):
         "Press a to mute/unmute group A\n"
         "Press b to mute/unmute group B\n"
         "Press m to mute/unmute master group\n"
-        "Press q to quit\n"
+        "Press q to quit"
     )
 
     while True:
@@ -91,6 +91,7 @@ def main(stdscr):
             if cerr.args[0] != "no input":
                 raise cerr
 
+        system.update()
         time.sleep(50 / 1000)
 
     # A little fade out

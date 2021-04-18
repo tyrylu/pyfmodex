@@ -490,7 +490,7 @@ class TIMEUNIT(Flags):
     #: :py:meth:`~pyfmodex.channel.Channel.get_position`.
     RAWBYTES = 0x00000008
 
-    #: Fractions of one  PCM sample. Unsigned int range 0 to 0xFFFFFFFF. Used for
+    #: Fractions of one PCM sample. Unsigned int range 0 to 0xFFFFFFFF. Used for
     #: sub-sample granularity for :py:class:`~pyfmodex.dsp.DSP` purposes.
     PCMFRACTION = 0x00000010
 

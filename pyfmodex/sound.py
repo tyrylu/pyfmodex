@@ -209,10 +209,12 @@ class Sound(FmodObject):
 
         :sound_type: Structobject with the following components:
 
-            - Type of sound (:py:class:`~pyfmodex.enums.SOUND_TYPE`)
-            - Format of the sound (:py:class:`~pyfmodex.enums.SOUND_FORMAT`)
-            - Number of channels (int)
-            - Number of bits per sample, corresponding to sound_format (int)
+            - type: Type of sound (:py:class:`~pyfmodex.enums.SOUND_TYPE`).
+            - format: Format of the sound
+              (:py:class:`~pyfmodex.enums.SOUND_FORMAT`).
+            - channels: Number of channels (int).
+            - bits: Number of bits per sample, corresponding to sound_format
+              (int).
         """
         sound_type = c_int()
         sound_format = c_int()
@@ -758,8 +760,7 @@ class Sound(FmodObject):
         self._call_fmod("FMOD_Sound_SetMusicSpeed", c_float(speed))
 
     def read_data(self, length):
-        """Read data from an opened sound to a specified buffer, using FMOD's
-        internal codecs.
+        """Read data from an opened sound, using FMOD's internal codecs.
 
         This can be used for decoding data offline in small pieces (or big
         pieces), rather than playing and capturing it, or loading the whole
@@ -809,12 +810,12 @@ class Sound(FmodObject):
 
         :param int length: Amount of data to read.
         :returns: The decoded data and the actual amount of data read.
-        :rtype: two-tuple with str and int
+        :rtype: two-tuple with bytes and int
         """
         buf = create_string_buffer(length)
         actual = c_uint()
         self._call_fmod("FMOD_Sound_ReadData", buf, length, byref(actual))
-        return buf.value, actual.value
+        return buf.raw, actual.value
 
     def seek_data(self, offset):
         """Seek a sound for use with data reading, using FMOD's internal

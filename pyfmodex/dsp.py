@@ -527,14 +527,13 @@ class DSP(FmodObject):
         """
         self._call_fmod("FMOD_DSP_SetParameterBool", index, val)
 
-    def set_parameter_data(self, index, data, length):
+    def set_parameter_data(self, index, data):
         """Set a binary data parameter by index.
 
         :param int index: Parameter index.
-        :param data data: Parameter binary data.
-        :param int length: Length of data.
+        :param PyCArrayType data: Parameter binary data.
         """
-        self._call_fmod("FMOD_DSP_SetParameterData", index, data, length)
+        self._call_fmod("FMOD_DSP_SetParameterData", index, byref(data), len(data))
 
     def set_parameter_float(self, index, val):
         """Set a floating point parameter by index.

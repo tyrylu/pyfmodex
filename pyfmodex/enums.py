@@ -1367,7 +1367,7 @@ class DSP_TYPE(IntEnum):
     PAN = 27  #: Pans the signal, possibly upmixing or downmixing as well.
     THREE_EQ = 28  #: Three-band equalizer.
 
-    #: Analyzes the signal and provides spectrum information back
+    #: Analyzes the signal and provides spectrum information back.
     FFT = 29
 
     LOUDNESS_METER = 30  #: Analyzes the loudness and true peak of the signal.
