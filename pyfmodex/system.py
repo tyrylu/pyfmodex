@@ -1448,8 +1448,8 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
             speaker_mode (SPEAKERMODE)
               Speaker setup of the mixer.
 
-            raw_speakers (SPEAKERMODE_RAW)
-              Number of speakers for
+            raw_speakers (int)
+              Number of speakers when using speaker_mode
               :py:attr:`~pyfmodex.enums.SPEAKERMODE.RAW`.
 
         If loading Studio banks, this must be called with `speaker_mode`
@@ -1486,7 +1486,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         self._call_fmod(
             "FMOD_System_SetSoftwareFormat",
             soft_format.sample_rate,
-            soft_format.speaker_mode,
+            soft_format.speaker_mode.value,
             soft_format.raw_speakers,
         )
 

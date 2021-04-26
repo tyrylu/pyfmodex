@@ -120,5 +120,4 @@ for sound in sounds:
 group_a.release()
 group_b.release()
 
-system.close()
 system.release()

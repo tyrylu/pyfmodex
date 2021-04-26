@@ -100,7 +100,7 @@ def main(stdscr):
         "\n"
         "Press k and j to change dry mix\n"
         "Press h and l to change wet mix\n"
-        "Press q to quit\n"
+        "Press q to quit"
     )
 
     while True:
@@ -139,5 +139,4 @@ reverbgroup.remove_dsp(reverbunit)
 reverbunit.disconnect_all(inputs=True, outputs=True)
 reverbunit.release()
 reverbgroup.release()
-system.close()
 system.release()

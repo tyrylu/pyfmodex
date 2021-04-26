@@ -20,7 +20,7 @@ class DSP(FmodObject):
     stream.
     """
 
-    def add_input(self, input_dsp, connection_type):
+    def add_input(self, input_dsp, connection_type=None):
         """Add a DSP unit as an input to this object.
 
         When a DSP has multiple inputs the signals are automatically mixed
@@ -37,9 +37,15 @@ class DSP(FmodObject):
         """
         check_type(input_dsp, DSP)
         connptr = c_void_p()
-        self._call_fmod(
-            "FMOD_DSP_AddInput", input_dsp._ptr, byref(connptr), connection_type.value
-        )
+        if connection_type:
+            self._call_fmod(
+                "FMOD_DSP_AddInput",
+                input_dsp._ptr,
+                byref(connptr),
+                connection_type.value,
+            )
+        else:
+            self._call_fmod("FMOD_DSP_AddInput", input_dsp._ptr, byref(connptr))
         return get_class("DSP_Connection")(connptr)
 
     def disconnect_all(self, inputs=False, outputs=False):

@@ -143,5 +143,4 @@ sound1.release()
 sound2.release()
 sound3.release()
 
-system.close()
 system.release()

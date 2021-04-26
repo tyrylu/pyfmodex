@@ -17,7 +17,7 @@ def _pp_driverinfo(driverinfo, indent=1):
     """Pretty print driverinfo.
 
     Lists all keys in the given pyfmodex.structobject with their values,
-    indented by the given number of four spaces.
+    indented by the given number times four spaces.
 
     .. todo:: Figure out how the GUID structure works exactly.
     """
@@ -35,7 +35,7 @@ def _pp_driverinfo(driverinfo, indent=1):
             value = re.sub(r"^DRIVER_STATE.|\)$", "", str(DRIVER_STATE(value))).replace(
                 "|", ", "
             )
-        print("    " * indent, end="")
+        print(4 * " " * indent, end="")
         print(f"{key}: {value}")
     print()
 
@@ -61,3 +61,5 @@ def list_drivers(title, meth):
 
 list_drivers("Detected audio OUT devices", system.get_driver_info)
 list_drivers("Detected audio IN devices", system.get_record_driver_info)
+
+system.release()

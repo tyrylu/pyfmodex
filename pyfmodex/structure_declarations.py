@@ -198,7 +198,7 @@ class DSP_STATE(Structure):
     """DSP plugin structure that is passed into each callback.
 
     `systemobject` is an integer that relates to the System object that created
-    the DSP or registered the DSP plugin. If only 1 System object is created
+    the DSP or registered the DSP plugin. If only one System object is created
     then it should be 0. A second object would be 1 and so on.
 
     :py:attr:`~pyfmodex.structures.DSP_STATE_FUNCTIONS.getsamplerate`/
