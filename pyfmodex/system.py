@@ -811,13 +811,14 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def get_dsp_info_by_plugin(self, handle):
         """The description structure for a pre-existing DSP plugin.
 
-        :param handle: Handle to a pre-existing DSP plugin, loaded by
+        :param handle: Handle to a pre-existing DSP plugin
+            :py:meth:`get_plugin_handle`, or a new one loaded by
             :py:meth:`load_plugin`.
         :returns: Description structure for the DSP.
         :rtype: DSP_DESCRIPTION
         """
         desc = DSP_DESCRIPTION()
-        self._call_fmod("FMOD_System_GetDSPInfoByPlugin", byref(desc))
+        self._call_fmod("FMOD_System_GetDSPInfoByPlugin", handle, byref(desc))
         return desc
 
     def get_default_mix_matrix(
@@ -1245,6 +1246,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         :param int index: Index in the list of plugins for the given
             `plugintype`.
         :returns: Handle used to represent the plugin.
+        :rtype: int
 
         All plugins whether built in or loaded can be enumerated using this and
         :py:meth:`get_num_plugins`.
@@ -1263,7 +1265,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         :param int handle: Handle to an already loaded plugin.
         :rtype: Structobject with the following components:
 
-            plugin_type (PLUGINTYPE)
+            type (PLUGINTYPE)
               Plugin type.
 
             name (str)

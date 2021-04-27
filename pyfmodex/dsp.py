@@ -226,7 +226,7 @@ class DSP(FmodObject):
             byref(cfgh),
         )
         return so(
-            name=name.value,
+            name=name.value.decode(),
             version=ver.value,
             channels=chans.value,
             config_width=cfgw.value,
