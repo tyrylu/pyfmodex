@@ -8,7 +8,8 @@ import time
 from dataclasses import dataclass
 
 import pyfmodex
-from pyfmodex.enums import DSP_PARAMETER_DATA_TYPE, DSP_PARAMETER_TYPE, PLUGINTYPE
+from pyfmodex.enums import (DSP_PARAMETER_DATA_TYPE, DSP_PARAMETER_TYPE,
+                            PLUGINTYPE)
 from pyfmodex.structures import DSP_DESCRIPTION
 
 MIN_FMOD_VERSION = 0x00020108
@@ -56,9 +57,10 @@ def has_data_parameter(description, data_type):
 
 def draw_dspinfo(stdscr, plugin_desc):
     """Pretty print the given DSP Info in the given window."""
+    stdscr.hline("-", 49)
     stdscr.addstr(
-        "-------------------------------------------------\n"
-        "\n"
+        2,
+        0,
         f"Name (Version) : {plugin_desc.name} ({plugin_desc.version:x})\n"
         f"SDK Version    : {plugin_desc.pluginsdkversion}\n"
         f"Type           : {'Effect' if plugin_desc.numinputbuffers else 'Sound Generator'}\n"
@@ -87,7 +89,7 @@ def draw_dspinfo(stdscr, plugin_desc):
             if has_data_parameter(plugin_desc, DSP_PARAMETER_DATA_TYPE.USER)
             or plugin_desc.userdata
             else "--",
-        )
+        ),
     )
 
 
@@ -106,7 +108,7 @@ def plugin_selector(stdscr, activeplugin_idx):
     )
 
     while True:
-        for i in range(min(num_plugins, MAX_PLUGINS_IN_VIEW)):
+        for i in range(min(MAX_PLUGINS_IN_VIEW, num_plugins)):
             idx = (activeplugin_idx - MAX_PLUGINS_IN_VIEW // 2 + i) % num_plugins
             row = 5 + i
 
@@ -217,12 +219,8 @@ def parameter_viewer(stdscr, activeplugin_idx):
     num_parameters = dsp.num_parameters
     scroll = 0
 
-    stdscr.addstr(
-        5,
-        0,
-        f"{dsp.info.name} Parameters:\n"
-        "-------------------------------------------------\n",
-    )
+    stdscr.addstr(5, 0, f"{dsp.info.name} Parameters:\n")
+    stdscr.hline("-", 49)
 
     stdscr.refresh()
     subscr = stdscr.derwin(7, 0)
