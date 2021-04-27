@@ -106,7 +106,7 @@ def plugin_selector(stdscr, activeplugin_idx):
     )
 
     while True:
-        for i in range(min(MAX_PLUGINS_IN_VIEW, num_plugins)):
+        for i in range(min(num_plugins, MAX_PLUGINS_IN_VIEW)):
             idx = (activeplugin_idx - MAX_PLUGINS_IN_VIEW // 2 + i) % num_plugins
             row = 5 + i
 
