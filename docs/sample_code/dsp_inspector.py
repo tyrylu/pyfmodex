@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Example code to demonstrate how to enumerate loaded plugins and their
 parameters.
 """
@@ -108,7 +106,7 @@ def plugin_selector(stdscr, activeplugin_idx):
     )
 
     while True:
-        for i in range(MAX_PLUGINS_IN_VIEW):
+        for i in range(min(MAX_PLUGINS_IN_VIEW, num_plugins)):
             idx = (activeplugin_idx - MAX_PLUGINS_IN_VIEW // 2 + i) % num_plugins
             row = 5 + i
 
