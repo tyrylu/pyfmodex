@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Example code to demonstrate how to manipulate DSP network to have two
 different effects on seperately filtered, different audio paths from a single
 sound.
@@ -10,8 +8,9 @@ import sys
 import time
 
 import pyfmodex
-from pyfmodex.enums import (CHANNELCONTROL_DSP_INDEX, DSP_HIGHPASS,
-                            DSP_LOWPASS, DSP_TYPE, SPEAKERMODE)
+from pyfmodex.enums import (CHANNELCONTROL_DSP_INDEX, DSP_MULTIBAND_EQ,
+                            DSP_MULTIBAND_EQ_FILTER_TYPE, DSP_TYPE,
+                            SPEAKERMODE)
 from pyfmodex.flags import MODE
 from pyfmodex.structobject import Structobject
 
@@ -41,13 +40,19 @@ sound = system.create_sound("media/drumloop.wav", mode=MODE.LOOP_NORMAL)
 channel = system.play_sound(sound)
 
 # Create the DSP effects
-dsplowpass = system.create_dsp_by_type(DSP_TYPE.LOWPASS)
-dsplowpass.set_parameter_float(DSP_LOWPASS.CUTOFF, 1000)
-dsplowpass.set_parameter_float(DSP_LOWPASS.RESONANCE, 4)
+dsplowpass = system.create_dsp_by_type(DSP_TYPE.MULTIBAND_EQ)
+dsplowpass.set_parameter_int(
+    DSP_MULTIBAND_EQ.A_FILTER, DSP_MULTIBAND_EQ_FILTER_TYPE.LOWPASS_24DB
+)
+dsplowpass.set_parameter_float(DSP_MULTIBAND_EQ.A_FREQUENCY, 1000)
+dsplowpass.set_parameter_float(DSP_MULTIBAND_EQ.A_Q, 4)
 
-dsphighpass = system.create_dsp_by_type(DSP_TYPE.HIGHPASS)
-dsphighpass.set_parameter_float(DSP_HIGHPASS.CUTOFF, 4000)
-dsphighpass.set_parameter_float(DSP_HIGHPASS.RESONANCE, 4)
+dsphighpass = system.create_dsp_by_type(DSP_TYPE.MULTIBAND_EQ)
+dsphighpass.set_parameter_int(
+    DSP_MULTIBAND_EQ.A_FILTER, DSP_MULTIBAND_EQ_FILTER_TYPE.HIGHPASS_24DB
+)
+dsphighpass.set_parameter_float(DSP_MULTIBAND_EQ.A_FREQUENCY, 4000)
+dsphighpass.set_parameter_float(DSP_MULTIBAND_EQ.A_Q, 4)
 
 # Connect up the DSP network
 
