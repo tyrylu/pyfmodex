@@ -62,3 +62,19 @@ before the two branches merge back together again.
 .. literalinclude:: ../sample_code/dsp_effect_per_speaker.py
    :linenos:
    :language: python
+
+Effects
+-------
+
+This is a sample script showing how to apply some of the built in software
+effects to sounds by applying them to the master channel group. All software
+sounds played here would be filtered in the same way. To filter per channel,
+and not have other channels affected, simply aply the same function to the
+:py:class:`~pyfmodex.channel.Channel` instead of the
+:py:class:`~pyfmodex.channel_group.ChannelGroup`.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/effects.py
+   :linenos:
+   :language: python

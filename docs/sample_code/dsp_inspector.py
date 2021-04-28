@@ -140,7 +140,7 @@ def plugin_selector(stdscr, activeplugin_idx):
 def draw_dspparameters(subscr, scroll, num_parameters, dsp):
     """Pretty print the Parameter Info of the given DSP in the given window."""
     subscr.erase()
-    for idx in range(min(num_parameters, MAX_PARAMETERS_IN_VIEW)):
+    for idx in range(min(MAX_PARAMETERS_IN_VIEW, num_parameters)):
         scrolled_idx = idx + scroll
         param_desc = dsp.get_parameter_info(scrolled_idx)
         subscr.addstr(f"{scrolled_idx:2d}: {param_desc.name.decode():15s} ")

@@ -207,7 +207,7 @@ class Sound(FmodObject):
     def format(self):
         """Format information about the sound.
 
-        :sound_type: Structobject with the following components:
+        :sound_type: Structobject with the following members:
 
             - type: Type of sound (:py:class:`~pyfmodex.enums.SOUND_TYPE`).
             - format: Format of the sound
@@ -453,7 +453,7 @@ class Sound(FmodObject):
         Note: Always check 'open_state' to determine the state of the sound. Do
         not assume the sound has finished loading.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             state (:py:class:`~pyfmodex.enums.OPENSTATE`)
               Open state of a sound.
@@ -554,7 +554,7 @@ class Sound(FmodObject):
         """Retrieve information on an embedded sync point.
 
         :param point: Sync point.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             - name: Name of the syncpoint (str)
             - offset: Offset of the syncpoint (int)

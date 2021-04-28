@@ -88,7 +88,7 @@ def get_memory_stats(blocking):
         Specifying true for this parameter will flush the
         :py:class:`~pyfmodex.dsp.DSP` network to make sure all queued
         allocations happen immediately, which can be costly.
-    :returns: Structobject with the following components:
+    :returns: Structobject with the following members:
 
         - currentalloced: Currently allocated memory at time of call.
         - maxalloced: Maximum allocated memory since

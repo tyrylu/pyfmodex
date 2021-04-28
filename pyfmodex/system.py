@@ -678,7 +678,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         and not overall usage. The values are smoothed to provide a more stable
         readout.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             - :py:class:`~pyfmodex.dsp.DSP` mixing engine CPU usage (float)
             - Streaming engine CPU usage (float)
@@ -731,7 +731,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def channels_playing(self):
         """The number of currently playing channels.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             channels (int)
               Number of playing channels (both real and virtual).
@@ -892,7 +892,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         by its index, and specific to the selected output mode.
 
         :param int aaidee: Index of the sound driver device.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             name (str)
               Name of the device.
@@ -941,7 +941,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
         The values are running totals that never reset.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             sample_bytes_read (int)
               Total bytes read from file for loading sample data.
@@ -978,7 +978,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
         :param list listener: The listener position.
         :param list source: The source position.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             direct
               Direct occlusion value. 0 = not occluded at all / full volume, 1
@@ -1263,7 +1263,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         """Retrieve information for the selected plugin.
 
         :param int handle: Handle to an already loaded plugin.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             type (PLUGINTYPE)
               Plugin type.
@@ -1291,7 +1291,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         by its index, and specific to the output mode.
 
         :param int index: Index of the recording device.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             name (str)
               Name of the device.
@@ -1345,7 +1345,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         this to enumerate all recording devices possible so that the user can
         select one.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             drivers (int)
               Number of recording drivers available for this output mode.
@@ -1442,7 +1442,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def software_format(self):
         """The output format for the software mixer.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             sample_rate (int)
               Sample rate of the mixer.
@@ -1510,7 +1510,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         speaker mode.
 
         :param SPEAKER speaker: Speaker.
-        :returns: Structobject with the following components:
+        :returns: Structobject with the following members:
 
             x (float)
               2D X position relative to the listener. -1 = left, 0 = middle, +1
@@ -1587,7 +1587,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def stream_buffer_size(self):
         """The default file buffer size for newly opened streams.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             size (int)
               Buffer size.
