@@ -29,24 +29,22 @@ channel = system.play_sound(sound)
 
 # Create some effects to play with
 dsplowpass = system.create_dsp_by_type(DSP_TYPE.MULTIBAND_EQ)
+dsphighpass = system.create_dsp_by_type(DSP_TYPE.MULTIBAND_EQ)
+dspecho = system.create_dsp_by_type(DSP_TYPE.ECHO)
+dspflange = system.create_dsp_by_type(DSP_TYPE.FLANGE)
+
+# Configure multiband_eq DSPs to create lowpass and highpass filters
 dsplowpass.set_parameter_int(
     DSP_MULTIBAND_EQ.A_FILTER, DSP_MULTIBAND_EQ_FILTER_TYPE.LOWPASS_24DB
 )
 dsplowpass.set_parameter_float(DSP_MULTIBAND_EQ.A_FREQUENCY, 1000)
 dsplowpass.set_parameter_float(DSP_MULTIBAND_EQ.A_Q, 4)
 
-dsphighpass = system.create_dsp_by_type(DSP_TYPE.MULTIBAND_EQ)
 dsphighpass.set_parameter_int(
     DSP_MULTIBAND_EQ.A_FILTER, DSP_MULTIBAND_EQ_FILTER_TYPE.HIGHPASS_24DB
 )
 dsphighpass.set_parameter_float(DSP_MULTIBAND_EQ.A_FREQUENCY, 4000)
 dsphighpass.set_parameter_float(DSP_MULTIBAND_EQ.A_Q, 4)
-
-dspecho = system.create_dsp_by_type(DSP_TYPE.ECHO)
-
-dsphighpass.set_parameter_float(DSP_MULTIBAND_EQ.A_FREQUENCY, 4000)
-dsphighpass.set_parameter_float(DSP_MULTIBAND_EQ.A_Q, 4)
-dspflange = system.create_dsp_by_type(DSP_TYPE.FLANGE)
 
 # Add them to the master channel group.  Each time an effect is added (to
 # position 0) it pushes the others down the list.
