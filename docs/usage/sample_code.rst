@@ -78,3 +78,16 @@ and not have other channels affected, simply aply the same function to the
 .. literalinclude:: ../sample_code/effects.py
    :linenos:
    :language: python
+
+Generate tone
+-------------
+
+This is a sample script showing how to play generated tones using
+:py:meth:`~pyfmodex.system.System.play_dsp` instead of manually connecting and
+disconnecting DSP units.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/generate_tone.py
+   :linenos:
+   :language: python
