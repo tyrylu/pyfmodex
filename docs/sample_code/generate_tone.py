@@ -1,5 +1,5 @@
-"""Example code to show how play generated tones using System.play_dsp instead
-of manually connecting and disconnecting DSP units.
+"""Example code to show how to play generated tones using System.play_dsp
+instead of manually connecting and disconnecting DSP units.
 """
 
 import curses
@@ -11,7 +11,7 @@ from pyfmodex.enums import DSP_OSCILLATOR, DSP_TYPE
 
 MIN_FMOD_VERSION = 0x00020108
 
-# Create a System object and initialize.
+# Create a System object and initialize
 system = pyfmodex.System()
 VERSION = system.version
 if VERSION < MIN_FMOD_VERSION:
@@ -23,8 +23,7 @@ if VERSION < MIN_FMOD_VERSION:
 
 system.init(maxchannels=1)
 
-# Create an oscillator DSP units for the tone.
-
+# Create an oscillator DSP unit for the tone
 dsp = system.create_dsp_by_type(DSP_TYPE.OSCILLATOR)
 dsp.set_parameter_float(DSP_OSCILLATOR.RATE, 440)  # Musical note 'A'
 

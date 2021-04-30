@@ -57,6 +57,31 @@ def has_data_parameter(description, data_type):
 
 def draw_dspinfo(stdscr, plugin_desc):
     """Pretty print the given DSP Info in the given window."""
+    reset = "Y" if plugin_desc.reset else "--"
+    sidechain = (
+        "Y"
+        if has_data_parameter(plugin_desc, DSP_PARAMETER_DATA_TYPE.SIDECHAIN)
+        else "--"
+    )
+    threed = (
+        "Y"
+        if has_data_parameter(plugin_desc, DSP_PARAMETER_DATA_TYPE.THREED_ATTRIBUTES)
+        or has_data_parameter(
+            plugin_desc, DSP_PARAMETER_DATA_TYPE.THREEDATTRIBUTES_MULTI
+        )
+        else "--"
+    )
+    audibility = (
+        "Y"
+        if has_data_parameter(plugin_desc, DSP_PARAMETER_DATA_TYPE.OVERALLGAIN)
+        else "--"
+    )
+    userdata = (
+        "Y"
+        if has_data_parameter(plugin_desc, DSP_PARAMETER_DATA_TYPE.USER)
+        or plugin_desc.userdata
+        else "--"
+    )
     stdscr.hline("-", 49)
     stdscr.addstr(
         2,
@@ -66,30 +91,9 @@ def draw_dspinfo(stdscr, plugin_desc):
         f"Type           : {'Effect' if plugin_desc.numinputbuffers else 'Sound Generator'}\n"
         f"Parameters     : {plugin_desc.numparameters:d}\n"
         f"Audio Calback  : {'process()' if plugin_desc.process else 'read()'}\n"
-        "\n"
-        " Reset | Side-Chain | 3D | Audibility | User Data\n"
-        "   %s  |     %s     | %s |     %s     |     %s\n"
-        % (
-            "Y" if plugin_desc.reset else "--",
-            "Y"
-            if has_data_parameter(plugin_desc, DSP_PARAMETER_DATA_TYPE.SIDECHAIN)
-            else "--",
-            "Y"
-            if has_data_parameter(
-                plugin_desc, DSP_PARAMETER_DATA_TYPE.THREED_ATTRIBUTES
-            )
-            or has_data_parameter(
-                plugin_desc, DSP_PARAMETER_DATA_TYPE.THREEDATTRIBUTES_MULTI
-            )
-            else "--",
-            "Y"
-            if has_data_parameter(plugin_desc, DSP_PARAMETER_DATA_TYPE.OVERALLGAIN)
-            else "--",
-            "Y"
-            if has_data_parameter(plugin_desc, DSP_PARAMETER_DATA_TYPE.USER)
-            or plugin_desc.userdata
-            else "--",
-        ),
+         "\n"
+         " Reset | Side-Chain | 3D | Audibility | User Data\n"
+        f"   {reset}  |     {sidechain}     | {threed} |     {audibility}     |     {userdata}",
     )
 
 

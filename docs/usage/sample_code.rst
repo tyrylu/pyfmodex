@@ -1,7 +1,7 @@
 Examples
 ========
 
-While we strive to keep the number of external dependencies required to run the examples below (ideally, to zero), many of the examples require the `curses` library.
+While we strive to keep the number of external dependencies required to run the examples below small (ideally: zero), many of the examples require the :py:mod:`curses` library.
 On Windows, this unfortunately requires the installation of an extra module, for example `windows-curses <https://pypi.org/project/windows-curses/>`_.
 
 Device detection
@@ -76,6 +76,19 @@ and not have other channels affected, simply aply the same function to the
 (Adapted from sample code shipped with FMOD Engine.)
 
 .. literalinclude:: ../sample_code/effects.py
+   :linenos:
+   :language: python
+
+Gapless playback
+----------------
+
+This is a sample script showing how to schedule channel playback into the
+future with sample accuracy. It uses several scheduled channels to synchronize
+two or more sounds.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/gapless_playback.py
    :linenos:
    :language: python
 

@@ -789,7 +789,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         1024 / 48000 * 1000 = 21.33ms. This means the mixer updates every
         21.33ms.
 
-        To get the total buffer size multiply the bufferlength by the
+        To get the total buffer size, multiply the bufferlength by the
         numbuffers value. By default this would be 41024 = 4096 samples, or
         421.33ms = 85.33ms. This would generally be the total latency of the
         software mixer, but in reality due to one of the buffers being written
