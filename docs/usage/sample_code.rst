@@ -104,3 +104,38 @@ disconnecting DSP units.
 .. literalinclude:: ../sample_code/generate_tone.py
    :linenos:
    :language: python
+
+Granular Synthesis
+------------------
+
+This is a sample script showing how to play a string of sounds together without
+gaps, using :py:attr:`~pyfmodex.channel_control.ChannelControl.delay` to
+produce a granular synthesis style truck engine effect.
+
+The basic operation is:
+
+ #. Play two sounds initially at the same time, the first sound immediately,
+    and the second sound with a delay calculated by the length of the first
+    sound.
+ #. Set `delay` to initiate the delayed playback. The `delay` is sample
+    accurate and uses output samples as the time frame, not source samples.
+    These samples are a fixed amount per second regardless of the source sound
+    format, for example 48000 samples per second if FMOD is initialized to
+    48khz output.
+ #. Output samples are calculated from source samples with a simple
+    source-to-output sample rate conversion.
+ #. When the first sound finishes, the second one should have automatically
+    started. This is a good oppurtunity to queue up the next sound. Repeat step
+    two.
+ #. Make sure the framerate is high enough to queue up a new sound before the
+    other one finishes otherwise you will get gaps.
+
+These sounds are not limited by format, channel count or bit depth and can also
+be modified to allow for overlap, by reducing the `delay` from the first sound
+playing to the second by the overlap amount.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/granular_synth.py
+   :linenos:
+   :language: python

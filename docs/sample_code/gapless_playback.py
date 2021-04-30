@@ -150,7 +150,7 @@ def main(stdscr):
         "Press SPACE to toggle pause\n"
         "Press k to increase pitch\n"
         "Press j to decrease pitch\n"
-        "Press q to quit\n"
+        "Press q to quit"
     )
 
     while True:

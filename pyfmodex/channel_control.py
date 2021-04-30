@@ -449,11 +449,12 @@ class ChannelControl(FmodObject):
             - dspclock_end: DSP clock (int) of the parent ChannelGroup to
               audibly stop playing sound at.
             - stop_channels:
-                - True: When dspclock_end is reached, behaves like
-                  :py:meth:`stop` has been called.
-                - False: When dspclock_end is reached, behaves like
-                  :py:attr:`paused` is True, a subsequent dspclock_start allows
-                  it to resume.
+
+              - True: When dspclock_end is reached, behaves like
+                :py:meth:`stop` has been called.
+              - False: When dspclock_end is reached, behaves like
+                :py:attr:`paused` is True, a subsequent dspclock_start allows
+                it to resume.
         :rtype: Structobject
         """
         dspclock_start = c_ulonglong()
