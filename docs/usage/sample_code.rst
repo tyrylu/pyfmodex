@@ -105,7 +105,7 @@ disconnecting DSP units.
    :linenos:
    :language: python
 
-Granular Synthesis
+Granular synthesis
 ------------------
 
 This is a sample script showing how to play a string of sounds together without
@@ -137,5 +137,18 @@ playing to the second by the overlap amount.
 (Adapted from sample code shipped with FMOD Engine.)
 
 .. literalinclude:: ../sample_code/granular_synth.py
+   :linenos:
+   :language: python
+
+Load from memory
+----------------
+
+This is a sample script showing how to use the
+:py:attr:`~pyfmodex.flags.MODE.OPENMEMORY` mode flag whe creating sounds to
+load the data into memory.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/load_from_memory.py
    :linenos:
    :language: python

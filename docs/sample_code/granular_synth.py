@@ -15,14 +15,14 @@ from pyfmodex.structobject import Structobject
 
 MIN_FMOD_VERSION = 0x00020108
 
-soundnames = [
+soundnames = (
     "media/granular/truck_idle_off_01.wav",
     "media/granular/truck_idle_off_02.wav",
     "media/granular/truck_idle_off_03.wav",
     "media/granular/truck_idle_off_04.wav",
     "media/granular/truck_idle_off_05.wav",
     "media/granular/truck_idle_off_06.wav",
-]
+)
 
 # Create a System object and initialize.
 system = pyfmodex.System()
@@ -79,7 +79,7 @@ def queue_next_sound(playingchannel=None):
 
     # Randomize pitch/volume to make it sound more realistic / random
     newchannel.frequency *= (
-        1 + random.uniform(-1, 1) * 0.02
+        1 + random.uniform(-1, 1) * .02
     )  # @22khz, range fluctuates from 21509 to 22491
 
     newchannel.volume *= 1 - random.random() * 0.2  # 0.8 to 1.0
@@ -147,8 +147,8 @@ def main(stdscr):
                 raise cerr
 
         system.update()
-        # If you wait too long, ie longer than the length of the shortest
-        # sound, you will get gaps.
+        # If you wait too long (longer than the length of the shortest sound),
+        # you will get gaps.
         time.sleep(10 / 1000)
 
 

@@ -110,87 +110,87 @@ class CREATESOUNDEXINFO(Structure):
     10,000 subsound pointers and other associated codec entries allocated along
     with it multiplied by 10,000.
 
+    :ivar int audioqueuepolicy: Hardware / software decoding policy for
+        :py:attr:`~pyfmodex.enums.SOUND_TYPE.MIDI`.
     :ivar int cbsize: Size of this structure. Must be set to
         sizeof(`CREATESOUNDEXINFO`) before calling
         :py:meth:`~pyfmodex.system.System.create_sound` or
         :py:meth:`~pyfmodex.system.System.create_stream`.
+    :ivar CHANNELORDER channelorder: Custom ordering of speakers for this sound
+        data.
+    :ivar int decodebuffersize: Size of the decoded buffer for
+        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM`, or the block size used
+        with `pcmreadcallback` for :py:attr:`~pyfmodex.flags.MODE.OPENUSER`.
+    :ivar int defaultfrequency: Default frequency of sound data for
+        :py:attr:`~pyfmodex.flags.MODE.OPENUSER` /
+        :py:attr:`~pyfmodex.flags.MODE.OPENRAW`.
+    :ivar str dlsname: File path for a FMOD_SOUND_TYPE_DLS sample set to use
+        when loading a :py:attr:`~pyfmodex.enums.SOUND_TYPE.MIDI` file.
+    :ivar str encryptionkey: Key for encrypted
+        :py:attr:`~pyfmodex.enums.SOUND_TYPE.FSB` file, cannot be used in
+        conjunction with :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY_POINT`.
+    :ivar int filebuffersize: Buffer size for reading the file, -1 to disable
+        buffering.
+    :ivar int fileoffset: File offset to start reading from.
+    :ivar FILE_CLOSE_CALLBACK fileuserclose: Callback for closing this file.
+    :ivar FILE_OPEN_CALLBACK fileuseropen: Callback for opening this file.
+    :ivar FILE_ASYNCREAD_CALLBACK fileuserasyncread: Callback for seeking
+        within this file.
+    :ivar FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel: Callback for seeking
+        within this file.
+    :ivar fileuserdata: User data to be passed into the file callbacks.
+    :ivar FILE_READ_CALLBACK fileuserread: Callback for reading from this file.
+    :ivar FILE_SEEK_CALLBACK fileuserseek: Callback for seeking within this
+        file.
+    :ivar SOUND_FORMAT format: Format of sound data for
+        :py:attr:`~pyfmodex.flags.MODE.OPENUSER` /
+        :py:attr:`~pyfmodex.flags.MODE.OPENRAW`.
+    :ivar GUID fsbguid: On input, GUID of already loaded
+        :py:attr:`~pyfmodex.enums.SOUND_TYPE.FSB` file to reduce disk access,
+        on output, GUID of loaded FSB.
+    :ivar int ignoresetfilesystem: Ignore
+        :py:meth:`~pyfmodex.system.System.set_file_system` and
+        CREATESOUNDEXINFO file callbacks.
+    :ivar list(int) inclusionlist: List of subsound indices to load from file.
+    :ivar int inclusionlistnum: Number of items in `inclusionlist`.
+    :ivar SoundGroup initialsoundgroup: SoundGroup to place this Sound in once
+        created.
+    :ivar int initialseekposition: Initial position to seek to for
+        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM`.
+    :ivar TIMEUNIT initialseekpostype: Time units for `initialseekposition`.
+    :ivar int initialsubsound: Initial subsound to seek to for
+        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM`.
     :ivar int length: Bytes to read starting at `fileoffset`, or length of
         Sound to create for :py:attr:`~pyfmodex.flags.MODE.OPENUSER`, or length
         of name_or_data for :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY` /
         :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY_POINT`
-    :ivar int fileoffset: File offset to start reading from.
+    :ivar int maxpolyphony: Maximum voice count for
+        :py:attr:`~pyfmodex.enums.SOUND_TYPE.MIDI` /
+        :py:attr:`~pyfmodex.enums.SOUND_TYPE.IT`
+    :ivar int minmidigranularity: Mixer granularity for
+        :py:attr:`~pyfmodex.enums.SOUND_TYPE.MIDI`. sounds, smaller numbers
+        give a more accurate reproduction at the cost of higher CPU usage.
+    :ivar SOUND_NONBLOCKCALLBACK nonblockcallback: Callback to notify
+        completion for :py:attr:`~pyfmodex.flags.MODE.NONBLOCKING`, occurs
+        during creation and seeking / restarting streams.
+    :ivar int nonblockthreadid: Thread index to execute
+        :py:attr:`~pyfmodex.flags.MODE.NONBLOCKING` loads on for parallel Sound
+        loading.
     :ivar int numchannels: Number of channels in sound data for
         :py:attr:`~pyfmodex.flags.MODE.OPENUSER` /
         :py:attr:`~pyfmodex.flags.MODE.OPENRAW`.
-    :ivar int defaultfrequency: Default frequency of sound data for
-        :py:attr:`~pyfmodex.flags.MODE.OPENUSER` /
-        :py:attr:`~pyfmodex.flags.MODE.OPENRAW`.
-    :ivar SOUND_FORMAT format: Format of sound data for
-        :py:attr:`~pyfmodex.flags.MODE.OPENUSER` /
-        :py:attr:`~pyfmodex.flags.MODE.OPENRAW`.
-    :ivar int decodebuffersize: Size of the decoded buffer for
-        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM`, or the block size used
-        with `pcmreadcallback` for :py:attr:`~pyfmodex.flags.MODE.OPENUSER`.
-    :ivar int initialsubsound: Initial subsound to seek to for
-        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM`.
     :ivar int numsubsounds: Number of subsounds available for
         :py:attr:`~pyfmodex.flags.MODE.OPENUSER`, or maximum subsounds to load
         from file.
-    :ivar list(int) inclusionlist: List of subsound indices to load from file.
-    :ivar int inclusionlistnum: Number of items in `inclusionlist`.
     :ivar SOUND_PCMREADCALLBACK pcmreadcallback: Callback to provide audio for
         :py:attr:`~pyfmodex.flags.MODE.OPENUSER`, or capture audio as it is
         decoded.
     :ivar SOUND_PCMSETPOSCALLBACK pcmsetposcallback: Callback to perform
         seeking for :py:attr:`~pyfmodex.flags.MODE.OPENUSER`, or capture seek
         requests.
-    :ivar SOUND_NONBLOCKCALLBACK nonblockcallback: Callback to notify
-        completion for :py:attr:`~pyfmodex.flags.MODE.NONBLOCKING`, occurs
-        during creation and seeking / restarting streams.
-    :ivar str dlsname: File path for a FMOD_SOUND_TYPE_DLS sample set to use
-        when loading a :py:attr:`~pyfmodex.enums.SOUND_TYPE.MIDI` file.
-    :ivar str encryptionkey: Key for encrypted
-        :py:attr:`~pyfmodex.enums.SOUND_TYPE.FSB` file, cannot be used in
-        conjunction with :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY_POINT`.
-    :ivar int maxpolyphony: Maximum voice count for
-        :py:attr:`~pyfmodex.enums.SOUND_TYPE.MIDI` /
-        :py:attr:`~pyfmodex.enums.SOUND_TYPE.IT`
-    :ivar userdata: User data to be attached to the Sound during creation.
     :ivar SOUND_TYPE suggestedsoundtype: Attempt to load using the specified
         type first instead of loading in codec priority order.
-    :ivar FILE_OPEN_CALLBACK fileuseropen: Callback for opening this file.
-    :ivar FILE_CLOSE_CALLBACK fileuserclose: Callback for closing this file.
-    :ivar FILE_READ_CALLBACK fileuserread: Callback for reading from this file.
-    :ivar FILE_SEEK_CALLBACK fileuserseek: Callback for seeking within this
-        file.
-    :ivar FILE_ASYNCREAD_CALLBACK fileuserasyncread: Callback for seeking
-        within this file.
-    :ivar FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel: Callback for seeking
-        within this file.
-    :ivar fileuserdata: User data to be passed into the file callbacks.
-    :ivar int filebuffersize: Buffer size for reading the file, -1 to disable
-        buffering.
-    :ivar CHANNELORDER channelorder: Custom ordering of speakers for this sound
-        data.
-    :ivar SoundGroup initialsoundgroup: SoundGroup to place this Sound in once
-        created.
-    :ivar int initialseekposition: Initial position to seek to for
-        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM`.
-    :ivar TIMEUNIT initialseekpostype: Time units for `initialseekposition`.
-    :ivar int ignoresetfilesystem: Ignore
-        :py:meth:`~pyfmodex.system.System.set_file_system` and
-        CREATESOUNDEXINFO file callbacks.
-    :ivar int audioqueuepolicy: Hardware / software decoding policy for
-        :py:attr:`~pyfmodex.enums.SOUND_TYPE.MIDI`.
-    :ivar int minmidigranularity: Mixer granularity for
-        :py:attr:`~pyfmodex.enums.SOUND_TYPE.MIDI`. sounds, smaller numbers
-        give a more accurate reproduction at the cost of higher CPU usage.
-    :ivar int nonblockthreadid: Thread index to execute
-        :py:attr:`~pyfmodex.flags.MODE.NONBLOCKING` loads on for parallel Sound
-        loading.
-    :ivar GUID fsbguid: On input, GUID of already loaded
-        :py:attr:`~pyfmodex.enums.SOUND_TYPE.FSB` file to reduce disk access,
-        on output, GUID of loaded FSB.
+    :ivar userdata: User data to be attached to the Sound during creation.
     """
 
 

@@ -314,7 +314,7 @@ class MODE(Flags):
     #: to specify length. If used with :py:attr:`CREATESAMPLE` or
     #: :py:attr:`CREATECOMPRESSEDSAMPLE`, FMOD duplicates the memory into its
     #: own buffers. Your own buffer can be freed after open, unless you are
-    #: using :py:attr:`NONBLOCKING` then wait until the Sound is in the
+    #: using :py:attr:`NONBLOCKING`. Then, wait until the Sound is in the
     #: :py:attr:`OPENSTATE_READY` state. If used with :py:attr:`CREATESTREAM`,
     #: FMOD will stream out of the buffer whose pointer you passed in. In this
     #: case, your own buffer should not be freed until you have finished with
