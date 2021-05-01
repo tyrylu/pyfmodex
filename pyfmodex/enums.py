@@ -1512,7 +1512,7 @@ class OUTPUTTYPE(Enum):
     #: Win - Low latency ASIO 2.0.
     ASIO = 7
 
-    #: Linux - Pulse Audio. (Default on Linux if available)
+    #: Linux - PulseAudio. (Default on Linux if available)
     PULSEAUDIO = 8
 
     #: Linux - Advanced Linux Sound Architecture. (Default on Linux if

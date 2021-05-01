@@ -165,3 +165,20 @@ individual speakers.
 .. literalinclude:: ../sample_code/multiple_speaker.py
    :linenos:
    :language: python
+
+Multiple systems
+----------------
+
+This example shows how to play sounds on two different output devices from the
+same application. It creates two :py:class:`~pyfmodex.system.System` objects,
+selects a different sound device for each, then allows the user to play one
+sound on each device.
+
+Note that sounds created on device A cannot be played on device B and vice
+versa.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/multiple_system.py
+   :linenos:
+   :language: python
