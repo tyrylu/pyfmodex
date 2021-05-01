@@ -152,3 +152,16 @@ load the data into memory.
 .. literalinclude:: ../sample_code/load_from_memory.py
    :linenos:
    :language: python
+
+Multiple speakers
+-----------------
+
+This is a sample script showing how to play sounds on multiple speakers, and
+also how to assign sound subchannels (like in stereo sound) to different,
+individual speakers.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/multiple_speaker.py
+   :linenos:
+   :language: python

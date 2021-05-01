@@ -923,7 +923,7 @@ class ChannelControl(FmodObject):
         :py:meth:`set_mix_levels_input` and :py:meth:`set_mix_matrix`.
 
         The output channel count will always match the System speaker mode set
-        via :py:attr:`pyfmodex.system.System.software_format`.
+        via :py:attr:`~pyfmodex.system.System.software_format`.
 
         If the System is initialized with
         :py:class:`~pyfmodex.enums.SPEAKERMODE` RAW calling this function will

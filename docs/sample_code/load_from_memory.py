@@ -14,7 +14,7 @@ from pyfmodex.structure_declarations import CREATESOUNDEXINFO
 
 MIN_FMOD_VERSION = 0x00020108
 
-mediadir = Path('media')
+mediadir = Path("media")
 soundnames = (
     mediadir / "drumloop.wav",
     mediadir / "jaguar.wav",
@@ -55,14 +55,14 @@ def main(stdscr):
 
     # Create small visual display
     stdscr.addstr(
-         "==========================\n"
-         "Load From Memoery Example.\n"
-         "==========================\n"
-         "\n"
+        "=========================\n"
+        "Load From Memory Example.\n"
+        "=========================\n"
+        "\n"
         f"Press 1 to play a mono sound ({soundnames[0].stem})\n"
         f"Press 2 to play a mono sound ({soundnames[1].stem})\n"
         f"Press 3 to play a mono sound ({soundnames[2].stem})\n"
-         "Press q to quit"
+        "Press q to quit"
     )
 
     channel = None
@@ -89,8 +89,6 @@ def main(stdscr):
         stdscr.move(9, 0)
         stdscr.clrtoeol()
         stdscr.addstr(
-            9,
-            0,
             "Time %02d:%02d:%02d/%02d:%02d:%02d : %s"
             % (
                 position / 1000 / 60,
@@ -99,7 +97,7 @@ def main(stdscr):
                 length / 1000 / 60,
                 length / 1000 % 60,
                 length / 10 % 100,
-                'Playing' if is_playing else 'Stopped'
+                "Playing" if is_playing else "Stopped",
             ),
         )
         stdscr.addstr(10, 0, f"Channel Playing {system.channels_playing.channels:-2d}")

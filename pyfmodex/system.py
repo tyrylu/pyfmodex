@@ -1447,8 +1447,9 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
             sample_rate (int)
               Sample rate of the mixer.
 
-            speaker_mode (SPEAKERMODE)
-              Speaker setup of the mixer.
+            speaker_mode (int)
+            Speaker setup of the mixer. Can be interpreted as
+            :py:attr:`~pyfmodex.enums.SPEAKERMODE`.
 
             raw_speakers (int)
               Number of speakers when using speaker_mode
