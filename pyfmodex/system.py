@@ -277,7 +277,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
         This allows users to capture data as FMOD reads it, which may be useful
         for extracting the raw data that FMOD reads for hard to support sources
-        (for example internet streams).
+        (for example Internet streams).
 
         To detach, pass None as the callback parameters.
 

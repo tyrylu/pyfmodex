@@ -241,7 +241,7 @@ class Sound(FmodObject):
         not support :py:attr:`~pyfmodex.flags.TIMEUNIT.MODORDER`.
 
         A length of 0xFFFFFFFF means it is of unlimited length, such as an
-        internet radio stream or MOD/S3M/XM/IT file which may loop forever.
+        Internet radio stream or MOD/S3M/XM/IT file which may loop forever.
 
         Note: Using a VBR (Variable Bit Rate) source that does not have
         metadata containing its accurate length (such as un-tagged MP3 or
@@ -594,6 +594,8 @@ class Sound(FmodObject):
         :param ChannelGroup channel_group: Group to output to instead of the
             master.
         :param bool paused: Whether to start in the paused state.
+        :returns: Newly playing channel.
+        :rtype: Channel
         """
         return self.system_object.play_sound(self, channel_group, paused)
 

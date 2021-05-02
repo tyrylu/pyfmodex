@@ -182,3 +182,14 @@ versa.
 .. literalinclude:: ../sample_code/multiple_system.py
    :linenos:
    :language: python
+
+Net stream
+----------
+
+This example shows how to play streaming audio from an Internet source.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/net_stream.py
+   :linenos:
+   :language: python

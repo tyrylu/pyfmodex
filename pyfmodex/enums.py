@@ -2128,7 +2128,7 @@ class TAGTYPE(Enum):
     #: SHOUTcast Internet stream metadata which can be issued during playback.
     SHOUTCAST = 4
 
-    #: Icecast internet stream metadata which can be issued during playback.
+    #: Icecast Internet stream metadata which can be issued during playback.
     ICECAST = 5
 
     #: Advanced Systems Format metadata typically associated with Windows Media
@@ -2151,7 +2151,7 @@ class TAGTYPE(Enum):
     PLAYLIST = 8
 
     #: Tag type used by FMOD's MIDI, MOD, S3M, XM, IT format support, and
-    #: netstreams to notify of internet stream events like a sample rate
+    #: netstreams to notify of Internet stream events like a sample rate
     #: change.
     FMOD = 9
 
