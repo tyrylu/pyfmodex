@@ -555,7 +555,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         formats and compressed formats using
         :py:attr:`~pyfmodex.flags.MODE.CREATECOMPRESSEDSAMPLE` are supported.
 
-        :param str name_of_addr: Name of the file or URL to open or a pointer
+        :param str name_or_addr: Name of the file or URL to open or a pointer
             to a preloaded sound memory block if
             :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY` /
             :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY_POINT` is used.
@@ -610,15 +610,15 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def create_stream(self, name_or_addr, mode=MODE.THREED, exinfo=None):
         """Opens a sound for streaming.
 
-        This is a convenience method for :py:meth:`create_sound` with the
-        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM` flag added.
+        This is a convenience method for :py:meth:`create_sound` adding the
+        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM` flag to the mode.
 
         A stream only has one decode buffer and file handle, and therefore can
         only be played once. It cannot play multiple times at once because it
         cannot share a stream buffer if the stream is playing at different
         positions. Open multiple streams to have them play concurrently.
 
-        :param str name_of_addr: Name of the file or URL to open or a pointer
+        :param str name_or_addr: Name of the file or URL to open or a pointer
             to a preloaded sound memory block if
             :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY` /
             :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY_POINT` is used.

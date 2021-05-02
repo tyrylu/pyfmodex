@@ -147,6 +147,10 @@ This is a sample script showing how to use the
 :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY` mode flag whe creating sounds to
 load the data into memory.
 
+This example is simply a variant of the :ref:`play_sound` example, but it loads
+the data into memory and then uses the `load from memory` feature of
+:py:meth:`~pyfmodex.system.create_sound`.
+
 (Adapted from sample code shipped with FMOD Engine.)
 
 .. literalinclude:: ../sample_code/load_from_memory.py
@@ -191,5 +195,43 @@ This example shows how to play streaming audio from an Internet source.
 (Adapted from sample code shipped with FMOD Engine.)
 
 .. literalinclude:: ../sample_code/net_stream.py
+   :linenos:
+   :language: python
+
+.. _play_sound:
+
+Play sound
+----------
+
+This example shows how to simply load and play multiple sounds, the simplest
+usage of FMOD. By default FMOD will decode the entire file into memory when it
+loads. If the sounds are big and possibly take up a lot of RAM it would be
+better to use the :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM` flag, as this
+will stream the file in realtime as it plays (see :ref:`play_stream`).
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/play_sound.py
+   :linenos:
+   :language: python
+
+.. _play_stream:
+
+Play stream
+-----------
+
+This example shows how to simply play a stream such as an MP3 or WAV. The
+stream behaviour is achieved by specifying
+:py:attr:`~pyfmodex.flags.MODE.CREATESTREAM` in the call to
+:py:meth:`~pyfmodex.system.System.create_sound`. This makes FMOD decode the
+file in realtime as it plays, instead of loading it all at once which uses far
+less memory in exchange for a small runtime CPU hit.
+
+Note that `pyfmodex` does this automatically through the convenience method
+:py:meth:`~pyfmodex.system.System.create_stream`.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/play_stream.py
    :linenos:
    :language: python

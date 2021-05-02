@@ -1,16 +1,17 @@
-"""Example code to show how to load data into memory and read it from there."""
+"""Example code to show how to simply load and play multiple sounds, the
+simplest usage of FMOD.
+"""
 
 import curses
-import mmap
 import sys
 import time
+
 from pathlib import Path
 
 import pyfmodex
 from pyfmodex.enums import RESULT
 from pyfmodex.exceptions import FmodError
 from pyfmodex.flags import MODE, TIMEUNIT
-from pyfmodex.structure_declarations import CREATESOUNDEXINFO
 
 MIN_FMOD_VERSION = 0x00020108
 
@@ -35,17 +36,10 @@ system.init()
 
 sounds = []
 for filename in soundnames:
-    with open(filename, mode="rb") as file_obj:
-        with mmap.mmap(
-            file_obj.fileno(), length=0, access=mmap.ACCESS_READ
-        ) as mmap_obj:
-            sounds.append(
-                system.create_sound(
-                    mmap_obj.read(),
-                    mode=MODE.OPENMEMORY | MODE.LOOP_OFF,
-                    exinfo=CREATESOUNDEXINFO(length=mmap_obj.size()),
-                )
-            )
+    # drumloop.wav has embedded loop points which automatically turns on
+    # looping so we turn it off (for all) here.
+    sounds.append(system.create_sound(str(filename), mode=MODE.LOOP_OFF))
+
 
 # Main loop
 def main(stdscr):
@@ -55,13 +49,13 @@ def main(stdscr):
 
     # Create small visual display
     stdscr.addstr(
-        "=========================\n"
-        "Load From Memory Example.\n"
-        "=========================\n"
+        "===================\n"
+        "Play Sound Example.\n"
+        "===================\n"
         "\n"
         f"Press 1 to play a mono sound ({soundnames[0].stem})\n"
         f"Press 2 to play a mono sound ({soundnames[1].stem})\n"
-        f"Press 3 to play a stero sound ({soundnames[2].stem})\n"
+        f"Press 3 to play a stereo sound ({soundnames[2].stem})\n"
         "Press q to quit"
     )
 

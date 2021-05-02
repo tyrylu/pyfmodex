@@ -148,7 +148,8 @@ def main(stdscr):
             ),
         )
         stdscr.addstr(
-            f"State = {state}\n" f"Buffer Percentage = {open_state.percent_buffered}%"
+            f"State = {state}\n"
+            f"Buffer Percentage = {open_state.percent_buffered}%"
         )
 
         show_tags(stdscr, sound, channel)
