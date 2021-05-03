@@ -235,3 +235,18 @@ Note that `pyfmodex` does this automatically through the convenience method
 .. literalinclude:: ../sample_code/play_stream.py
    :linenos:
    :language: python
+
+Record
+------
+
+This example shows how to record continuously and play back the same data while
+keeping a specified latency between the two. This is achieved by delaying the
+start of playback until the specified number of milliseconds has been recorded.
+At runtime the playback speed will be slightly altered to compensate for any
+drift in either play or record drivers.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/record.py
+   :linenos:
+   :language: python

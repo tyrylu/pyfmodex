@@ -672,7 +672,7 @@ class DSP(FmodObject):
     def release(self):
         """Frees the DSP object.
 
-        :raises FmodErr: when this DSP is not removed from the network with
+        :raises FmodError: when this DSP is not removed from the network with
             :py:meth:`~pyfmodex.channel_control.ChannelControl.remove_dsp`
             after being added with
             :py:meth:`~pyfmodex.channel_control.ChannelControl.add_dsp`.

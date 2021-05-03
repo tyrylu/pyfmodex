@@ -1910,11 +1910,9 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
             recording to the provided sound from the start again, after it has
             reached the end. If this is set to True the data will be
             continually be overwritten once every loop.
-
-        will raise an
-        :py:exc:`~pyfmodex.exceptions.FmodError` with code
-        :py:attr:`~pyfmodex.enums.RESULT.RECORD_DISCONNECTED` if the driver is
-        unplugged.
+        :raises FmodError: with code
+            :py:attr:`~pyfmodex.enums.RESULT.RECORD_DISCONNECTED` if the driver
+            is unplugged.
 
         Sound must be created as :py:attr:`~pyfmodex.flags.MODE.CREATESAMPLE`.
         Raw PCM data can be accessed with
