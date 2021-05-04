@@ -25,7 +25,7 @@ def _pp_driverinfo(driverinfo, indent=1):
         value = driverinfo[key]
         if isinstance(value, bytes):
             value = value.decode()
-        elif isinstance(value, pyfmodex.structure_declarations.GUID):
+        elif isinstance(value, pyfmodex.structures.GUID):
             continue
         elif key == "system_rate":
             value = f"{value} kHz"

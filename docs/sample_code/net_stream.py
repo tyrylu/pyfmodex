@@ -10,7 +10,7 @@ from pyfmodex.enums import OPENSTATE, RESULT, TAGDATATYPE, TAGTYPE
 from pyfmodex.exceptions import FmodError
 from pyfmodex.flags import MODE, TIMEUNIT
 from pyfmodex.structobject import Structobject
-from pyfmodex.structure_declarations import CREATESOUNDEXINFO
+from pyfmodex.structures import CREATESOUNDEXINFO
 
 URL = "https://focus.stream.publicradio.org/focus.mp3"
 

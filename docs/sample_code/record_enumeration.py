@@ -12,7 +12,7 @@ import pyfmodex
 from pyfmodex.enums import RESULT, SOUND_FORMAT
 from pyfmodex.exceptions import FmodError
 from pyfmodex.flags import DRIVER_STATE, MODE, SYSTEM_CALLBACK_TYPE
-from pyfmodex.structure_declarations import CREATESOUNDEXINFO
+from pyfmodex.structures import CREATESOUNDEXINFO
 
 MIN_FMOD_VERSION = 0x00020108
 MAX_DRIVERS_IN_VIEW = 3

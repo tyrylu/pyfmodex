@@ -12,8 +12,7 @@ from pyfmodex.enums import RESULT, SOUND_FORMAT
 from pyfmodex.exceptions import FmodError
 from pyfmodex.flags import MODE, TIMEUNIT
 from pyfmodex.reverb_presets import REVERB_PRESET
-from pyfmodex.structure_declarations import CREATESOUNDEXINFO
-from pyfmodex.structures import REVERB_PROPERTIES
+from pyfmodex.structures import CREATESOUNDEXINFO, REVERB_PROPERTIES
 
 MIN_FMOD_VERSION = 0x00020108
 
