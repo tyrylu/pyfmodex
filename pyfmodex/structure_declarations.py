@@ -290,10 +290,10 @@ class OUTPUT_STATE(Structure):
 class GUID(Structure):
     """Structure describing a globally unique identifier.
 
-    :ivar int Data1: Specifies the first 8 hexadecimal digits of the GUID.
-    :ivar int Data2: Specifies the first group of 4 hexadecimal digits.
-    :ivar int Data3: Specifies the second group of 4 hexadecimal digits.
-    :ivar list(str) Data4: Array of 8 bytes. The first 2 bytes contain the
+    :ivar int data1: Specifies the first 8 hexadecimal digits of the GUID.
+    :ivar int data2: Specifies the first group of 4 hexadecimal digits.
+    :ivar int data3: Specifies the second group of 4 hexadecimal digits.
+    :ivar bytes data4: Array of 8 bytes. The first 2 bytes contain the
         third group of 4 hexadecimal digits. The remaining 6 bytes contain the
         final 12 hexadecimal digits.
     """

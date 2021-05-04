@@ -236,6 +236,26 @@ Note that `pyfmodex` does this automatically through the convenience method
    :linenos:
    :language: python
 
+Record enumeration
+------------------
+
+This example shows how to enumerate the available recording drivers on a
+device. It demonstrates how the enumerated list changes as microphones are
+attached and detached. It also shows that you can record from multi mics at the
+same time (if your audio subsystem supports that).
+
+Please note: to minimize latency, care should be taken to control the number of
+samples between the record position and the play position. Check :ref:`record`
+for details on this process.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/record_enumeration.py
+   :linenos:
+   :language: python
+
+.. _record:
+
 Record
 ------
 
