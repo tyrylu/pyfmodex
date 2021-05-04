@@ -162,8 +162,9 @@ def main(stdscr):
                         numchannels=record_driver_info.speaker_mode_channels,
                         format=SOUND_FORMAT.PCM16.value,
                         defaultfrequency=record_driver_info.system_rate,
-                        length=record_driver_info.system_rate  # one second buffer; size here does
-                        * sizeof(c_short)  # not change the latency
+                        # one second buffer; size here does not change the latency
+                        length=record_driver_info.system_rate
+                        * sizeof(c_short)
                         * record_driver_info.speaker_mode_channels,
                     )
                     sound = system.create_sound(

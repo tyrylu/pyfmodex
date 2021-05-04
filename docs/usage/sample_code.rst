@@ -270,3 +270,18 @@ drift in either play or record drivers.
 .. literalinclude:: ../sample_code/record.py
    :linenos:
    :language: python
+
+User Created Sound
+------------------
+
+This example shows how create a sound with data filled by the user. It shows a
+user created static sample, followed by a user created stream. The former
+allocates all memory needed for the sound and is played back as a static
+sample, while the latter streams the data in chunks as it plays, using far less
+memory.
+
+(Adapted from sample code shipped with FMOD Engine.)
+
+.. literalinclude:: ../sample_code/user_created_sound.py
+   :linenos:
+   :language: python
