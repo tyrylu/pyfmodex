@@ -128,7 +128,7 @@ def main(stdscr):
         numchannels=numchannels,
         # Default playback rate of the sound
         defaultfrequency=defaultfrequency,
-        # Chunk size of stram update in samples. This will be the amount of
+        # Chunk size of stream update in samples. This will be the amount of
         # data passed to the user callback.
         decodebuffersize=44100,
         # Length of PCM data in bytes of whole sound (for sound.get_length)

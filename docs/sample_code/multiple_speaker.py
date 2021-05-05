@@ -43,7 +43,7 @@ sound_stereo = system.create_sound("media/stereo.ogg", mode=MODE.TWOD | MODE.LOO
 
 
 def is_choice_available(choice_idx):
-    """Is the given cofiguration choice available in the current speakermode?"""
+    """Is the given configuration choice available in the current speakermode?"""
     if speaker_mode in (SPEAKERMODE.MONO, SPEAKERMODE.STEREO):
         return choice_idx not in (2, 3, 4, 5, 6, 9)
     if speaker_mode == SPEAKERMODE.QUAD:
