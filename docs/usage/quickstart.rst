@@ -17,6 +17,9 @@ Try the following simple script:
    while channel.is_playing:
       pass
 
+   sound.release()
+   system.release()
+
 Of course, `somefile.mp3` must be replaced with something that actually exists. :-)
 
 Note that the while loop is necessary (at least in this simple example) to keep the main thread alive long enough.

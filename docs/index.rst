@@ -13,6 +13,7 @@ While the FMOD library is not Source, this Python binding is available under the
    :maxdepth: 1
    :caption: Contents:
 
+   about
    usage/installation
    usage/quickstart
    usage/sample_code
