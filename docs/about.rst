@@ -5,7 +5,7 @@ FMOD
 ----
 
 `FMOD <https://fmod.com/>`_ is a solution of adaptive audio, mostly used for games.
-The software suite consists out of two components:
+The software suite consists of two components:
 
 FMOD Studio:
    A GUI to build adaptive audio.
@@ -13,7 +13,7 @@ FMOD Studio:
 FMOD Engine:
    An API to play adaptive audio.
 
-The FMOD Engine API consists out of
+The FMOD Engine API consists of
 
 Studio API:
    Plays back content created within the FMOD Studio authoring tool. 
@@ -28,7 +28,7 @@ pyfmodex
 --------
 
 The FMOD APIs have officiale bindings for C, C++, C# and Javascript.
-`pyfmodex` provides an unofficial binding for Python.
+`pyfmodex` provides unofficial bindings for Python.
 
 Goal of the project
 ^^^^^^^^^^^^^^^^^^^
@@ -36,9 +36,12 @@ Goal of the project
 The goal of the `pyfmodex` project - ran by volunteers in the Open Source community - is to provide a first class package to allow users to interface with FMOD from within their Python programs without needing to worry about the internals.
 
 The intention is to
-   - support the last three stable minor releases of Python
-   - support Linux x86 and Windows platforms
-   - keep documentation and code quality consistently high
+
+ - support the last three stable minor releases of Python
+ - support Linux x86 and Windows platforms
+ - keep documentation and code quality consistently high
+
+Given the portable nature of both Python and the FMOD libraries, this ought to mean that `pyfmodex` works just fine on other platforms (Mac OS) or architectures (Raspberry Pi, ...).
 
 This concerted effort can be found on the `Github page <https://github.com/tyrylu/pyfmodex/>`_ of the project's founder Lukáš Tyrychtr.
 
