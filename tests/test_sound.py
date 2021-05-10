@@ -111,10 +111,10 @@ def test_get_syncpoint(sound):
 def test_get_sync_point_info(sound):
     
     point = sound.add_sync_point(42, TIMEUNIT.MS, "foobar")
-    info = sound.get_sync_point_info(point)
+    info = sound.get_sync_point_info(point, TIMEUNIT.MS)
     assert info.name == b"foobar"
-    #assert info.offset == 42
-    #assert info.offset_type is TIMEUNIT.MS
+    assert info.offset == 41
+    assert sound.get_sync_point_info(point, TIMEUNIT.PCM).offset == 1852
 
 def test_system_object(sound):
     assert sound.system_object

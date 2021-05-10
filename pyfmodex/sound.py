@@ -550,30 +550,28 @@ class Sound(FmodObject):
         self._call_fmod("FMOD_Sound_GetSyncPoint", index, byref(syncpoint))
         return syncpoint.value
 
-    def get_sync_point_info(self, point):
+    def get_sync_point_info(self, point, offset_type):
         """Retrieve information on an embedded sync point.
 
         :param point: Sync point.
+        :param offset_type: The unit in which the point's offset should be expressed.
         :rtype: Structobject with the following members:
 
             - name: Name of the syncpoint (str)
-            - offset: Offset of the syncpoint (int)
-            - offset_type: Format of offset
-              (:py:class:`~pyfmodex.flags.TIMEUNIT`)
+            - offset: Offset of the syncpoint, expressed in the given offset_type (int)
         """
         name = create_string_buffer(256)
         offset = c_uint()
-        offsettype = c_int()
         self._call_fmod(
             "FMOD_Sound_GetSyncPointInfo",
             c_void_p(point),
             byref(name),
             256,
             byref(offset),
-            byref(offsettype),
+            offset_type.value,
         )
         return so(
-            name=name.value, offset=offset.value, offset_type=TIMEUNIT(offsettype.value)
+            name=name.value, offset=offset.value
         )
 
     @property
