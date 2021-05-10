@@ -20,7 +20,7 @@ class DSP(FmodObject):
     stream.
     """
 
-    def add_input(self, input_dsp, connection_type):
+    def add_input(self, input_dsp, connection_type=None):
         """Add a DSP unit as an input to this object.
 
         When a DSP has multiple inputs the signals are automatically mixed
@@ -37,9 +37,15 @@ class DSP(FmodObject):
         """
         check_type(input_dsp, DSP)
         connptr = c_void_p()
-        self._call_fmod(
-            "FMOD_DSP_AddInput", input_dsp._ptr, byref(connptr), connection_type.value
-        )
+        if connection_type:
+            self._call_fmod(
+                "FMOD_DSP_AddInput",
+                input_dsp._ptr,
+                byref(connptr),
+                connection_type.value,
+            )
+        else:
+            self._call_fmod("FMOD_DSP_AddInput", input_dsp._ptr, byref(connptr))
         return get_class("DSP_Connection")(connptr)
 
     def disconnect_all(self, inputs=False, outputs=False):
@@ -123,7 +129,7 @@ class DSP(FmodObject):
         mix to that channel count before processing the DSP read/process
         callback.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             - channel_mask: (:py:class:`~pyfmodex.flags.CHANNELMASK`)
               Deprecated
@@ -193,7 +199,7 @@ class DSP(FmodObject):
     def info(self):
         """Information about this DSP unit.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             - name: (str) The name of this unit.
             - version: (int) Version number of this unit, usually formated as
@@ -220,7 +226,7 @@ class DSP(FmodObject):
             byref(cfgh),
         )
         return so(
-            name=name.value,
+            name=name.value.decode(),
             version=ver.value,
             channels=chans.value,
             config_width=cfgw.value,
@@ -407,7 +413,7 @@ class DSP(FmodObject):
         """The output format this DSP will produce when processing based on the
         input specified.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             - in_mask: (:py:class:`~pyfmodex.flags.CHANNELMASK`) Deprecated.
             - out_mask: (:py:class:`~pyfmodex.flags.CHANNELMASK`) Deprecated.
@@ -527,14 +533,13 @@ class DSP(FmodObject):
         """
         self._call_fmod("FMOD_DSP_SetParameterBool", index, val)
 
-    def set_parameter_data(self, index, data, length):
+    def set_parameter_data(self, index, data):
         """Set a binary data parameter by index.
 
         :param int index: Parameter index.
-        :param data data: Parameter binary data.
-        :param int length: Length of data.
+        :param PyCArrayType data: Parameter binary data.
         """
-        self._call_fmod("FMOD_DSP_SetParameterData", index, data, length)
+        self._call_fmod("FMOD_DSP_SetParameterData", index, byref(data), len(data))
 
     def set_parameter_float(self, index, val):
         """Set a floating point parameter by index.
@@ -577,7 +582,7 @@ class DSP(FmodObject):
 
     @property
     def _wet_dry_mix(self):
-        """The scale of the wet and dry signal components.
+        """The scale of the wet and dry signal members.
 
         :type: three-tuple of floats with:
 
@@ -667,7 +672,7 @@ class DSP(FmodObject):
     def release(self):
         """Frees the DSP object.
 
-        :raises FmodErr: when this DSP is not removed from the network with
+        :raises FmodError: when this DSP is not removed from the network with
             :py:meth:`~pyfmodex.channel_control.ChannelControl.remove_dsp`
             after being added with
             :py:meth:`~pyfmodex.channel_control.ChannelControl.add_dsp`.

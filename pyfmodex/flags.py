@@ -314,7 +314,7 @@ class MODE(Flags):
     #: to specify length. If used with :py:attr:`CREATESAMPLE` or
     #: :py:attr:`CREATECOMPRESSEDSAMPLE`, FMOD duplicates the memory into its
     #: own buffers. Your own buffer can be freed after open, unless you are
-    #: using :py:attr:`NONBLOCKING` then wait until the Sound is in the
+    #: using :py:attr:`NONBLOCKING`. Then, wait until the Sound is in the
     #: :py:attr:`OPENSTATE_READY` state. If used with :py:attr:`CREATESTREAM`,
     #: FMOD will stream out of the buffer whose pointer you passed in. In this
     #: case, your own buffer should not be freed until you have finished with
@@ -490,7 +490,7 @@ class TIMEUNIT(Flags):
     #: :py:meth:`~pyfmodex.channel.Channel.get_position`.
     RAWBYTES = 0x00000008
 
-    #: Fractions of one  PCM sample. Unsigned int range 0 to 0xFFFFFFFF. Used for
+    #: Fractions of one PCM sample. Unsigned int range 0 to 0xFFFFFFFF. Used for
     #: sub-sample granularity for :py:class:`~pyfmodex.dsp.DSP` purposes.
     PCMFRACTION = 0x00000010
 

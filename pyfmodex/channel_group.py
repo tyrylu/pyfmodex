@@ -17,7 +17,7 @@ class ChannelGroup(ChannelControl):
     :py:class:`~pyfmodex.channel_group.ChannelGroup` objects.
     """
 
-    def add_group(self, group, propagate_dsp_clock):
+    def add_group(self, group, propagate_dsp_clock=True):
         """Add a ChannelGroup as an input to this group.
 
         :param ChannelGroup group: Group to add.

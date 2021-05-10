@@ -207,12 +207,14 @@ class Sound(FmodObject):
     def format(self):
         """Format information about the sound.
 
-        :sound_type: Structobject with the following components:
+        :sound_type: Structobject with the following members:
 
-            - Type of sound (:py:class:`~pyfmodex.enums.SOUND_TYPE`)
-            - Format of the sound (:py:class:`~pyfmodex.enums.SOUND_FORMAT`)
-            - Number of channels (int)
-            - Number of bits per sample, corresponding to sound_format (int)
+            - type: Type of sound (:py:class:`~pyfmodex.enums.SOUND_TYPE`).
+            - format: Format of the sound
+              (:py:class:`~pyfmodex.enums.SOUND_FORMAT`).
+            - channels: Number of channels (int).
+            - bits: Number of bits per sample, corresponding to sound_format
+              (int).
         """
         sound_type = c_int()
         sound_format = c_int()
@@ -239,7 +241,7 @@ class Sound(FmodObject):
         not support :py:attr:`~pyfmodex.flags.TIMEUNIT.MODORDER`.
 
         A length of 0xFFFFFFFF means it is of unlimited length, such as an
-        internet radio stream or MOD/S3M/XM/IT file which may loop forever.
+        Internet radio stream or MOD/S3M/XM/IT file which may loop forever.
 
         Note: Using a VBR (Variable Bit Rate) source that does not have
         metadata containing its accurate length (such as un-tagged MP3 or
@@ -333,6 +335,8 @@ class Sound(FmodObject):
     def mode(self):
         """The mode of a sound.
 
+        :type: MODE
+
         The mode is dependent on  the mode set by
         :py:meth:`~pyfmodex.system.create_sound`,
         :py:meth:`~pyfmodex.system.create_stream` or :py:attr:`mode`.
@@ -347,8 +351,6 @@ class Sound(FmodObject):
 
         Changing mode on an already buffered stream may not produced desired
         output.
-
-        :type: MODE
         """
         mode = c_int()
         self._call_fmod("FMOD_Sound_GetMode", byref(mode))
@@ -451,7 +453,7 @@ class Sound(FmodObject):
         Note: Always check 'open_state' to determine the state of the sound. Do
         not assume the sound has finished loading.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             state (:py:class:`~pyfmodex.enums.OPENSTATE`)
               Open state of a sound.
@@ -552,7 +554,7 @@ class Sound(FmodObject):
         """Retrieve information on an embedded sync point.
 
         :param point: Sync point.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             - name: Name of the syncpoint (str)
             - offset: Offset of the syncpoint (int)
@@ -592,6 +594,8 @@ class Sound(FmodObject):
         :param ChannelGroup channel_group: Group to output to instead of the
             master.
         :param bool paused: Whether to start in the paused state.
+        :returns: Newly playing channel.
+        :rtype: Channel
         """
         return self.system_object.play_sound(self, channel_group, paused)
 
@@ -758,8 +762,7 @@ class Sound(FmodObject):
         self._call_fmod("FMOD_Sound_SetMusicSpeed", c_float(speed))
 
     def read_data(self, length):
-        """Read data from an opened sound to a specified buffer, using FMOD's
-        internal codecs.
+        """Read data from an opened sound, using FMOD's internal codecs.
 
         This can be used for decoding data offline in small pieces (or big
         pieces), rather than playing and capturing it, or loading the whole
@@ -809,12 +812,12 @@ class Sound(FmodObject):
 
         :param int length: Amount of data to read.
         :returns: The decoded data and the actual amount of data read.
-        :rtype: two-tuple with str and int
+        :rtype: two-tuple with bytes and int
         """
         buf = create_string_buffer(length)
         actual = c_uint()
         self._call_fmod("FMOD_Sound_ReadData", buf, length, byref(actual))
-        return buf.value, actual.value
+        return buf.raw, actual.value
 
     def seek_data(self, offset):
         """Seek a sound for use with data reading, using FMOD's internal
@@ -828,9 +831,9 @@ class Sound(FmodObject):
         lead to de-synchronization of position information for the stream and
         audible playback.
 
-        A stream can be reset its stream buffer and position synchronization by
-        calling :py:meth:`~pyfmodex.channel.Channel.set_position`. This causes
-        reset and flush of the stream buffer.
+        A stream can have its stream buffer and position synchronization reset
+        by calling :py:meth:`~pyfmodex.channel.Channel.set_position`. This
+        causes a reset and flush of the stream buffer.
 
         :param int offset: Seek offset.
         """

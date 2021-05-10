@@ -277,7 +277,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
         This allows users to capture data as FMOD reads it, which may be useful
         for extracting the raw data that FMOD reads for hard to support sources
-        (for example internet streams).
+        (for example Internet streams).
 
         To detach, pass None as the callback parameters.
 
@@ -555,7 +555,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         formats and compressed formats using
         :py:attr:`~pyfmodex.flags.MODE.CREATECOMPRESSEDSAMPLE` are supported.
 
-        :param str name_of_addr: Name of the file or URL to open or a pointer
+        :param str name_or_addr: Name of the file or URL to open or a pointer
             to a preloaded sound memory block if
             :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY` /
             :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY_POINT` is used.
@@ -610,15 +610,15 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def create_stream(self, name_or_addr, mode=MODE.THREED, exinfo=None):
         """Opens a sound for streaming.
 
-        This is a convenience method for :py:meth:`create_sound` with the
-        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM` flag added.
+        This is a convenience method for :py:meth:`create_sound` adding the
+        :py:attr:`~pyfmodex.flags.MODE.CREATESTREAM` flag to the mode.
 
         A stream only has one decode buffer and file handle, and therefore can
         only be played once. It cannot play multiple times at once because it
         cannot share a stream buffer if the stream is playing at different
         positions. Open multiple streams to have them play concurrently.
 
-        :param str name_of_addr: Name of the file or URL to open or a pointer
+        :param str name_or_addr: Name of the file or URL to open or a pointer
             to a preloaded sound memory block if
             :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY` /
             :py:attr:`~pyfmodex.flags.MODE.OPENMEMORY_POINT` is used.
@@ -678,7 +678,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         and not overall usage. The values are smoothed to provide a more stable
         readout.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             - :py:class:`~pyfmodex.dsp.DSP` mixing engine CPU usage (float)
             - Streaming engine CPU usage (float)
@@ -731,7 +731,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def channels_playing(self):
         """The number of currently playing channels.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             channels (int)
               Number of playing channels (both real and virtual).
@@ -789,7 +789,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         1024 / 48000 * 1000 = 21.33ms. This means the mixer updates every
         21.33ms.
 
-        To get the total buffer size multiply the bufferlength by the
+        To get the total buffer size, multiply the bufferlength by the
         numbuffers value. By default this would be 41024 = 4096 samples, or
         421.33ms = 85.33ms. This would generally be the total latency of the
         software mixer, but in reality due to one of the buffers being written
@@ -811,13 +811,14 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def get_dsp_info_by_plugin(self, handle):
         """The description structure for a pre-existing DSP plugin.
 
-        :param handle: Handle to a pre-existing DSP plugin, loaded by
+        :param handle: Handle to a pre-existing DSP plugin
+            :py:meth:`get_plugin_handle`, or a new one loaded by
             :py:meth:`load_plugin`.
         :returns: Description structure for the DSP.
         :rtype: DSP_DESCRIPTION
         """
         desc = DSP_DESCRIPTION()
-        self._call_fmod("FMOD_System_GetDSPInfoByPlugin", byref(desc))
+        self._call_fmod("FMOD_System_GetDSPInfoByPlugin", handle, byref(desc))
         return desc
 
     def get_default_mix_matrix(
@@ -891,7 +892,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         by its index, and specific to the selected output mode.
 
         :param int aaidee: Index of the sound driver device.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             name (str)
               Name of the device.
@@ -940,7 +941,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
         The values are running totals that never reset.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             sample_bytes_read (int)
               Total bytes read from file for loading sample data.
@@ -977,7 +978,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
         :param list listener: The listener position.
         :param list source: The source position.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             direct
               Direct occlusion value. 0 = not occluded at all / full volume, 1
@@ -1245,6 +1246,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         :param int index: Index in the list of plugins for the given
             `plugintype`.
         :returns: Handle used to represent the plugin.
+        :rtype: int
 
         All plugins whether built in or loaded can be enumerated using this and
         :py:meth:`get_num_plugins`.
@@ -1261,9 +1263,9 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         """Retrieve information for the selected plugin.
 
         :param int handle: Handle to an already loaded plugin.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
-            plugin_type (PLUGINTYPE)
+            type (PLUGINTYPE)
               Plugin type.
 
             name (str)
@@ -1289,7 +1291,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         by its index, and specific to the output mode.
 
         :param int index: Index of the recording device.
-        :rtype: Structobject with the following components:
+        :rtype: Structobject with the following members:
 
             name (str)
               Name of the device.
@@ -1343,7 +1345,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         this to enumerate all recording devices possible so that the user can
         select one.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             drivers (int)
               Number of recording drivers available for this output mode.
@@ -1440,16 +1442,17 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def software_format(self):
         """The output format for the software mixer.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             sample_rate (int)
               Sample rate of the mixer.
 
-            speaker_mode (SPEAKERMODE)
-              Speaker setup of the mixer.
+            speaker_mode (int)
+            Speaker setup of the mixer. Can be interpreted as
+            :py:attr:`~pyfmodex.enums.SPEAKERMODE`.
 
-            raw_speakers (SPEAKERMODE_RAW)
-              Number of speakers for
+            raw_speakers (int)
+              Number of speakers when using speaker_mode
               :py:attr:`~pyfmodex.enums.SPEAKERMODE.RAW`.
 
         If loading Studio banks, this must be called with `speaker_mode`
@@ -1486,7 +1489,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         self._call_fmod(
             "FMOD_System_SetSoftwareFormat",
             soft_format.sample_rate,
-            soft_format.speaker_mode,
+            soft_format.speaker_mode.value,
             soft_format.raw_speakers,
         )
 
@@ -1508,7 +1511,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         speaker mode.
 
         :param SPEAKER speaker: Speaker.
-        :returns: Structobject with the following components:
+        :returns: Structobject with the following members:
 
             x (float)
               2D X position relative to the listener. -1 = left, 0 = middle, +1
@@ -1585,7 +1588,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
     def stream_buffer_size(self):
         """The default file buffer size for newly opened streams.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             size (int)
               Buffer size.
@@ -1856,6 +1859,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
         :param Sound snd: Sound to play.
         :param ChannelGroup channel_group: Group to output to instead of the
+            master.
         :param bool paused: Whether to start in the paused state. Start a
             Channel paused to allow altering attributes without it being
             audible, then follow it up with setting
@@ -1906,11 +1910,9 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
             recording to the provided sound from the start again, after it has
             reached the end. If this is set to True the data will be
             continually be overwritten once every loop.
-
-        will raise an
-        :py:exc:`~pyfmodex.exceptions.FmodError` with code
-        :py:attr:`~pyfmodex.enums.RESULT.RECORD_DISCONNECTED` if the driver is
-        unplugged.
+        :raises FmodError: with code
+            :py:attr:`~pyfmodex.enums.RESULT.RECORD_DISCONNECTED` if the driver
+            is unplugged.
 
         Sound must be created as :py:attr:`~pyfmodex.flags.MODE.CREATESAMPLE`.
         Raw PCM data can be accessed with
@@ -2185,7 +2187,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         specified 3D sound listener.
 
         :param int aaidee: Listener ID in a multi-listener environment. Specify
-            0 if there is only 1 listener.
+            0 if there is only one listener.
         :rtype: Listener
         """
         return Listener(self._ptr, aaidee)

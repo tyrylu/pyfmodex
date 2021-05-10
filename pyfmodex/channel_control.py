@@ -166,7 +166,7 @@ class ChannelControl(FmodObject):
         filter, based on 3D distance. This function allows the distance filter
         effect to be set manually, or to be set back to 'automatic' mode.
 
-        :type: Structobject with the following components:
+        :type: Structobject with the following members:
 
             - custom: Boolean indicating wheter to override automatic distance
               filtering and use custom_level instead
@@ -404,7 +404,7 @@ class ChannelControl(FmodObject):
     def dsp_clock(self):
         """The DSP clock values at this point in time.
 
-        :returns: Structobject with the following components:
+        :returns: Structobject with the following members:
 
             - dsp_clock: DSP clock value for the tail DSP node (int).
             - parent_clock: DSP clock value for the tail DSP node of the parent
@@ -442,18 +442,19 @@ class ChannelControl(FmodObject):
         """A sample accurate start (and/or stop) time relative to the parent
         ChannelGroup DSP clock.
 
-        :returns: Structobject with the following components:
+        :returns: Structobject with the following members:
 
             - dspclock_start: DSP clock (int) of the parent ChannelGroup to
               audibly start playing sound at.
             - dspclock_end: DSP clock (int) of the parent ChannelGroup to
               audibly stop playing sound at.
             - stop_channels:
-                - True: When dspclock_end is reached, behaves like
-                  :py:meth:`stop` has been called.
-                - False: When dspclock_end is reached, behaves like
-                  :py:attr:`paused` is True, a subsequent dspclock_start allows
-                  it to resume.
+
+              - True: When dspclock_end is reached, behaves like
+                :py:meth:`stop` has been called.
+              - False: When dspclock_end is reached, behaves like
+                :py:attr:`paused` is True, a subsequent dspclock_start allows
+                it to resume.
         :rtype: Structobject
         """
         dspclock_start = c_ulonglong()
@@ -922,7 +923,7 @@ class ChannelControl(FmodObject):
         :py:meth:`set_mix_levels_input` and :py:meth:`set_mix_matrix`.
 
         The output channel count will always match the System speaker mode set
-        via :py:attr:`pyfmodex.system.System.software_format`.
+        via :py:attr:`~pyfmodex.system.System.software_format`.
 
         If the System is initialized with
         :py:class:`~pyfmodex.enums.SPEAKERMODE` RAW calling this function will

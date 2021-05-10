@@ -1367,7 +1367,7 @@ class DSP_TYPE(IntEnum):
     PAN = 27  #: Pans the signal, possibly upmixing or downmixing as well.
     THREE_EQ = 28  #: Three-band equalizer.
 
-    #: Analyzes the signal and provides spectrum information back
+    #: Analyzes the signal and provides spectrum information back.
     FFT = 29
 
     LOUDNESS_METER = 30  #: Analyzes the loudness and true peak of the signal.
@@ -1512,7 +1512,7 @@ class OUTPUTTYPE(Enum):
     #: Win - Low latency ASIO 2.0.
     ASIO = 7
 
-    #: Linux - Pulse Audio. (Default on Linux if available)
+    #: Linux - PulseAudio. (Default on Linux if available)
     PULSEAUDIO = 8
 
     #: Linux - Advanced Linux Sound Architecture. (Default on Linux if
@@ -2128,7 +2128,7 @@ class TAGTYPE(Enum):
     #: SHOUTcast Internet stream metadata which can be issued during playback.
     SHOUTCAST = 4
 
-    #: Icecast internet stream metadata which can be issued during playback.
+    #: Icecast Internet stream metadata which can be issued during playback.
     ICECAST = 5
 
     #: Advanced Systems Format metadata typically associated with Windows Media
@@ -2151,7 +2151,7 @@ class TAGTYPE(Enum):
     PLAYLIST = 8
 
     #: Tag type used by FMOD's MIDI, MOD, S3M, XM, IT format support, and
-    #: netstreams to notify of internet stream events like a sample rate
+    #: netstreams to notify of Internet stream events like a sample rate
     #: change.
     FMOD = 9
 
