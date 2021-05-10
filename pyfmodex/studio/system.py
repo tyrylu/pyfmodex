@@ -102,7 +102,7 @@ class StudioSystem(StudioObject):
         :param Flags flags: Core system initialization flags.
         :param extra: Driver specific data to be passed to the output plugin.
         """
-        self._call("Initialize", max_channels, int(studio_flags), int(flags), extra)
+        self._call("Initialize", max_channels, studio_flags.value, flags.value, extra)
 
     def release(self):
         """Shut down and free the Studio System object.
@@ -150,7 +150,7 @@ class StudioSystem(StudioObject):
         """
         filename = prepare_str(filename)
         bank_ptr = c_void_p()
-        self._call("LoadBankFile", filename, int(flags), byref(bank_ptr))
+        self._call("LoadBankFile", filename, flags.value, byref(bank_ptr))
         return Bank(bank_ptr)
 
     def update(self):

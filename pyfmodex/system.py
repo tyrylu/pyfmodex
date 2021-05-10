@@ -571,7 +571,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
             exinfo = byref(exinfo)
         ckresult(
             _dll.FMOD_System_CreateSound(
-                self._ptr, name_or_addr, int(mode), exinfo, byref(snd_ptr)
+                self._ptr, name_or_addr, mode.value, exinfo, byref(snd_ptr)
             )
         )
         return get_class("Sound")(snd_ptr)
@@ -1651,7 +1651,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
 
     @stream_buffer_size.setter
     def stream_buffer_size(self, size):
-        self._call_fmod("FMOD_System_SetStreamBufferSize", size.size, int(size.unit))
+        self._call_fmod("FMOD_System_SetStreamBufferSize", size.size, size.unit.value)
 
     def init(self, maxchannels=1000, flags=INIT_FLAGS.NORMAL, extra=None):
         """Initialize the system object and prepare FMOD for playback.
@@ -1683,7 +1683,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         after :py:meth:`init` on Android, GameCore, UWP, Windows and Mac. Other
         platforms can only call this before :py:meth:`init`.
         """
-        ckresult(_dll.FMOD_System_Init(self._ptr, maxchannels, int(flags), extra))
+        ckresult(_dll.FMOD_System_Init(self._ptr, maxchannels, flags.value, extra))
 
     def is_recording(self, aaidee):
         """Retrieve the state of the FMOD recording API, ie if it is currently
@@ -2031,7 +2031,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         """
         callback = SYSTEM_CALLBACK(callback or 0)
         self._system_callbacks[callback_mask] = callback
-        ckresult(_dll.FMOD_System_SetCallback(self._ptr, callback, int(callback_mask)))
+        ckresult(_dll.FMOD_System_SetCallback(self._ptr, callback, callback_mask.value))
 
     def set_file_system(  # pylint: disable=too-many-arguments
         self,

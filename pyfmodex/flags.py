@@ -4,10 +4,10 @@
 # Just staying close to the original names here.
 
 
-from flags import Flags
+from enum import Flag
 
 
-class CHANNELMASK(Flags):
+class CHANNELMASK(Flag):
     """Flags that describe the speakers present in a given signal."""
 
     FRONT_LEFT = 0x00000001  #: Front left channel.
@@ -74,12 +74,12 @@ class CHANNELMASK(Flags):
     )
 
 
-class DEBUG_FLAGS(Flags):
+class DEBUG_FLAGS(Flag):
     """Specify the requested information to be output when using the logging
     version of FMOD.
     """
 
-    __no_flags_name__ = "LEVEL_NONE"  #: Disable all messages.
+    LEVEL_NONE = 0x0 #: Disable all messages.
     LEVEL_ERROR = 0x00000001  #: Enable only error messages.
     LEVEL_WARNING = 0x00000002  #: Enable warning and error messages.
 
@@ -114,7 +114,7 @@ class DEBUG_FLAGS(Flags):
     DISPLAY_THREAD = 0x00040000
 
 
-class DRIVER_STATE(Flags):
+class DRIVER_STATE(Flag):
     """Flags that provide additional information about a particular driver."""
 
     #: Device is currently plugged in.
@@ -124,10 +124,10 @@ class DRIVER_STATE(Flags):
     DEFAULT = 0x00000002
 
 
-class INIT_FLAGS(Flags):
+class INIT_FLAGS(Flag):
     """Configuration flags used when initializing the System object."""
 
-    __no_flags_name__ = "NORMAL"  #: Initialize normally.
+    NORMAL = 0x0 #: Initialize normally.
 
     #: No stream thread is created internally. Streams are driven from
     #: :py:meth:`~pyfmodex.system.System.update`. Mainly used with non-realtime
@@ -194,12 +194,12 @@ class INIT_FLAGS(Flags):
     MEMORY_TRACKING = 0x00400000
 
 
-class MEMORY_TYPE(Flags):
+class MEMORY_TYPE(Flag):
     """Bitfields for memory allocation type being passed into FMOD memory
     callbacks.
     """
 
-    __no_flags_name__ = "NORMAL"  #: Standard memory.
+    NORMAL = 0x0 #: Standard memory.
 
     #: Stream file buffer, size controllable with
     #: :py:attr:`~pyfmodex.system.System.stream_buffer_size`.
@@ -226,7 +226,7 @@ class MEMORY_TYPE(Flags):
     ALL = 0xFFFFFFFF
 
 
-class MODE(Flags):
+class MODE(Flag):
     """Sound description bitfields, bitwise OR them together for loading and
     describing sounds.
 
@@ -259,7 +259,7 @@ class MODE(Flags):
     #: Default for all modes listed below: :py:attr:`LOOP_OFF`,
     #: :py:attr:`TWOD`, :py:attr:`THREED_WORLDRELATIVE`,
     #: :py:attr:`THREED_INVERSEROLLOFF`.
-    __no_flags_name__ = "DEFAULT"
+    DEFAULT = 0x0
 
     #: For non looping sounds. (DEFAULT). Overrides :py:attr:`LOOP_NORMAL` /
     #: :py:attr:`LOOP_BIDI`.
@@ -411,7 +411,7 @@ class MODE(Flags):
     VIRTUAL_PLAYFROMSTART = 0x80000000
 
 
-class SYSTEM_CALLBACK_TYPE(Flags):
+class SYSTEM_CALLBACK_TYPE(Flag):
     """Types of callbacks called by the System."""
 
     #: Called from :py:meth:`~pyfmodex.system.System.update` when the
@@ -473,7 +473,7 @@ class SYSTEM_CALLBACK_TYPE(Flags):
     ALL = 0xFFFFFFFF
 
 
-class TIMEUNIT(Flags):
+class TIMEUNIT(Flag):
     """Time types used for position or length."""
 
     MS = 0x00000001  #: Milliseconds.

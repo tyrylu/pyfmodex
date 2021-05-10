@@ -8,7 +8,7 @@ To install, first make sure that you have the FMOD Engine library for you platfo
 On Linux, libraries are searched for in `LD_LIBRARY_PATH`.
 To download the FMOD Engine library, visit http://www.fmod.org/download. The library is free to download, but requires a free account to be made first.
 
-Then, install pyfmodex via `pip`, `easy_install` or the `setup.py` way.
+Then, install pyfmodex via `pip`, `easy_install` or the `setup.py` way. Note that the minimum supported Python version is Python 3.6.
 
 Usage
 -----

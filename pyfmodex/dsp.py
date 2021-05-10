@@ -156,7 +156,7 @@ class DSP(FmodObject):
     def channel_format(self, channel_format):
         self._call_fmod(
             "FMOD_DSP_SetChannelFormat",
-            int(channel_format.channel_mask),
+            channel_format.channel_mask.value,
             channel_format.num_channels,
             channel_format.source_speaker_mode.value,
         )

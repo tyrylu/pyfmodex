@@ -33,7 +33,7 @@ class Sound(FmodObject):
         name = prepare_str(name, "ascii")
         s_ptr = c_void_p()
         self._call_fmod(
-            "FMOD_Sound_AddSyncPoint", offset, int(offset_type), name, byref(s_ptr)
+            "FMOD_Sound_AddSyncPoint", offset, offset_type.value, name, byref(s_ptr)
         )
         return s_ptr.value
 
@@ -257,7 +257,7 @@ class Sound(FmodObject):
         :rtype: int
         """
         length = c_uint()
-        self._call_fmod("FMOD_Sound_GetLength", byref(length), int(ltype))
+        self._call_fmod("FMOD_Sound_GetLength", byref(length), ltype.value)
         return length.value
 
     @property
@@ -299,9 +299,9 @@ class Sound(FmodObject):
         self._call_fmod(
             "FMOD_Sound_GetLoopPoints",
             byref(start),
-            int(start_unit),
+            start_unit.value,
             byref(end),
-            int(end_unit),
+            end_unit.value,
         )
         return start.value, end.value
 
@@ -326,9 +326,9 @@ class Sound(FmodObject):
         self._call_fmod(
             "FMOD_Sound_SetLoopPoints",
             loopstart,
-            int(start_unit),
+            start_unit.value,
             loopend,
-            int(end_unit),
+            end_unit.value,
         )
 
     @property
@@ -358,7 +358,7 @@ class Sound(FmodObject):
 
     @mode.setter
     def mode(self, mode):
-        self._call_fmod("FMOD_Sound_SetMode", int(mode))
+        self._call_fmod("FMOD_Sound_SetMode", mode.value)
 
     def get_music_channel_volume(self, channel):
         """Retrieve the volume of a MOD/S3M/XM/IT/MIDI music channel volume.

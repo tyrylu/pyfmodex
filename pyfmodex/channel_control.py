@@ -42,7 +42,7 @@ class ChannelControl(FmodObject):
         """
         check_type(dsp, get_class("DSP"))
         c_ptr = c_void_p()
-        self._call_specific("AddDSP", int(index), dsp._ptr, byref(c_ptr))
+        self._call_specific("AddDSP", index.value, dsp._ptr, byref(c_ptr))
         return get_class("DSP_Connection")(c_ptr)
 
     def add_fade_point(self, dsp_clock, volume):
@@ -632,7 +632,7 @@ class ChannelControl(FmodObject):
 
     @mode.setter
     def mode(self, mode):
-        self._call_specific("SetMode", int(mode))
+        self._call_specific("SetMode", mode.value)
 
     @property
     def mute(self):
