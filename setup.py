@@ -14,4 +14,4 @@ clfs.append("Operating System :: MacOS :: MacOS X")
 clfs.append("Operating System :: POSIX :: Linux")
 clfs.append("Programming Language :: Python :: 3")
 
-setup(name="pyfmodex", version="0.7.0", author="Lukas Tyrychtr", author_email="lukastyrychtr@gmail.com", url="https://www.github.com/tyrylu/pyfmodex", packages=["pyfmodex", "pyfmodex.studio"], long_description=open("readme.md", "r").read(), long_description_content_type="text/markdown", description="Python bindings to the Fmod Ex library.", license="MIT", classifiers=clfs, install_requires=["py-flags"])
+setup(name="pyfmodex", version="0.7.0", author="Lukas Tyrychtr", author_email="lukastyrychtr@gmail.com", url="https://www.github.com/tyrylu/pyfmodex", packages=["pyfmodex", "pyfmodex.studio"], long_description=open("readme.md", "r").read(), long_description_content_type="text/markdown", description="Python bindings to the Fmod Ex library.", license="MIT", classifiers=clfs)
