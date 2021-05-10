@@ -1,6 +1,6 @@
 import pytest
-from pyfmodex.enums import SOUND_TYPE, SOUND_FORMAT, OPENSTATE, RESULT
-from pyfmodex.flags import TIMEUNIT, MODE
+from pyfmodex.enums import SOUND_TYPE, SOUND_FORMAT, OPENSTATE, RESULT, TIMEUNIT
+from pyfmodex.flags import MODE
 from pyfmodex.exceptions import FmodError
 
 def test_add_delete_syncpoint(sound):

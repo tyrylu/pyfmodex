@@ -8,8 +8,8 @@
 from ctypes import *
 
 from .cone_settings import ConeSettings
-from .enums import OPENSTATE, SOUND_FORMAT, SOUND_TYPE
-from .flags import MODE, TIMEUNIT
+from .enums import OPENSTATE, SOUND_FORMAT, SOUND_TYPE, TIMEUNIT
+from .flags import MODE
 from .fmodobject import FmodObject, _dll
 from .globalvars import get_class
 from .structobject import Structobject as so

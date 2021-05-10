@@ -1,8 +1,8 @@
 import os
 import unittest.mock as mock
 import pytest
-from pyfmodex.enums import DSP_TYPE, SPEAKERMODE, PLUGINTYPE, OUTPUTTYPE, SPEAKER, SOUND_FORMAT
-from pyfmodex.flags import TIMEUNIT, SYSTEM_CALLBACK_TYPE, MODE
+from pyfmodex.enums import DSP_TYPE, SPEAKERMODE, PLUGINTYPE, OUTPUTTYPE, SPEAKER, SOUND_FORMAT, TIMEUNIT
+from pyfmodex.flags import SYSTEM_CALLBACK_TYPE, MODE
 from pyfmodex import FmodError, System
 from pyfmodex.structures import CREATESOUNDEXINFO
 

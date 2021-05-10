@@ -1,7 +1,7 @@
 import pytest
 from unittest import mock
-from pyfmodex.enums import DSP_TYPE, CHANNELCONTROL_DSP_INDEX
-from pyfmodex.flags import TIMEUNIT, MODE
+from pyfmodex.enums import DSP_TYPE, CHANNELCONTROL_DSP_INDEX, TIMEUNIT
+from pyfmodex.flags import MODE
 
 def test_add_dsp(echo, channel_group):
     channel_group.add_dsp(0, echo)

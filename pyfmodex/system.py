@@ -3,8 +3,8 @@
 from ctypes import *
 
 from .callback_prototypes import ROLLOFF_CALLBACK, SYSTEM_CALLBACK
-from .enums import OUTPUTTYPE, PLUGINTYPE, SPEAKERMODE
-from .flags import INIT_FLAGS, MODE, TIMEUNIT
+from .enums import OUTPUTTYPE, PLUGINTYPE, SPEAKERMODE, TIMEUNIT
+from .flags import INIT_FLAGS, MODE
 from .fmodobject import FmodObject
 from .globalvars import DLL as _dll
 from .globalvars import get_class
