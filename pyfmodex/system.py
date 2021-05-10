@@ -3,7 +3,7 @@
 from ctypes import *
 
 from .callback_prototypes import ROLLOFF_CALLBACK, SYSTEM_CALLBACK
-from .enums import OUTPUTTYPE, PLUGINTYPE
+from .enums import OUTPUTTYPE, PLUGINTYPE, SPEAKERMODE
 from .flags import INIT_FLAGS, MODE, TIMEUNIT
 from .fmodobject import FmodObject
 from .globalvars import DLL as _dll
@@ -1447,9 +1447,8 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
             sample_rate (int)
               Sample rate of the mixer.
 
-            speaker_mode (int)
-            Speaker setup of the mixer. Can be interpreted as
-            :py:attr:`~pyfmodex.enums.SPEAKERMODE`.
+            speaker_mode (:py:attr:`~pyfmodex.enums.SPEAKERMODE`)
+            Speaker setup of the mixer. 
 
             raw_speakers (int)
               Number of speakers when using speaker_mode
@@ -1481,7 +1480,7 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
             "FMOD_System_GetSoftwareFormat", byref(rate), byref(mode), byref(speakers)
         )
         return so(
-            sample_rate=rate.value, speaker_mode=mode.value, raw_speakers=speakers.value
+            sample_rate=rate.value, speaker_mode=SPEAKERMODE(mode.value), raw_speakers=speakers.value
         )
 
     @software_format.setter
