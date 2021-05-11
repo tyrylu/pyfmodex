@@ -6,9 +6,9 @@ import time
 from pathlib import Path
 
 import pyfmodex
-from pyfmodex.enums import RESULT
+from pyfmodex.enums import RESULT, TIMEUNIT
 from pyfmodex.exceptions import FmodError
-from pyfmodex.flags import MODE, TIMEUNIT
+from pyfmodex.flags import MODE
 
 MIN_FMOD_VERSION = 0x00020108
 

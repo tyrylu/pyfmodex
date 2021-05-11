@@ -60,7 +60,7 @@ def show_record_drivers(stdscr, selected_driver_idx, num_drivers):
         if idx == selected_driver_idx:
             stdscr.addstr(row, 0, ">")
         driver_info = system.get_record_driver_info(idx)
-        statechar = "(*) " if driver_info.state & int(DRIVER_STATE.DEFAULT) else ""
+        statechar = "(*) " if DRIVER_STATE(driver_info.state) & DRIVER_STATE.DEFAULT else ""
         stdscr.addstr(row, 2, f"{idx}. {statechar}{driver_info.name.decode():41s}")
         row += 1
         stdscr.addstr(row, 2, f"{driver_info.system_rate/1000:2.1f}KHz")
@@ -90,7 +90,7 @@ def show_record_drivers(stdscr, selected_driver_idx, num_drivers):
             "(%s) (%s) (%s)"
             % (
                 "Connected"
-                if (driver_info.state & int(DRIVER_STATE.CONNECTED))
+                if (DRIVER_STATE(driver_info.state) & DRIVER_STATE.CONNECTED)
                 else "Unplugged",
                 "Recording" if system.is_recording(idx) else "Not recoding",
                 "Playing"
