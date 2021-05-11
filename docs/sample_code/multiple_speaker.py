@@ -5,9 +5,9 @@ import sys
 import time
 
 import pyfmodex
-from pyfmodex.enums import RESULT, SPEAKERMODE
+from pyfmodex.enums import RESULT, SPEAKERMODE, TIMEUNIT
 from pyfmodex.exceptions import FmodError
-from pyfmodex.flags import MODE, TIMEUNIT
+from pyfmodex.flags import MODE
 
 MIN_FMOD_VERSION = 0x00020108
 

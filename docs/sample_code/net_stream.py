@@ -6,9 +6,9 @@ import sys
 import time
 
 import pyfmodex
-from pyfmodex.enums import OPENSTATE, RESULT, TAGDATATYPE, TAGTYPE
+from pyfmodex.enums import OPENSTATE, RESULT, TAGDATATYPE, TAGTYPE, TIMEUNIT
 from pyfmodex.exceptions import FmodError
-from pyfmodex.flags import MODE, TIMEUNIT
+from pyfmodex.flags import MODE
 from pyfmodex.structobject import Structobject
 from pyfmodex.structures import CREATESOUNDEXINFO
 

@@ -9,7 +9,7 @@ import time
 from enum import IntEnum
 
 import pyfmodex
-from pyfmodex.flags import TIMEUNIT
+from pyfmodex.enums import TIMEUNIT
 from pyfmodex.structobject import Structobject
 
 MIN_FMOD_VERSION = 0x00020108
