@@ -4,10 +4,10 @@
 # Just staying close to the original names here.
 
 
-from flags import Flags
+from enum import Flag
 
 
-class CHANNELMASK(Flags):
+class CHANNELMASK(Flag):
     """Flags that describe the speakers present in a given signal."""
 
     FRONT_LEFT = 0x00000001  #: Front left channel.
@@ -74,12 +74,12 @@ class CHANNELMASK(Flags):
     )
 
 
-class DEBUG_FLAGS(Flags):
+class DEBUG_FLAGS(Flag):
     """Specify the requested information to be output when using the logging
     version of FMOD.
     """
 
-    __no_flags_name__ = "LEVEL_NONE"  #: Disable all messages.
+    LEVEL_NONE = 0x0 #: Disable all messages.
     LEVEL_ERROR = 0x00000001  #: Enable only error messages.
     LEVEL_WARNING = 0x00000002  #: Enable warning and error messages.
 
@@ -114,7 +114,7 @@ class DEBUG_FLAGS(Flags):
     DISPLAY_THREAD = 0x00040000
 
 
-class DRIVER_STATE(Flags):
+class DRIVER_STATE(Flag):
     """Flags that provide additional information about a particular driver."""
 
     #: Device is currently plugged in.
@@ -124,10 +124,10 @@ class DRIVER_STATE(Flags):
     DEFAULT = 0x00000002
 
 
-class INIT_FLAGS(Flags):
+class INIT_FLAGS(Flag):
     """Configuration flags used when initializing the System object."""
 
-    __no_flags_name__ = "NORMAL"  #: Initialize normally.
+    NORMAL = 0x0 #: Initialize normally.
 
     #: No stream thread is created internally. Streams are driven from
     #: :py:meth:`~pyfmodex.system.System.update`. Mainly used with non-realtime
@@ -194,12 +194,12 @@ class INIT_FLAGS(Flags):
     MEMORY_TRACKING = 0x00400000
 
 
-class MEMORY_TYPE(Flags):
+class MEMORY_TYPE(Flag):
     """Bitfields for memory allocation type being passed into FMOD memory
     callbacks.
     """
 
-    __no_flags_name__ = "NORMAL"  #: Standard memory.
+    NORMAL = 0x0 #: Standard memory.
 
     #: Stream file buffer, size controllable with
     #: :py:attr:`~pyfmodex.system.System.stream_buffer_size`.
@@ -226,7 +226,7 @@ class MEMORY_TYPE(Flags):
     ALL = 0xFFFFFFFF
 
 
-class MODE(Flags):
+class MODE(Flag):
     """Sound description bitfields, bitwise OR them together for loading and
     describing sounds.
 
@@ -259,7 +259,7 @@ class MODE(Flags):
     #: Default for all modes listed below: :py:attr:`LOOP_OFF`,
     #: :py:attr:`TWOD`, :py:attr:`THREED_WORLDRELATIVE`,
     #: :py:attr:`THREED_INVERSEROLLOFF`.
-    __no_flags_name__ = "DEFAULT"
+    DEFAULT = 0x0
 
     #: For non looping sounds. (DEFAULT). Overrides :py:attr:`LOOP_NORMAL` /
     #: :py:attr:`LOOP_BIDI`.
@@ -314,7 +314,7 @@ class MODE(Flags):
     #: to specify length. If used with :py:attr:`CREATESAMPLE` or
     #: :py:attr:`CREATECOMPRESSEDSAMPLE`, FMOD duplicates the memory into its
     #: own buffers. Your own buffer can be freed after open, unless you are
-    #: using :py:attr:`NONBLOCKING` then wait until the Sound is in the
+    #: using :py:attr:`NONBLOCKING`. Then, wait until the Sound is in the
     #: :py:attr:`OPENSTATE_READY` state. If used with :py:attr:`CREATESTREAM`,
     #: FMOD will stream out of the buffer whose pointer you passed in. In this
     #: case, your own buffer should not be freed until you have finished with
@@ -411,7 +411,7 @@ class MODE(Flags):
     VIRTUAL_PLAYFROMSTART = 0x80000000
 
 
-class SYSTEM_CALLBACK_TYPE(Flags):
+class SYSTEM_CALLBACK_TYPE(Flag):
     """Types of callbacks called by the System."""
 
     #: Called from :py:meth:`~pyfmodex.system.System.update` when the
@@ -471,44 +471,3 @@ class SYSTEM_CALLBACK_TYPE(Flags):
 
     #: Mask representing all callback types.
     ALL = 0xFFFFFFFF
-
-
-class TIMEUNIT(Flags):
-    """Time types used for position or length."""
-
-    MS = 0x00000001  #: Milliseconds.
-
-    #: PCM samples, related to milliseconds * samplerate / 1000.
-    PCM = 0x00000002
-
-    #: Bytes, related to PCM samples * channels * datawidth (ie 16bit = 2
-    #: bytes).
-    PCMBYTES = 0x00000004
-
-    #: Raw file bytes of (compressed) sound data (does not include headers).
-    #: Only used by :py:meth:`~pyfmodex.sound.Sound.get_length` and
-    #: :py:meth:`~pyfmodex.channel.Channel.get_position`.
-    RAWBYTES = 0x00000008
-
-    #: Fractions of one  PCM sample. Unsigned int range 0 to 0xFFFFFFFF. Used for
-    #: sub-sample granularity for :py:class:`~pyfmodex.dsp.DSP` purposes.
-    PCMFRACTION = 0x00000010
-
-    #: MOD/S3M/XM/IT. Order in a sequenced module format. Use
-    #: :py:attr:`~pyfmodex.sound.Sound.format` to determine the PCM format
-    #: being decoded to.
-    MODORDER = 0x00000100
-
-    #: MOD/S3M/XM/IT. Current row in a sequenced module format. Cannot use with
-    #: :py:meth:`~pyfmodex.channel.Channel.set_position`.
-    #: :py:meth:`~pyfmodex.sound.Sound.get_length` will return the number of
-    #: rows in the currently playing or seeked to pattern.
-    MODROW = 0x00000200
-
-    #: MOD/S3M/XM/IT. Current pattern in a sequenced module format. Cannot use
-    #: with :py:meth:`~pyfmodex.channel.Channel.set_position`.
-    #: :py:meth:`~pyfmodex.sound.Sound.get_length` will return the number of
-    #: patterns in the song and
-    #: :py:meth:`~pyfmodex.channel.Channel.get_position` will return the
-    #: currently playing pattern.
-    MODPATTERN = 0x00000400

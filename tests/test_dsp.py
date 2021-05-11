@@ -50,7 +50,7 @@ def test_idle(echo):
 
 
 def test_info(echo):
-    assert echo.info.name == b"FMOD Echo"
+    assert echo.info.name == "FMOD Echo"
     assert echo.info.channels == 0
 
 

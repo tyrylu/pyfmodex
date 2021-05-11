@@ -3,7 +3,7 @@ import os
 import pyfmodex
 import pyfmodex.studio
 import pytest
-from pyfmodex.enums import DSP_TYPE, DSPCONNECTION_TYPE
+from pyfmodex.enums import DSP_TYPE, DSPCONNECTION_TYPE, SPEAKERMODE
 from pyfmodex.studio.enums import LOADING_STATE
 from pyfmodex.flags import MODE
 
@@ -59,7 +59,7 @@ def system_with_banks():
 def many_speakers_system():
     system = pyfmodex.System()
     format = system.software_format
-    format.speaker_mode = 7
+    format.speaker_mode = SPEAKERMODE.SEVENPOINTONE
     system.software_format = format
     yield system
 

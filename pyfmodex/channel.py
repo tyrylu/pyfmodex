@@ -123,7 +123,7 @@ class Channel(ChannelControl):
         end = c_uint()
         ckresult(
             _dll.FMOD_Channel_GetLoopPoints(
-                self._ptr, byref(start), int(startunit), byref(end), int(endunit)
+                self._ptr, byref(start), startunit.value, byref(end), endunit.value
             )
         )
         return start.value, end.value
@@ -148,7 +148,7 @@ class Channel(ChannelControl):
         """
         ckresult(
             _dll.FMOD_Channel_SetLoopPoints(
-                self._ptr, c_uint(start), int(startunit), c_uint(end), int(endunit)
+                self._ptr, c_uint(start), startunit.value, c_uint(end), endunit.value
             )
         )
 
@@ -167,7 +167,7 @@ class Channel(ChannelControl):
         :rtype: int
         """
         pos = c_uint()
-        ckresult(_dll.FMOD_Channel_GetPosition(self._ptr, byref(pos), int(unit)))
+        ckresult(_dll.FMOD_Channel_GetPosition(self._ptr, byref(pos), unit.value))
         return pos.value
 
     def set_position(self, pos, unit):

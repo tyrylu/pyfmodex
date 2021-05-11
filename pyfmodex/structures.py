@@ -658,8 +658,8 @@ class DSP_PARAMETER_DESC(Structure):
     """Base Structure for DSP parameter descriptions.
 
     :ivar DSP_PARAMETER_TYPE type: Parameter type.
-    :ivar str name: Parameter Name.
-    :ivar str label: Unit type label.
+    :ivar bytes name: Parameter Name.
+    :ivar bytes label: Unit type label.
     :ivar str description: Description of the parameter.
     :ivar DSP_PARAMETER_DESC_UNION desc_union: Format description.
     """
@@ -678,19 +678,6 @@ class DSP_DESCRIPTION(Structure):
 
     This description structure allows the plugin writer to define all
     functionality required for a user defined DSP effect.
-
-    There are two different ways to change a parameter in this architecture:
-
-        - One is to use :py:meth:`~pyfmodex.dsp.DSP.set_parameter_float`/
-          :py:meth:`~pyfmodex.dsp.DSP.set_parameter_int`/
-          :py:meth:`~pyfmodex.dsp.DSP.set_parameter_bool`/
-          :py:meth:`~pyfmodex.dsp.DSP.set_parameter_data`. This is platform
-          independent and is dynamic, so new unknown plugins can have their
-          parameters enumerated and used.
-        - The other is to use
-          :py:meth:`~pyfmodex.dsp.DSP.show_config_dialog`. This is platform
-          specific and requires a GUI, and will display a dialog box to
-          configure the plugin.
 
     :ivar int pluginsdkversion: The plugin SDK version.
     :ivar str name: DSP name.
@@ -752,6 +739,19 @@ class DSP_DESCRIPTION(Structure):
         called when the mixer starts to execute or is just finishing executing.
         Useful for 'global'/per system object once a mix update calls for a
         plugin.
+
+    There are two different ways to change a parameter in this architecture:
+
+        - One is to use :py:meth:`~pyfmodex.dsp.DSP.set_parameter_float`/
+          :py:meth:`~pyfmodex.dsp.DSP.set_parameter_int`/
+          :py:meth:`~pyfmodex.dsp.DSP.set_parameter_bool`/
+          :py:meth:`~pyfmodex.dsp.DSP.set_parameter_data`. This is platform
+          independent and is dynamic, so new unknown plugins can have their
+          parameters enumerated and used.
+        - The other is to use
+          :py:meth:`~pyfmodex.dsp.DSP.show_config_dialog`. This is platform
+          specific and requires a GUI, and will display a dialog box to
+          configure the plugin.
     """
 
     _fields_ = [

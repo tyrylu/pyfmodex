@@ -1,22 +1,27 @@
 Pyfmodex
 ========
-This is pyfmodex a fmod ex binding using ctypes.
+This is pyfmodex, an [FMOD Engine](https://fmod.com) Python binding using [ctypes](https://docs.python.org/3/library/ctypes.html).
 
 Installation
 ------------
-For installation, first make sure that you have the fmod stuio library for you platform somewhere on your path, so python will be able to find it.
-For download visit http://www.fmod.org/download/. For some reason, the API download requires a free account.
-Then, install it via pip or easy_install, or, you can always use the setup.py way. Don't forget superuser rights, if they're needed.
+To install, first make sure that you have the FMOD Engine library for you platform somewhere in your path, so Python will be able to find it.
+On Linux, libraries are searched for in `LD_LIBRARY_PATH`.
+To download the FMOD Engine library, visit http://www.fmod.org/download. The library is free to download, but requires a free account to be made first.
+
+Then, install pyfmodex via `pip`, `easy_install` or the `setup.py` way. Note that the minimum supported Python version is Python 3.6.
 
 Usage
 -----
-To verify if everything works, open python interactive interpreter and try importing pyfmodex:
+To verify if everything works, open a Python REPL and try importing pyfmodex:
 
 ```python
 import pyfmodex
 ```
 
-If there is no error, good. It worked. Playing a sound is a little bit more complicated than the import, but nothing horrible:
+If there is no error: good, it worked. :-)
+
+Playing a sound is a little bit more complicated than the import, but nothing horrible.
+Try the following simple script:
 
 ```python
 import pyfmodex
@@ -30,13 +35,6 @@ while channel.is_playing:
     pass
 ```
 
-Of course, somefile.mp3 must be replaced with somethink that actually exists. 
-Here, i used the default parameters and not used features like 3d positioning. 
-For more info, you can use the dir function and of course the source.
-Note that the while loop is necessary at least in this simple example to keep the main thread alive long enough.
+Of course, `somefile.mp3` must be replaced with something that actually exists. :-)
 
-Python 3 compatibility
-----------------------
-Pyfmodex works with python 3 (tested on version 3.5, older versions than python 3.4 will not work, because the library depends on the enum module.
-If you pass as a file name str on py3 or unicode on py2, make sure that they're encodable by the encoding retuned by sys.getfilesystemencoding. 
-Channel Group names and other identifiers are supposed to be ascii only.
+Note that the while loop is necessary (at least in this simple example) to keep the main thread alive long enough.

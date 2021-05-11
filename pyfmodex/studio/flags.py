@@ -1,9 +1,9 @@
 """Flags."""
 
-from flags import Flags
+from enum import Flag
 
 
-class STUDIO_INIT_FLAGS(Flags):  # pylint: disable=invalid-name
+class STUDIO_INIT_FLAGS(Flag):  # pylint: disable=invalid-name
     """Studio System initialization flags.
 
     The zero flag is called "NORMAL".
@@ -18,7 +18,7 @@ class STUDIO_INIT_FLAGS(Flags):  # pylint: disable=invalid-name
         resource loading.
     """
 
-    __no_flags_name__ = "NORMAL"
+    NORMAL = 0x0
     LIVEUPDATE = 0x00000001
     ALLOW_MISSING_PLUGINS = 0x00000002
     SYNCHRONOUS_UPDATE = 0x00000004
@@ -26,7 +26,7 @@ class STUDIO_INIT_FLAGS(Flags):  # pylint: disable=invalid-name
     LOAD_FROM_UPDATE = 0x00000010
 
 
-class LOAD_BANK_FLAGS(Flags):  # pylint: disable=invalid-name
+class LOAD_BANK_FLAGS(Flag):  # pylint: disable=invalid-name
     """Flags to control bank loading.
 
     The zero flag is called "NORMAL".
@@ -40,7 +40,7 @@ class LOAD_BANK_FLAGS(Flags):  # pylint: disable=invalid-name
         bank are not encrypted).
     """
 
-    __no_flags_name__ = "NORMAL"
+    NORMAL = 0x0
     NONBLOCKING = 0x00000001
     DECOMPRESS_SAMPLES = 0x00000002
     UNENCRYPTED = 0x00000004

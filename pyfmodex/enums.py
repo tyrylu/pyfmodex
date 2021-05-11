@@ -1367,7 +1367,7 @@ class DSP_TYPE(IntEnum):
     PAN = 27  #: Pans the signal, possibly upmixing or downmixing as well.
     THREE_EQ = 28  #: Three-band equalizer.
 
-    #: Analyzes the signal and provides spectrum information back
+    #: Analyzes the signal and provides spectrum information back.
     FFT = 29
 
     LOUDNESS_METER = 30  #: Analyzes the loudness and true peak of the signal.
@@ -1512,7 +1512,7 @@ class OUTPUTTYPE(Enum):
     #: Win - Low latency ASIO 2.0.
     ASIO = 7
 
-    #: Linux - Pulse Audio. (Default on Linux if available)
+    #: Linux - PulseAudio. (Default on Linux if available)
     PULSEAUDIO = 8
 
     #: Linux - Advanced Linux Sound Architecture. (Default on Linux if
@@ -2128,7 +2128,7 @@ class TAGTYPE(Enum):
     #: SHOUTcast Internet stream metadata which can be issued during playback.
     SHOUTCAST = 4
 
-    #: Icecast internet stream metadata which can be issued during playback.
+    #: Icecast Internet stream metadata which can be issued during playback.
     ICECAST = 5
 
     #: Advanced Systems Format metadata typically associated with Windows Media
@@ -2151,7 +2151,7 @@ class TAGTYPE(Enum):
     PLAYLIST = 8
 
     #: Tag type used by FMOD's MIDI, MOD, S3M, XM, IT format support, and
-    #: netstreams to notify of internet stream events like a sample rate
+    #: netstreams to notify of Internet stream events like a sample rate
     #: change.
     FMOD = 9
 
@@ -2162,6 +2162,47 @@ class TAGTYPE(Enum):
 
     #: Maximum number of tag types supported.
     MAX = 11
+
+
+class TIMEUNIT(Enum):
+    """Time types used for position or length."""
+
+    MS = 0x00000001  #: Milliseconds.
+
+    #: PCM samples, related to milliseconds * samplerate / 1000.
+    PCM = 0x00000002
+
+    #: Bytes, related to PCM samples * channels * datawidth (ie 16bit = 2
+    #: bytes).
+    PCMBYTES = 0x00000004
+
+    #: Raw file bytes of (compressed) sound data (does not include headers).
+    #: Only used by :py:meth:`~pyfmodex.sound.Sound.get_length` and
+    #: :py:meth:`~pyfmodex.channel.Channel.get_position`.
+    RAWBYTES = 0x00000008
+
+    #: Fractions of one PCM sample. Unsigned int range 0 to 0xFFFFFFFF. Used for
+    #: sub-sample granularity for :py:class:`~pyfmodex.dsp.DSP` purposes.
+    PCMFRACTION = 0x00000010
+
+    #: MOD/S3M/XM/IT. Order in a sequenced module format. Use
+    #: :py:attr:`~pyfmodex.sound.Sound.format` to determine the PCM format
+    #: being decoded to.
+    MODORDER = 0x00000100
+
+    #: MOD/S3M/XM/IT. Current row in a sequenced module format. Cannot use with
+    #: :py:meth:`~pyfmodex.channel.Channel.set_position`.
+    #: :py:meth:`~pyfmodex.sound.Sound.get_length` will return the number of
+    #: rows in the currently playing or seeked to pattern.
+    MODROW = 0x00000200
+
+    #: MOD/S3M/XM/IT. Current pattern in a sequenced module format. Cannot use
+    #: with :py:meth:`~pyfmodex.channel.Channel.set_position`.
+    #: :py:meth:`~pyfmodex.sound.Sound.get_length` will return the number of
+    #: patterns in the song and
+    #: :py:meth:`~pyfmodex.channel.Channel.get_position` will return the
+    #: currently playing pattern.
+    MODPATTERN = 0x00000400
 
 
 class OUTPUT_METHOD(IntEnum):
