@@ -3,7 +3,7 @@
 from ctypes import *
 
 from .callback_prototypes import ROLLOFF_CALLBACK, SYSTEM_CALLBACK
-from .enums import OUTPUTTYPE, PLUGINTYPE, SPEAKERMODE, TIMEUNIT
+from .enums import OUTPUTTYPE, PLUGINTYPE, SPEAKERMODE, TIMEUNIT, RESULT
 from .flags import INIT_FLAGS, MODE
 from .fmodobject import FmodObject
 from .globalvars import DLL as _dll
@@ -224,7 +224,7 @@ class ThreedSettings:
 class System(FmodObject):  # pylint: disable=too-many-public-methods
     """Management object from which all resources are created and played."""
 
-    def __init__(self, ptr=None):
+    def __init__(self, ptr=None, header_version=0x20200):
         """A System object must be created first before any other FMOD API
         calls are made (except for
         :py:meth:`~pyfmodex.fmodex.initialize_memory`
@@ -233,14 +233,19 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         You can create one or multiple instances of FMOD System objects. If
         `ptr` is None, a new instance is created. Otherwise it must be a valid
         pointer of an existing System object.
+        During creation, the 2.01 and older creation sequece will be tried first, when that fails on 2.02 or newer, the new will be used with a provided `header_version` or a library default.
         """
         self._system_callbacks = {}
         if ptr is None:
             self._ptr = c_void_p()
-            ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
+            try:
+                ckresult(_dll.FMOD_System_Create(byref(self._ptr)))
+            except FmodError as exc:
+                if exc.result is not RESULT.HEADER_MISMATCH:
+                    raise
+                ckresult(_dll.FMOD_System_Create(byref(self._ptr), header_version))
         else:
             self._ptr = ptr
-
         self._user_open = None
         self._user_close = None
         self._user_read = None
