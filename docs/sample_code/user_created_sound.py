@@ -9,9 +9,9 @@ from math import sin
 import pyfmodex
 from pyfmodex.callback_prototypes import (SOUND_PCMREADCALLBACK,
                                           SOUND_PCMSETPOSCALLBACK)
-from pyfmodex.enums import RESULT, SOUND_FORMAT
+from pyfmodex.enums import RESULT, SOUND_FORMAT, TIMEUNIT
 from pyfmodex.exceptions import FmodError
-from pyfmodex.flags import MODE, TIMEUNIT
+from pyfmodex.flags import MODE
 from pyfmodex.structures import CREATESOUNDEXINFO
 
 MIN_FMOD_VERSION = 0x00020108

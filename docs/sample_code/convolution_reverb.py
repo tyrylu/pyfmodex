@@ -9,8 +9,9 @@ from ctypes import c_short, sizeof
 
 import pyfmodex
 from pyfmodex.enums import (CHANNELCONTROL_DSP_INDEX, DSP_CONVOLUTION_REVERB,
-                            DSP_TYPE, DSPCONNECTION_TYPE, SOUND_FORMAT)
-from pyfmodex.flags import MODE, TIMEUNIT
+                            DSP_TYPE, DSPCONNECTION_TYPE, SOUND_FORMAT,
+                            TIMEUNIT)
+from pyfmodex.flags import MODE
 
 MIN_FMOD_VERSION = 0x00020108
 

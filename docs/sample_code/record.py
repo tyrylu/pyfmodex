@@ -8,9 +8,9 @@ import time
 from ctypes import c_short, sizeof
 
 import pyfmodex
-from pyfmodex.enums import RESULT, SOUND_FORMAT
+from pyfmodex.enums import RESULT, SOUND_FORMAT, TIMEUNIT
 from pyfmodex.exceptions import FmodError
-from pyfmodex.flags import MODE, TIMEUNIT
+from pyfmodex.flags import MODE
 from pyfmodex.reverb_presets import REVERB_PRESET
 from pyfmodex.structures import CREATESOUNDEXINFO, REVERB_PROPERTIES
 
