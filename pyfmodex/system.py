@@ -224,7 +224,7 @@ class ThreedSettings:
 class System(FmodObject):  # pylint: disable=too-many-public-methods
     """Management object from which all resources are created and played."""
 
-    def __init__(self, ptr=None, header_version=0x20200):
+    def __init__(self, ptr=None, header_version=0x00020230):
         """A System object must be created first before any other FMOD API
         calls are made (except for
         :py:meth:`~pyfmodex.fmodex.initialize_memory`
