@@ -41,12 +41,13 @@ def test_position(geometry):
 
 def test_rotation(geometry):
     assert geometry.forward_rotation == [0.0, 0.0, 1.0]
-    new_rot = [1.0, 2.0, 3.0]
-    geometry.forward_rotation = new_rot
-    assert geometry.forward_rotation == new_rot
     assert geometry.up_rotation == [0.0, 1.0, 0.0]
-    geometry.up_rotation = new_rot
-    assert geometry.up_rotation == new_rot
+    new_fwd_rot = [1.0, 0.0, 0.0]
+    new_up_rot = [0.0, 0.0, 1.0]
+    geometry.forward_rotation = new_fwd_rot
+    assert geometry.forward_rotation == new_fwd_rot
+    geometry.up_rotation = new_up_rot
+    assert geometry.up_rotation == new_up_rot
 
 def test_scale(geometry):
     assert geometry.scale == [1.0, 1.0, 1.0]
