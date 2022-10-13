@@ -3,6 +3,7 @@ Installation
 
 To install, first make sure that you have the FMOD Engine library for you platform somewhere in your path, so Python will be able to find it.
 On Linux, libraries are searched for in `LD_LIBRARY_PATH`.
+Alternatively, you can set ``PYFMODEX_DLL_PATH`` as an environment variable to specify the library path. This can also be done inside Python setting ``os.environ["PYFMODEX_DLL_PATH"]`` before importing pyfmodex. 
 
 .. todo:: Add instructions for library paths on Mac OS X and Windows
 
