@@ -12,26 +12,29 @@ Raises a RuntimeError when that fails.
 import os
 import platform
 import sys
-from ctypes import *
+from ctypes import CDLL, windll
 
-arch = platform.architecture()[0]
-if platform.system() == "Windows":
-    try:
-        _dll = windll.fmod
-    except Exception as exc:
-        current_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+if os.environ.get("PYFMODEX_DLL_PATH") is not None:
+    _dll = CDLL(os.environ.get("PYFMODEX_DLL_PATH"))
+else:
+    arch = platform.architecture()[0]
+    if platform.system() == "Windows":
         try:
-            _dll = CDLL(os.path.join(current_directory, "fmod"))
-        except:
-            raise RuntimeError("Pyfmodex could not find the fmod library") from exc
+            _dll = windll.fmod
+        except Exception as exc:
+            current_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+            try:
+                _dll = CDLL(os.path.join(current_directory, "fmod"))
+            except:
+                raise RuntimeError("Pyfmodex could not find the fmod library") from exc
 
-elif platform.system() == "Linux":
-    _dll = CDLL("libfmod.so")
+    elif platform.system() == "Linux":
+        _dll = CDLL("libfmod.so")
 
-elif platform.system() == "Darwin":
-    if arch == "32bit":
-        raise RuntimeError("No 32-bit fmod library for Mac Os exists")
-    _dll = CDLL("libfmod.dylib")
+    elif platform.system() == "Darwin":
+        if arch == "32bit":
+            raise RuntimeError("No 32-bit fmod library for Mac Os exists")
+        _dll = CDLL("libfmod.dylib")
 from . import globalvars
 
 globalvars.DLL = _dll
