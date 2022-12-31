@@ -138,7 +138,7 @@ class PolygonAttributes:
         """
         vvec = VECTOR.from_list(vertex)
         ckresult(
-            _dll.FMOD_Geometry_SetPolygonVertex(self._gptr, self.index, index, vvec)
+            _dll.FMOD_Geometry_SetPolygonVertex(self._gptr, self.index, index, byref(vvec))
         )
 
 
@@ -270,7 +270,7 @@ class Geometry(FmodObject):
     @position.setter
     def position(self, pos):
         posv = VECTOR.from_list(pos)
-        self._call_fmod("FMOD_Geometry_SetPosition", posv)
+        self._call_fmod("FMOD_Geometry_SetPosition", byref(posv))
 
     @property
     def _rotation(self):
@@ -287,7 +287,7 @@ class Geometry(FmodObject):
     def _rotation(self, rot):
         fwd_vec = VECTOR.from_list(rot[0])
         up_vec = VECTOR.from_list(rot[1])
-        self._call_fmod("FMOD_Geometry_SetRotation", fwd_vec, up_vec)
+        self._call_fmod("FMOD_Geometry_SetRotation", byref(fwd_vec), byref(up_vec))
 
     @property
     def forward_rotation(self):
