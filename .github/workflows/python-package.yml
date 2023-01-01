@@ -32,6 +32,15 @@ jobs:
         run: |
           $arch = '${{ matrix.arch }}'
           if ($IsWindows) {
+            # install virtual audio - scream
+            # credit to: https://github.com/actions/runner-images/issues/2528#issuecomment-934857719
+            Invoke-WebRequest https://github.com/duncanthrax/scream/releases/download/3.8/Scream3.8.zip -OutFile Scream3.8.zip
+            Expand-Archive -Path Scream3.8.zip -DestinationPath Scream
+            Import-Certificate -FilePath Scream\Install\driver\x64\Scream.cat -CertStoreLocation Cert:\LocalMachine\TrustedPublisher 
+            Scream\Install\helpers\devcon-x64.exe install Scream\Install\driver\x64\Scream.inf *Scream
+            # start audio service
+            net start audiosrv
+
             $env:PYFMODEX_DLL_PATH = '${{ github.workspace }}/tests/lib/Windows/fmod.dll'
             $env:PYFMODEX_STUDIO_DLL_PATH = '${{ github.workspace }}/tests/lib/Windows/fmodstudio.dll'
           }
@@ -40,6 +49,12 @@ jobs:
             $env:PYFMODEX_STUDIO_DLL_PATH = '${{ github.workspace }}/tests/lib/Darwin/libfmodstudio.dylib'
           }
           else {
+            # install virtual audio
+            # credit to: https://github.com/LABSN/sound-ci-helpers/blob/master/linux/setup_sound.sh
+            sudo apt update
+            sudo apt install -y pulseaudio libportaudio2 dbus-x11
+            dbus-launch pulseaudio --start
+
             $env:PYFMODEX_DLL_PATH = '${{ github.workspace }}/tests/lib/Linux/libfmod.so'
             $env:PYFMODEX_STUDIO_DLL_PATH = '${{ github.workspace }}/tests/lib/Linux/libfmodstudio.so'
           }
