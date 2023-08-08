@@ -200,7 +200,7 @@ class Channel(ChannelControl):
         :param int pos: Playback position.
         :param TIMEUNIT unit: Time units for `pos`.
         """
-        ckresult(_dll.FMOD_Channel_SetPosition(self._ptr, pos, unit))
+        ckresult(_dll.FMOD_Channel_SetPosition(self._ptr, pos, unit.value))
 
     @property
     def priority(self):

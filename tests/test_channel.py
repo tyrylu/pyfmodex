@@ -271,3 +271,6 @@ def test_set_pan(channel):
 
 def test_stop(channel):
     channel.stop()
+
+def test_set_position(channel):
+    channel.set_position(0, TIMEUNIT.MS)
