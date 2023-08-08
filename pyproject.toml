@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "pyfmodex"
+version = "0.7.0"
+description = "Python bindings to the Fmod Ex library."
+license = "MIT"
+homepage = "https://www.github.com/tyrylu/pyfmodex"
+authors = ["Lukáš Tyrychtr <lukastyrychtr@gmail.com>"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3",
+]
+[tool.poetry.dependencies]
+python = "^3.6"
