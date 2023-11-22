@@ -16,6 +16,9 @@ elif os.name == "posix":
 
 LIBRARY = None
 
+if os.environ.get("PYFMODEX_STUDIO_DLL_PATH") is not None:
+    LIBRARY_NAME = os.environ.get("PYFMODEX_STUDIO_DLL_PATH")
+
 def get_library():
     """Load libary file according to architecture's ctype method."""
     global LIBRARY
