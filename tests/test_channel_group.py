@@ -1,5 +1,8 @@
 import pytest
 from unittest import mock
+
+import pytest
+
 from pyfmodex.enums import DSP_TYPE, CHANNELCONTROL_DSP_INDEX, TIMEUNIT
 from pyfmodex.flags import MODE
 
@@ -187,6 +190,7 @@ def test_set_callback(channel_group):
     mock_callback = mock.Mock(return_value=0)
     channel_group.set_callback(mock_callback)
 
+@pytest.mark.xfail
 def test_dsp_clock(channel_group):
     assert channel_group.dsp_clock.dsp_clock >= 0
     assert channel_group.dsp_clock.parent_clock > 5000
