@@ -39,7 +39,7 @@ def test_cone_settings(channel_group):
     channel_group.mode = MODE.THREED
     settings = channel_group.cone_settings
     assert settings.outside_angle == 360.0
-    
+
 def test_custom_rolloff(channel_group):
     new_curve = [[1.0,0.5,0.0], [4.0,0.0,0.0]]
     assert channel_group.custom_rolloff == []
@@ -115,7 +115,7 @@ def test_fade_points(channel_group):
 
 def test_low_pass_gain(channel_group):
     assert channel_group.low_pass_gain == 0.0
-    
+
 def test_mix_matrix(channel_group):
     assert channel_group.get_mix_matrix() == []
     matrix = [0.5, 0.5]
@@ -141,7 +141,7 @@ def test_num_channels(channel_group):
 
 def test_num_groups(channel_group):
     assert channel_group.num_groups == 0
-    
+
 def test_num_dsps(channel_group):
     assert channel_group.num_dsps == 1
 
@@ -206,7 +206,7 @@ def test_set_fade_point_ramp(channel_group):
 
 def test_set_mix_levels_input(channel_group):
     channel_group.set_mix_levels_input(0.5, 0.5)
-    
+
 def test_set_mix_levels_output(channel_group):
     channel_group.set_mix_levels_output(0.5,  1.0, 1.0, 0.25, 0.0, 0.0, 0.5, 0.8)
 
