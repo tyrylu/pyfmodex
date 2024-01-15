@@ -1,5 +1,4 @@
 """Structures."""
-import ctypes
 # pylint: disable=too-few-public-methods
 # These are mostly data containers, really.
 
