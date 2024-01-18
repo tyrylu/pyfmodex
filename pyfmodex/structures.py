@@ -1,5 +1,4 @@
 """Structures."""
-
 # pylint: disable=too-few-public-methods
 # These are mostly data containers, really.
 
@@ -509,7 +508,7 @@ class DSP_PARAMETER_FFT(Structure):
     :ivar list(float) spectrum: Per channel spectrum arrays.
     """
 
-    _fields_ = [("length", c_int), ("numchannels", c_int), ("spectrum", c_float * 32)]
+    _fields_ = [("length", c_int), ("numchannels", c_int), ("spectrum", POINTER(c_float) * 32)]
 
 
 class DSP_PARAMETER_OVERALLGAIN(Structure):
