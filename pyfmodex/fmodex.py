@@ -12,13 +12,15 @@ Raises a RuntimeError when that fails.
 import os
 import platform
 import sys
-from ctypes import CDLL, windll
+from ctypes import CDLL, c_int, byref
 
 if os.environ.get("PYFMODEX_DLL_PATH") is not None:
     _dll = CDLL(os.environ.get("PYFMODEX_DLL_PATH"))
 else:
     arch = platform.architecture()[0]
     if platform.system() == "Windows":
+        from ctypes import windll
+
         try:
             _dll = windll.fmod
         except Exception as exc:
@@ -101,7 +103,9 @@ def get_memory_stats(blocking):
     """
     currenalloced = c_int()
     maxalloced = c_int()
-    ckresult(_dll.FMOD_Memory_GetStats(byref(currenalloced), byref(maxalloced), blocking))
+    ckresult(
+        _dll.FMOD_Memory_GetStats(byref(currenalloced), byref(maxalloced), blocking)
+    )
     return so(current=currenalloced.value, maximum=maxalloced.value)
 
 

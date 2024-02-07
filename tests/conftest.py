@@ -1,4 +1,5 @@
 import os
+import platform
 
 import pyfmodex
 import pyfmodex.studio
@@ -6,6 +7,8 @@ import pytest
 from pyfmodex.enums import DSP_TYPE, DSPCONNECTION_TYPE, SPEAKERMODE
 from pyfmodex.studio.enums import LOADING_STATE
 from pyfmodex.flags import MODE
+from pyfmodex.structures import CREATESOUNDEXINFO
+from pyfmodex.utils import prepare_str
 
 
 @pytest.fixture(scope="session")
@@ -97,8 +100,10 @@ def channel(sound):
 
 @pytest.fixture(scope="session")
 def midi_sound(initialized_system):
+    dlsname = prepare_str(os.path.join(os.path.dirname(__file__), "Piano.dls"))
     sound = initialized_system.create_sound(
-        os.path.join(os.path.dirname(__file__), "innerlight.mid")
+        os.path.join(os.path.dirname(__file__), "innerlight.mid"),
+        exinfo=CREATESOUNDEXINFO(dlsname=dlsname),
     )
     yield sound
     sound.release()

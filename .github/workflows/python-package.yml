@@ -1,0 +1,80 @@
+name: Test and Publish
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macOS-latest", "windows-latest"]
+        arch: ["x64"]
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          architecture: ${{ matrix.arch }}
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip pytest
+
+      - name: Install pyfmodex
+        run: |
+          pip install .
+
+      - name: Install Audio-Service (Windows)
+        run: |
+            # slightly complicated setup
+            # source: https://github.com/duncanthrax/scream/issues/202
+            # disable automatic time syncing
+            Set-Service -Name vmictimesync -Status stopped -StartupType disabled
+            Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\services\W32Time\Parameters -Name 'Type' -Value 'NoSync'
+            # set time for Scream installation - Scream cert expired on 5th July 2022
+            net stop w32time;
+            Set-Date (Get-Date "2023-07-04 12:00:00")
+            # install scream
+            Invoke-WebRequest https://github.com/duncanthrax/scream/releases/download/4.0/Scream4.0.zip -OutFile Scream.zip
+            Expand-Archive -Path Scream.zip -DestinationPath Scream
+            Import-Certificate -FilePath Scream\Install\driver\x64\Scream.cat -CertStoreLocation Cert:\LocalMachine\TrustedPublisher 
+            Scream\Install\helpers\devcon-x64.exe install Scream\Install\driver\x64\Scream.inf *Scream
+            # start audio service
+            net start audiosrv
+            # sync time
+            net start w32time
+            w32tm /resync /force
+        shell: pwsh
+        if: runner.os == 'Windows'
+
+      - name: Install Audio-Service (Linux)
+        run: |
+            # install virtual audio
+            # credit to: https://github.com/LABSN/sound-ci-helpers/blob/master/linux/setup_sound.sh
+            sudo apt update
+            sudo apt install -y pulseaudio libportaudio2 dbus-x11
+            dbus-launch pulseaudio --start
+        if: runner.os == 'Linux'
+
+      - name: Run tests
+        run: |
+          $arch = '${{ matrix.arch }}'
+          if ($IsWindows) {
+            $env:PYFMODEX_DLL_PATH = '${{ github.workspace }}/tests/lib/Windows/fmod.dll'
+            $env:PYFMODEX_STUDIO_DLL_PATH = '${{ github.workspace }}/tests/lib/Windows/fmodstudio.dll'
+          }
+          elseif ($IsMacOS) {
+            $env:PYFMODEX_DLL_PATH = '${{ github.workspace }}/tests/lib/Darwin/libfmod.dylib'
+            $env:PYFMODEX_STUDIO_DLL_PATH = '${{ github.workspace }}/tests/lib/Darwin/libfmodstudio.dylib'
+          }
+          else {
+            $env:PYFMODEX_DLL_PATH = '${{ github.workspace }}/tests/lib/Linux/libfmod.so'
+            $env:PYFMODEX_STUDIO_DLL_PATH = '${{ github.workspace }}/tests/lib/Linux/libfmodstudio.so'
+          }
+          pytest -vs
+        shell: pwsh
