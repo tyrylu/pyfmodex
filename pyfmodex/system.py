@@ -1,17 +1,22 @@
 """Module containing all classes related to the Fmod System class."""
 
-from ctypes import *
+from ctypes import byref, create_string_buffer, sizeof
+from ctypes import c_bool, c_float, c_int, c_uint, c_longlong, c_void_p
 
 from .callback_prototypes import ROLLOFF_CALLBACK, SYSTEM_CALLBACK
+from .callback_prototypes import FILE_ASYNCCANCEL_CALLBACK, FILE_CLOSE_CALLBACK
+from .callback_prototypes import FILE_OPEN_CALLBACK, FILE_READ_CALLBACK
+from .callback_prototypes import FILE_SEEK_CALLBACK, FILE_ASYNCREAD_CALLBACK
 from .enums import OUTPUTTYPE, PLUGINTYPE, SPEAKERMODE, TIMEUNIT, RESULT
+from .exceptions import FmodError
 from .flags import INIT_FLAGS, MODE
 from .fmodobject import FmodObject
 from .globalvars import DLL as _dll
 from .globalvars import get_class
 from .structobject import Structobject as so
-from .structures import *
-from .utils import *
-
+from .structures import ADVANCEDSETTINGS, VECTOR, REVERB_PROPERTIES, GUID
+from .structures import DSP_DESCRIPTION
+from .utils import ckresult, prepare_str, check_type
 
 class Listener:
     """A 3D sound listener."""
@@ -92,6 +97,16 @@ class Listener:
     @up.setter
     def up(self, uplist):  # pylint: disable=invalid-name
         self._up = VECTOR.from_list(uplist)
+        self._commit()
+
+    def set_orientation(self, forward, up):
+        """Set the orientation of the listener.
+
+        :param list forward: Forwards orientation.
+        :param list up: Upwards orientation.
+        """
+        self._fwd = VECTOR.from_list(forward)
+        self._up = VECTOR.from_list(up)
         self._commit()
 
     def _commit(self):
@@ -233,7 +248,9 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
         You can create one or multiple instances of FMOD System objects. If
         `ptr` is None, a new instance is created. Otherwise it must be a valid
         pointer of an existing System object.
-        During creation, the 2.01 and older creation sequece will be tried first, when that fails on 2.02 or newer, the new will be used with a provided `header_version` or a library default.
+        During creation, the 2.01 and older creation sequece will be tried
+        first, when that fails on 2.02 or newer, the new will be used
+        with a provided `header_version` or a library default.
         """
         self._system_callbacks = {}
         if ptr is None:
@@ -1485,7 +1502,9 @@ class System(FmodObject):  # pylint: disable=too-many-public-methods
             "FMOD_System_GetSoftwareFormat", byref(rate), byref(mode), byref(speakers)
         )
         return so(
-            sample_rate=rate.value, speaker_mode=SPEAKERMODE(mode.value), raw_speakers=speakers.value
+            sample_rate=rate.value,
+            speaker_mode=SPEAKERMODE(mode.value),
+            raw_speakers=speakers.value
         )
 
     @software_format.setter

@@ -14,7 +14,7 @@ from .reverb_presets import REVERB_PRESET, set_reverb_preset
 from .roomproperties import MaterialNames, RoomProperties
 from .utils import FmodError
 
-__version__ = "0.7.0"
+__version__ = "0.7.1"
 
 c = {}
 c["DSP"] = dsp.DSP
