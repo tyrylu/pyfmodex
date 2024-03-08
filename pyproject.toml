@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyfmodex"
-version = "0.7.1"
+version = "0.7.2"
 description = "Python bindings to the Fmod Ex library."
 license = "MIT"
 homepage = "https://www.github.com/tyrylu/pyfmodex"
