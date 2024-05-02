@@ -15,6 +15,13 @@ class EventInstance(StudioObject):
 
     function_prefix = "FMOD_Studio_EventInstance"
 
+    def __init__(self, ptr):
+        self._pos = VECTOR()
+        self._vel = VECTOR()
+        self._fwd = VECTOR()
+        self._up = VECTOR()
+        super().__init__(ptr)
+
     def start(self):
         """Starts playback.
 
@@ -55,6 +62,69 @@ class EventInstance(StudioObject):
         state = c_int()
         self._call("GetPlaybackState", byref(state))
         return PLAYBACK_STATE(state.value)
+
+    @property
+    def position(self):
+        """Position in 3D space used for panning and attenuation.
+
+        :type: list of three coordinate floats
+        """
+        return self._pos.to_list()
+
+    @position.setter
+    def position(self, poslist):
+        self._pos = VECTOR.from_list(poslist)
+        self._commit_3d()
+
+    @property
+    def velocity(self):
+        """Velocity in 3D space used for doppler.
+
+        :type: list of three coordinate floats
+        """
+        return self._vel.to_list()
+
+    @velocity.setter
+    def velocity(self, vellist):
+        self._vel = VECTOR.from_list(vellist)
+        self._commit_3d()
+
+    @property
+    def forward(self):
+        """Forwards orientation.
+
+        :type: list of three coordinate floats
+        """
+        return self._fwd.to_list()
+
+    @forward.setter
+    def forward(self, fwdlist):
+        self._fwd = VECTOR.from_list(fwdlist)
+        self._commit_3d()
+
+    @property
+    def up(self):
+        """Upwards orientation.
+
+        :type: list of three coordinate floats
+        """
+        return self._up.to_list()
+
+    @up.setter
+    def up(self, uplist):
+        self._up = VECTOR.from_list(uplist)
+        self._commit_3d()
+
+    def _commit_3d(self):
+        self._call(
+            "Set3DAttributes",
+            byref(THREED_ATTRIBUTES(
+                self._pos,
+                self._vel,
+                self._fwd,
+                self._up
+            ))
+        )
 
     def get_parameter_by_name(self, name):
         """A parameter value.
@@ -110,14 +180,11 @@ class EventInstance(StudioObject):
         :param list up: Upwards orientation, must be of unit length (1.0) and
             perpendicular to `forward`.
         """
-        pos = VECTOR.from_list(position)
-        vel = VECTOR.from_list(velocity)
-        forward = VECTOR.from_list(forward)
-        up = VECTOR.from_list(up)
-        self._call(
-            "Set3DAttributes",
-            byref(THREED_ATTRIBUTES(pos, vel, forward, up))
-        )
+        self._pos = VECTOR.from_list(position)
+        self._vel = VECTOR.from_list(velocity)
+        self._fwd = VECTOR.from_list(forward)
+        self._up = VECTOR.from_list(up)
+        self._commit_3d()
 
     @property
     def channel_group(self):
