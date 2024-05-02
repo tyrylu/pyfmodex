@@ -3,6 +3,8 @@
 from ctypes import byref, c_bool, c_float, c_int, c_void_p
 
 from ..channel_group import ChannelGroup
+from ..structures import THREED_ATTRIBUTES
+from ..structures import VECTOR
 from ..utils import prepare_str
 from .enums import PLAYBACK_STATE
 from .studio_object import StudioObject
@@ -73,6 +75,48 @@ class EventInstance(StudioObject):
         """
         self._call(
             "SetParameterByName", prepare_str(name), c_float(value), ignoreseekspeed
+        )
+
+    def get_3d_attributes(self) -> list[list[float]]:
+        """Get the 3D attributes of this EventInstance.
+
+        :returns: list of [`position`, `velocity`, `forward`, `up`]
+        """
+        _attrs = THREED_ATTRIBUTES(VECTOR(), VECTOR(), VECTOR(), VECTOR())
+        self._call(
+            "Get3DAttributes",
+            byref(_attrs)
+        )
+        return [
+            _attrs.position.to_list(),
+            _attrs.velocity.to_list(),
+            _attrs.forward.to_list(),
+            _attrs.up.to_list()
+        ]
+
+    def set_3d_attributes(
+            self,
+            position: list = [0, 0, 0],
+            velocity: list = [0, 0, 0],
+            forward: list = [0, 1, 0],
+            up: list = [0, 0, 1]
+        ):
+        """Set the 3D attributes for this EventInstance.
+
+        :param list position: Position used for panning and attenuation (camera relative).
+        :param list velocity: Velocity in world space used for doppler.
+        :param list forward: Forwards orientation, must be of unit length (1.0)
+            and perpendicular to `up`.
+        :param list up: Upwards orientation, must be of unit length (1.0) and
+            perpendicular to `forward`.
+        """
+        pos = VECTOR.from_list(position)
+        vel = VECTOR.from_list(velocity)
+        forward = VECTOR.from_list(forward)
+        up = VECTOR.from_list(up)
+        self._call(
+            "Set3DAttributes",
+            byref(THREED_ATTRIBUTES(pos, vel, forward, up))
         )
 
     @property
