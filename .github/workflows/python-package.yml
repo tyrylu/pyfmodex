@@ -33,6 +33,9 @@ jobs:
         run: |
             # slightly complicated setup
             # source: https://github.com/duncanthrax/scream/issues/202
+            # Modified to download the archive with proper TLS validation
+            Invoke-WebRequest https://github.com/duncanthrax/scream/releases/download/4.0/Scream4.0.zip -OutFile Scream.zip
+            Expand-Archive -Path Scream.zip -DestinationPath Scream
             # disable automatic time syncing
             Set-Service -Name vmictimesync -Status stopped -StartupType disabled
             Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\services\W32Time\Parameters -Name 'Type' -Value 'NoSync'
@@ -40,8 +43,6 @@ jobs:
             net stop w32time;
             Set-Date (Get-Date "2023-07-04 12:00:00")
             # install scream
-            Invoke-WebRequest https://github.com/duncanthrax/scream/releases/download/4.0/Scream4.0.zip -OutFile Scream.zip
-            Expand-Archive -Path Scream.zip -DestinationPath Scream
             Import-Certificate -FilePath Scream\Install\driver\x64\Scream.cat -CertStoreLocation Cert:\LocalMachine\TrustedPublisher 
             Scream\Install\helpers\devcon-x64.exe install Scream\Install\driver\x64\Scream.inf *Scream
             # start audio service
