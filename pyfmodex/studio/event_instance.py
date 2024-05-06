@@ -35,6 +35,28 @@ class EventInstance(StudioObject):
         self._call("Stop")
 
     @property
+    def volume(self):
+        """The volume level.
+
+         - 0: silent
+         - 1: full
+         - Negative level: inverts the signal
+         - Value larger than 1: amplifies the signal
+
+        Setting volume at a level higher than 1 can lead to
+        distortion/clipping.
+
+        :type: float
+        """
+        vol = c_float()
+        self._call("GetVolume", byref(vol))
+        return vol.value
+
+    @volume.setter
+    def volume(self, vol):
+        self._call("SetVolume", c_float(vol))
+
+    @property
     def paused(self):
         """Tthe pause state.
 
@@ -125,6 +147,17 @@ class EventInstance(StudioObject):
                 self._up
             ))
         )
+
+    def set_volume(self, vol):
+        """Sets the volume level.
+
+        :param vol: float
+        """
+        self.volume = vol
+
+    def get_volume(self):
+        """Retrieves the volume level."""
+        return self.volume
 
     def get_parameter_by_name(self, name):
         """A parameter value.
