@@ -219,6 +219,9 @@ class EventInstance(StudioObject):
         self._up = VECTOR.from_list(up)
         self._commit_3d()
 
+    def release(self):
+        self._call('Release')
+
     @property
     def channel_group(self):
         """The core channel group corresponding to the master track.
