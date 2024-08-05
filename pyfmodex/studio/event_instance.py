@@ -186,7 +186,7 @@ class EventInstance(StudioObject):
     def set_volume(self, vol):
         """Sets the volume level.
 
-        :param vol: float
+        :param vol: Volume multiplier.
         """
         self.volume = vol
 
@@ -197,7 +197,7 @@ class EventInstance(StudioObject):
     def set_pitch(self, vol):
         """Sets the pitch level.
 
-        :param vol: float
+        :param vol: Pitch multiplier.
         """
         self.pitch = vol
 
@@ -208,7 +208,7 @@ class EventInstance(StudioObject):
     def set_timeline_position(self, pos: int):
         """Sets the timeline cursor position.
 
-        :param vol: int
+        :param pos: Timeline position.
         """
         self.timeline_position = pos
 
@@ -296,9 +296,28 @@ class EventInstance(StudioObject):
         return ChannelGroup(ptr)
 
     def set_reverb_level(self, index, level):
+        """Sets the core reverb send level.
+
+        :param index: Core reverb instance index.
+        :param level: Reverb send level.
+        """
         self._call('SetReverbLevel', c_int(index), c_float(level))
 
     def get_reverb_level(self, index):
+        """Retrieves the core reverb send level.
+
+        :param index: Core reverb instance index.
+        """
         level = c_float()
         self._call('GetReverbLevel', c_int(index), byref(level))
         return level.value
+
+    @property
+    def is_virtual(self):
+        """Retrieves the virtualization state.
+
+        True if the event instance has been virtualized due to the polyphony limit being exceeded.
+        """
+        virtual = c_bool()
+        self._call('IsVirtual', byref(virtual))
+        return virtual.value
