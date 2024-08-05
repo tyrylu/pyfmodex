@@ -295,11 +295,10 @@ class EventInstance(StudioObject):
         self._call("GetChannelGroup", byref(ptr))
         return ChannelGroup(ptr)
 
-    @property
-    def reverb_level(self):
-        """Not Implemented."""
-        raise NotImplementedError
+    def set_reverb_level(self, index, level):
+        self._call('SetReverbLevel', c_int(index), c_float(level))
 
-    @reverb_level.setter
-    def reverb_level(self, level):
-        raise NotImplementedError
+    def get_reverb_level(self, index):
+        level = c_float()
+        self._call('GetReverbLevel', c_int(index), byref(level))
+        return level.value
