@@ -57,8 +57,22 @@ class EventInstance(StudioObject):
         self._call("SetVolume", c_float(vol))
 
     @property
+    def pitch(self):
+        """Pitch multiplier.
+
+        :type: float
+        """
+        pitch = c_float()
+        self._call("GetPitch", byref(pitch))
+        return pitch.value
+
+    @pitch.setter
+    def pitch(self, pitch):
+        self._call("SetPitch", c_float(pitch))
+
+    @property
     def paused(self):
-        """Tthe pause state.
+        """The pause state.
 
         True if the event instance is paused.
         """
@@ -84,6 +98,27 @@ class EventInstance(StudioObject):
         state = c_int()
         self._call("GetPlaybackState", byref(state))
         return PLAYBACK_STATE(state.value)
+
+    @property
+    def cpu_usage(self):
+        """Retrieves the event CPU usage data."""
+        usage = c_int()
+        self._call('Release', byref(usage))
+        return usage.value
+
+    @property
+    def timeline_position(self):
+        """Timeline cursor position
+
+        :type: int
+        """
+        pos = c_int()
+        self._call("GetTimelinePosition", byref(pos))
+        return pos.value
+
+    @timeline_position.setter
+    def timeline_position(self, pos):
+        self._call("SetTimelinePosition", c_int(pos))
 
     @property
     def position(self):
@@ -159,6 +194,28 @@ class EventInstance(StudioObject):
         """Retrieves the volume level."""
         return self.volume
 
+    def set_pitch(self, vol):
+        """Sets the pitch level.
+
+        :param vol: float
+        """
+        self.pitch = vol
+
+    def get_pitch(self):
+        """Retrieves the pitch level."""
+        return self.pitch
+
+    def set_timeline_position(self, pos: int):
+        """Sets the timeline cursor position.
+
+        :param vol: int
+        """
+        self.timeline_position = pos
+
+    def get_timeline_position(self):
+        """Retrieves the timeline cursor position."""
+        return self.timeline_position
+
     def get_parameter_by_name(self, name):
         """A parameter value.
 
@@ -218,6 +275,10 @@ class EventInstance(StudioObject):
         self._fwd = VECTOR.from_list(forward)
         self._up = VECTOR.from_list(up)
         self._commit_3d()
+
+    def get_cpu_usage(self):
+        '''Retrieves the event CPU usage data.'''
+        return self.cpu_usage
 
     def release(self):
         self._call('Release')
