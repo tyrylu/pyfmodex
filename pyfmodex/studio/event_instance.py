@@ -35,8 +35,44 @@ class EventInstance(StudioObject):
         self._call("Stop")
 
     @property
+    def volume(self):
+        """The volume level.
+
+         - 0: silent
+         - 1: full
+         - Negative level: inverts the signal
+         - Value larger than 1: amplifies the signal
+
+        Setting volume at a level higher than 1 can lead to
+        distortion/clipping.
+
+        :type: float
+        """
+        vol = c_float()
+        self._call("GetVolume", byref(vol))
+        return vol.value
+
+    @volume.setter
+    def volume(self, vol):
+        self._call("SetVolume", c_float(vol))
+
+    @property
+    def pitch(self):
+        """Pitch multiplier.
+
+        :type: float
+        """
+        pitch = c_float()
+        self._call("GetPitch", byref(pitch))
+        return pitch.value
+
+    @pitch.setter
+    def pitch(self, pitch):
+        self._call("SetPitch", c_float(pitch))
+
+    @property
     def paused(self):
-        """Tthe pause state.
+        """The pause state.
 
         True if the event instance is paused.
         """
@@ -62,6 +98,27 @@ class EventInstance(StudioObject):
         state = c_int()
         self._call("GetPlaybackState", byref(state))
         return PLAYBACK_STATE(state.value)
+
+    @property
+    def cpu_usage(self):
+        """Retrieves the event CPU usage data."""
+        usage = c_int()
+        self._call('Release', byref(usage))
+        return usage.value
+
+    @property
+    def timeline_position(self):
+        """Timeline cursor position
+
+        :type: int
+        """
+        pos = c_int()
+        self._call("GetTimelinePosition", byref(pos))
+        return pos.value
+
+    @timeline_position.setter
+    def timeline_position(self, pos):
+        self._call("SetTimelinePosition", c_int(pos))
 
     @property
     def position(self):
@@ -126,6 +183,39 @@ class EventInstance(StudioObject):
             ))
         )
 
+    def set_volume(self, vol):
+        """Sets the volume level.
+
+        :param vol: Volume multiplier.
+        """
+        self.volume = vol
+
+    def get_volume(self):
+        """Retrieves the volume level."""
+        return self.volume
+
+    def set_pitch(self, vol):
+        """Sets the pitch level.
+
+        :param vol: Pitch multiplier.
+        """
+        self.pitch = vol
+
+    def get_pitch(self):
+        """Retrieves the pitch level."""
+        return self.pitch
+
+    def set_timeline_position(self, pos: int):
+        """Sets the timeline cursor position.
+
+        :param pos: Timeline position.
+        """
+        self.timeline_position = pos
+
+    def get_timeline_position(self):
+        """Retrieves the timeline cursor position."""
+        return self.timeline_position
+
     def get_parameter_by_name(self, name):
         """A parameter value.
 
@@ -186,6 +276,13 @@ class EventInstance(StudioObject):
         self._up = VECTOR.from_list(up)
         self._commit_3d()
 
+    def get_cpu_usage(self):
+        '''Retrieves the event CPU usage data.'''
+        return self.cpu_usage
+
+    def release(self):
+        self._call('Release')
+
     @property
     def channel_group(self):
         """The core channel group corresponding to the master track.
@@ -198,11 +295,29 @@ class EventInstance(StudioObject):
         self._call("GetChannelGroup", byref(ptr))
         return ChannelGroup(ptr)
 
-    @property
-    def reverb_level(self):
-        """Not Implemented."""
-        raise NotImplementedError
+    def set_reverb_level(self, index, level):
+        """Sets the core reverb send level.
 
-    @reverb_level.setter
-    def reverb_level(self, level):
-        raise NotImplementedError
+        :param index: Core reverb instance index.
+        :param level: Reverb send level.
+        """
+        self._call('SetReverbLevel', c_int(index), c_float(level))
+
+    def get_reverb_level(self, index):
+        """Retrieves the core reverb send level.
+
+        :param index: Core reverb instance index.
+        """
+        level = c_float()
+        self._call('GetReverbLevel', c_int(index), byref(level))
+        return level.value
+
+    @property
+    def is_virtual(self):
+        """Retrieves the virtualization state.
+
+        True if the event instance has been virtualized due to the polyphony limit being exceeded.
+        """
+        virtual = c_bool()
+        self._call('IsVirtual', byref(virtual))
+        return virtual.value
